@@ -44,6 +44,7 @@ public class ReservationService {
         payload.put("event", "RESERVATION_CREATED");
         payload.put("reservationId", saved.getReservationId());
         payload.put("userId", saved.getUserId());
+        payload.put("email", saved.getEmail());
         payload.put("status", saved.getStatus());
         payload.put("amount", saved.getAmount());
         payload.put("stallId", saved.getStallId());
@@ -78,6 +79,7 @@ public class ReservationService {
         payload.put("event", "RESERVATION_CONFIRMED");
         payload.put("reservationId", updated.getReservationId());
         payload.put("userId", updated.getUserId());
+        payload.put("email", updated.getEmail());
         payload.put("status", updated.getStatus());
         payload.put("reserveConfirmDate", updated.getReserveConfirmDate() != null ? updated.getReserveConfirmDate().toString() : null);
         payload.put("qrId", updated.getQrId());
@@ -96,6 +98,7 @@ public class ReservationService {
         payload.put("event", "RESERVATION_CANCELLED");
         payload.put("reservationId", updated.getReservationId());
         payload.put("userId", updated.getUserId());
+        payload.put("email", updated.getEmail());
         payload.put("status", updated.getStatus());
 
         rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE, RabbitMQConfig.ROUTING_KEY_CANCELLED, payload);

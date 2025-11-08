@@ -17,6 +17,7 @@ public class Reservation {
     private LocalDateTime reserveDate;
     private String status;
     private String userId;
+    private String email;
     private double amount;
     private String stallId;
     private String qrId;
