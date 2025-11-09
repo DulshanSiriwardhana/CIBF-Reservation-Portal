@@ -1,4 +1,4 @@
-package com.example.reservation.util;
+package com.example.notificationservice.util;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -21,11 +21,17 @@ public class QRCodeGenerator {
 
         BitMatrix bitMatrix = qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, width, height, hints);
         File dir = new File(folder);
-        if (!dir.exists()) dir.mkdirs();
+        if (!dir.exists()) {
+            dir.mkdirs();
+            System.out.println("📁 Created QR directory: " + dir.getAbsolutePath());
+        }
 
         String filename = "qr_" + UUID.randomUUID() + ".png";
         Path path = new File(dir, filename).toPath();
         MatrixToImageWriter.writeToPath(bitMatrix, "PNG", path);
+        
+        System.out.println("✅ QR code generated: " + path.toAbsolutePath());
+        
         return filename;
     }
 }

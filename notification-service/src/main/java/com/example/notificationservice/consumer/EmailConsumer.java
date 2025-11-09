@@ -2,10 +2,12 @@ package com.example.notificationservice.consumer;
 
 import com.example.notificationservice.config.RabbitMQConfig;
 import com.example.notificationservice.service.EmailService;
+import com.example.notificationservice.util.QRCodeGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -16,6 +18,9 @@ public class EmailConsumer {
 
     private final EmailService emailService;
     private final ObjectMapper objectMapper;
+
+    @Value("${qrcode.folder:qrcodes}")
+    private String qrFolder;
 
     @RabbitListener(queues = RabbitMQConfig.RESERVATION_EMAIL_QUEUE)
     public void consumeMessage(String messageJson) {
@@ -29,11 +34,16 @@ public class EmailConsumer {
             String email = (String) messageMap.get("email");
             String status = (String) messageMap.get("status");
             String reservationId = (String) messageMap.get("reservationId");
-            String qrId = (String) messageMap.get("qrId");
             String event = (String) messageMap.get("event");
 
+            // Validate required fields
             if (email == null || email.isEmpty()) {
                 System.err.println("❌ Email is missing in the message");
+                return;
+            }
+
+            if (reservationId == null || reservationId.isEmpty()) {
+                System.err.println("❌ Reservation ID is missing in the message");
                 return;
             }
 
@@ -41,12 +51,29 @@ public class EmailConsumer {
             System.out.println("   Event: " + event);
             System.out.println("   Status: " + status);
             System.out.println("   Reservation ID: " + reservationId);
-            System.out.println("   QR ID: " + qrId);
-            
+
+            String qrFileName = null;
+            try {
+                String qrContent = buildQRContent(reservationId, event, status);
+                System.out.println("🔲 Generating QR code with content: " + qrContent);
+                
+                qrFileName = QRCodeGenerator.generateQRCodeImage(
+                    qrContent,
+                    300,
+                    300,
+                    qrFolder
+                );
+                
+                System.out.println("✅ QR code generated: " + qrFileName);
+            } catch (Exception e) {
+                System.err.println("❌ Failed to generate QR code: " + e.getMessage());
+                e.printStackTrace();
+            }
+
             String subject = buildSubject(event, status);
             String text = buildEmailBody(messageMap, event, status, reservationId);
 
-            emailService.sendEmail(email, subject, text, null, qrId);
+            emailService.sendEmail(email, subject, text, null, qrFileName);
             
             System.out.println("✅ Email sent successfully to: " + email);
         } catch (MessagingException e) {
@@ -56,6 +83,37 @@ public class EmailConsumer {
             System.err.println("❌ Error processing message: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    private String buildQRContent(String reservationId, String event, String status) {
+        StringBuilder content = new StringBuilder();
+        
+        if (event == null) {
+            event = "UNKNOWN";
+        }
+
+        switch (event) {
+            case "RESERVATION_CREATED":
+                content.append("RESERVATION:").append(reservationId)
+                       .append("|STATUS:PENDING")
+                       .append("|TYPE:INITIAL");
+                break;
+            case "RESERVATION_CONFIRMED":
+                content.append("RESERVATION:").append(reservationId)
+                       .append("|STATUS:CONFIRMED")
+                       .append("|TYPE:CHECK_IN");
+                break;
+            case "RESERVATION_CANCELLED":
+                content.append("RESERVATION:").append(reservationId)
+                       .append("|STATUS:CANCELLED")
+                       .append("|TYPE:CANCELLED");
+                break;
+            default:
+                content.append("RESERVATION:").append(reservationId)
+                       .append("|STATUS:").append(status != null ? status : "UNKNOWN");
+        }
+
+        return content.toString();
     }
 
     private String buildSubject(String event, String status) {
@@ -93,12 +151,17 @@ public class EmailConsumer {
                 
                 Object amount = messageMap.get("amount");
                 if (amount != null) {
-                    body.append("<p><strong>Amount:</strong> $").append(amount).append("</p>");
+                    body.append("<p><strong>Amount:</strong> LKR").append(amount).append("</p>");
                 }
                 
                 Object stallId = messageMap.get("stallId");
                 if (stallId != null) {
                     body.append("<p><strong>Stall ID:</strong> ").append(stallId).append("</p>");
+                }
+                
+                Object reserveDate = messageMap.get("reserveDate");
+                if (reserveDate != null) {
+                    body.append("<p><strong>Reserved on:</strong> ").append(reserveDate).append("</p>");
                 }
                 
                 body.append("<p>Please keep your QR code attached to this email for check-in.</p>");

@@ -4,7 +4,6 @@ import com.example.reservation.config.RabbitMQConfig;
 import com.example.reservation.exception.ResourceNotFoundException;
 import com.example.reservation.model.Reservation;
 import com.example.reservation.repository.ReservationRepository;
-import com.example.reservation.util.QRCodeGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -23,26 +22,14 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final RabbitTemplate rabbitTemplate;
     private final ObjectMapper objectMapper;
-    private final String qrFolder = "qrcodes";
 
     public Reservation createReservation(Reservation reservation) {
         reservation.setReserveDate(LocalDateTime.now());
         reservation.setStatus("PENDING");
         Reservation saved = reservationRepository.save(reservation);
 
-        try {
-            String qrFile = QRCodeGenerator.generateQRCodeImage(
-                    "reservation:" + saved.getReservationId(),
-                    300,
-                    300,
-                    qrFolder
-            );
-            saved.setQrId(qrFile);
-            saved = reservationRepository.save(saved);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        System.out.println("💾 Reservation saved: " + saved.getReservationId());
+        
         sendNotification(saved, "RESERVATION_CREATED", RabbitMQConfig.ROUTING_KEY_CREATED);
         return saved;
     }
@@ -52,19 +39,9 @@ public class ReservationService {
         res.setStatus("CONFIRMED");
         res.setReserveConfirmDate(LocalDateTime.now());
 
-        try {
-            String qrFile = QRCodeGenerator.generateQRCodeImage(
-                    "reservation_confirmed:" + res.getReservationId(),
-                    300,
-                    300,
-                    qrFolder
-            );
-            res.setQrId(qrFile);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         Reservation updated = reservationRepository.save(res);
+        System.out.println("✅ Reservation confirmed: " + updated.getReservationId());
+        
         sendNotification(updated, "RESERVATION_CONFIRMED", RabbitMQConfig.ROUTING_KEY_CONFIRMED);
         return updated;
     }
@@ -73,6 +50,9 @@ public class ReservationService {
         Reservation res = getReservationById(id);
         res.setStatus("CANCELLED");
         Reservation updated = reservationRepository.save(res);
+        
+        System.out.println("❌ Reservation cancelled: " + updated.getReservationId());
+        
         sendNotification(updated, "RESERVATION_CANCELLED", RabbitMQConfig.ROUTING_KEY_CANCELLED);
         return updated;
     }
@@ -89,11 +69,14 @@ public class ReservationService {
             payload.put("stallId", reservation.getStallId());
             payload.put("reserveDate", reservation.getReserveDate() != null ? reservation.getReserveDate().toString() : null);
             payload.put("reserveConfirmDate", reservation.getReserveConfirmDate() != null ? reservation.getReserveConfirmDate().toString() : null);
-            payload.put("qrId", reservation.getQrId());
 
             String jsonMessage = objectMapper.writeValueAsString(payload);
             
-            System.out.println("📤 Sending notification: " + jsonMessage);
+            System.out.println("📤 Sending notification to RabbitMQ");
+            System.out.println("   Event: " + event);
+            System.out.println("   Exchange: " + RabbitMQConfig.EXCHANGE);
+            System.out.println("   Routing Key: " + routingKey);
+            System.out.println("   Payload: " + jsonMessage);
             
             rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE, routingKey, jsonMessage);
             

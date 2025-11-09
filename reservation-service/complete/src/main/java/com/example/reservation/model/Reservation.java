@@ -20,6 +20,5 @@ public class Reservation {
     private String email;
     private double amount;
     private String stallId;
-    private String qrId;
     private LocalDateTime reserveConfirmDate;
 }
