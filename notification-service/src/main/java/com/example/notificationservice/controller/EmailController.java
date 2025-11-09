@@ -34,7 +34,6 @@ public class EmailController {
         }
 
         emailService.sendEmail(to, subject, message, attachmentPath, qrData);
-
         return ResponseEntity.ok("Email sent successfully!");
     }
 }

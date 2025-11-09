@@ -26,7 +26,7 @@ public class EmailService {
 
         helper.setTo(to);
         helper.setSubject(subject);
-        helper.setText(message);
+        helper.setText(message, true);
 
         String attachmentName = null;
         if (attachmentPath != null) {
@@ -44,7 +44,6 @@ public class EmailService {
         record.setAttachmentName(attachmentName);
         record.setQrData(qrData);
         record.setSentAt(LocalDateTime.now());
-
         repository.save(record);
     }
 }

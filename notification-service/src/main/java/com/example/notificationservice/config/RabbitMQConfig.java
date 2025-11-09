@@ -6,11 +6,10 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitMQConfig {
-
     public static final String RESERVATION_EMAIL_QUEUE = "reservation.email.queue";
 
     @Bean
-    public Queue reservationEmailQueue() {
+    public Queue emailQueue() {
         return new Queue(RESERVATION_EMAIL_QUEUE, true);
     }
 }
