@@ -1,0 +1,31 @@
+package lk.bookfair.emailservice.controller;
+
+import lk.bookfair.emailservice.model.EmailRequest;
+import lk.bookfair.emailservice.service.EmailSenderService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/email")
+@CrossOrigin
+public class EmailController {
+
+    @Autowired
+    private EmailSenderService emailSenderService;
+
+    @GetMapping("/")
+    public String home() {
+        return "Email Service is running!";
+    }
+
+    @PostMapping("/send")
+    public ResponseEntity<String> sendEmail(@RequestBody EmailRequest request) {
+        try {
+            emailSenderService.sendEmail(request);
+            return ResponseEntity.ok("Email sent successfully to " + request.getTo());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Failed to send email: " + e.getMessage());
+        }
+    }
+}
