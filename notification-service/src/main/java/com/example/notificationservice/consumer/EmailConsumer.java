@@ -19,10 +19,12 @@ public class EmailConsumer {
 
     @RabbitListener(queues = RabbitMQConfig.RESERVATION_EMAIL_QUEUE)
     public void consumeMessage(String messageJson) {
+        System.out.println("📨 Raw message received: " + messageJson);
+        
         try {
             Map<String, Object> messageMap = objectMapper.readValue(messageJson, Map.class);
 
-            System.out.println("📨 Received message: " + messageJson);
+            System.out.println("📨 Parsed message: " + messageMap);
 
             String email = (String) messageMap.get("email");
             String status = (String) messageMap.get("status");
@@ -30,24 +32,37 @@ public class EmailConsumer {
             String qrId = (String) messageMap.get("qrId");
             String event = (String) messageMap.get("event");
 
-            // Build email subject and body based on event type
+            if (email == null || email.isEmpty()) {
+                System.err.println("❌ Email is missing in the message");
+                return;
+            }
+
+            System.out.println("📧 Preparing to send email to: " + email);
+            System.out.println("   Event: " + event);
+            System.out.println("   Status: " + status);
+            System.out.println("   Reservation ID: " + reservationId);
+            System.out.println("   QR ID: " + qrId);
+            
             String subject = buildSubject(event, status);
             String text = buildEmailBody(messageMap, event, status, reservationId);
 
-            // Send email with QR code path if available
             emailService.sendEmail(email, subject, text, null, qrId);
             
-            System.out.println("Email sent successfully to: " + email);
+            System.out.println("✅ Email sent successfully to: " + email);
         } catch (MessagingException e) {
-            System.err.println("Failed to send email: " + e.getMessage());
+            System.err.println("❌ Failed to send email: " + e.getMessage());
             e.printStackTrace();
         } catch (Exception e) {
-            System.err.println("Error processing message: " + e.getMessage());
+            System.err.println("❌ Error processing message: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
     private String buildSubject(String event, String status) {
+        if (event == null) {
+            return "Reservation " + (status != null ? status : "Update");
+        }
+        
         switch (event) {
             case "RESERVATION_CREATED":
                 return "Reservation Created Successfully";
@@ -56,7 +71,7 @@ public class EmailConsumer {
             case "RESERVATION_CANCELLED":
                 return "Reservation Cancelled";
             default:
-                return "Reservation " + status;
+                return "Reservation " + (status != null ? status : "Update");
         }
     }
 
@@ -66,11 +81,15 @@ public class EmailConsumer {
         body.append("<h2 style='color: #333;'>Reservation Update</h2>");
         body.append("<p>Dear Customer,</p>");
 
+        if (event == null) {
+            event = "UNKNOWN";
+        }
+
         switch (event) {
             case "RESERVATION_CREATED":
                 body.append("<p>Your reservation has been <strong>created successfully</strong>.</p>");
-                body.append("<p><strong>Reservation ID:</strong> ").append(reservationId).append("</p>");
-                body.append("<p><strong>Status:</strong> ").append(status).append("</p>");
+                body.append("<p><strong>Reservation ID:</strong> ").append(reservationId != null ? reservationId : "N/A").append("</p>");
+                body.append("<p><strong>Status:</strong> ").append(status != null ? status : "N/A").append("</p>");
                 
                 Object amount = messageMap.get("amount");
                 if (amount != null) {
@@ -87,7 +106,7 @@ public class EmailConsumer {
 
             case "RESERVATION_CONFIRMED":
                 body.append("<p>Your reservation has been <strong>confirmed</strong>!</p>");
-                body.append("<p><strong>Reservation ID:</strong> ").append(reservationId).append("</p>");
+                body.append("<p><strong>Reservation ID:</strong> ").append(reservationId != null ? reservationId : "N/A").append("</p>");
                 
                 Object confirmDate = messageMap.get("reserveConfirmDate");
                 if (confirmDate != null) {
@@ -99,13 +118,13 @@ public class EmailConsumer {
 
             case "RESERVATION_CANCELLED":
                 body.append("<p>Your reservation has been <strong>cancelled</strong>.</p>");
-                body.append("<p><strong>Reservation ID:</strong> ").append(reservationId).append("</p>");
+                body.append("<p><strong>Reservation ID:</strong> ").append(reservationId != null ? reservationId : "N/A").append("</p>");
                 body.append("<p>If you did not request this cancellation, please contact support immediately.</p>");
                 break;
 
             default:
-                body.append("<p>Your reservation with ID <strong>").append(reservationId)
-                    .append("</strong> is now <strong>").append(status).append("</strong>.</p>");
+                body.append("<p>Your reservation with ID <strong>").append(reservationId != null ? reservationId : "N/A")
+                    .append("</strong> is now <strong>").append(status != null ? status : "updated").append("</strong>.</p>");
         }
 
         body.append("<br>");
