@@ -1,3 +1,19 @@
+//package lk.bookfair.emailservice.model;
+//
+//import lombok.AllArgsConstructor;
+//import lombok.Data;
+//import lombok.NoArgsConstructor;
+//
+//@Data
+//@AllArgsConstructor
+//@NoArgsConstructor
+//public class EmailRequest {
+//    private String to;
+//    private String subject;
+//    private String body;
+//    private String qrCodeUrl; // optional
+//}
+
 package lk.bookfair.emailservice.model;
 
 import lombok.AllArgsConstructor;
@@ -5,11 +21,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class EmailRequest {
     private String to;
     private String subject;
     private String body;
-    private String qrCodeUrl; // optional
+    private String reservationId;
+    private String stallName;
 }
