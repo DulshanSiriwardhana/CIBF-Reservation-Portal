@@ -1,36 +1,76 @@
 package com.cibf.stallservice.Model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import jakarta.persistence.*;
+
 import java.time.LocalDate;
 
 @Entity
 public class Model_Stall {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long stallId;
 
+    @Column(nullable=false, unique=true)
     private String stallName;
-    private String bookerName;
-    private String contactEmail;
-    private LocalDate reservationDate;
+
+    @Column(nullable=false)
+    private String size;
+
+    @Column(nullable=false)
+    private boolean available = true;
+
+    @Column
+    private String locationDescription;
 
     // Getters and setters
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Model_Stall() {}
 
-    public String getStallName() { return stallName; }
-    public void setStallName(String stallName) { this.stallName = stallName; }
+    public Model_Stall(String name, String size, boolean available, String locationDescription) {
+        this.stallName = name;
+        this.size = size;
+        this.available = available;
+        this.locationDescription = locationDescription;
+    }
 
-    public String getBookerName() { return bookerName; }
-    public void setBookerName(String bookerName) { this.bookerName = bookerName; }
 
-    public String getContactEmail() { return contactEmail; }
-    public void setContactEmail(String contactEmail) { this.contactEmail = contactEmail; }
+    // Getter and setter for stallId
+    public Long getStallId() {
+        return stallId;
+    }
+    public void setStallId(Long stallId) {
+        this.stallId = stallId;
+    }
 
-    public LocalDate getReservationDate() { return reservationDate; }
-    public void setReservationDate(LocalDate reservationDate) { this.reservationDate = reservationDate; }
+    // Getter and setter for stallName
+    public String getStallName() {
+        return stallName;
+    }
+    public void setStallName(String stallName) {
+        this.stallName = stallName;
+    }
+
+    // Getter and setter for size
+    public String getSize() {
+        return size;
+    }
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    // Getter and setter for available
+    public boolean isAvailable() {
+        return available;
+    }
+    public void setAvailable(boolean available) {
+        this.available = available;
+    }
+
+    // Getter and setter for locationDescription
+    public String getLocationDescription() {
+        return locationDescription;
+    }
+    public void setLocationDescription(String locationDescription) {
+        this.locationDescription = locationDescription;
+    }
 }
