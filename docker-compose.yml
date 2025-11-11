@@ -1,4 +1,3 @@
-version: '3.9'
 services:
   mongo: 
     image: mongo:6
@@ -15,22 +14,18 @@ services:
     build: ./notification-service
     ports:
       - "8083:8083"
-    
     depends_on:
       - mongo
       - rabbitmq
-    
     networks:
       - notification-network
     
   email-service:
     build: ./email-service
-
     ports:
       - "8081:8081"
-    
     networks:
-      - notification-service
+      - notification-network   # <-- fix here
 
 networks:
   notification-network:
