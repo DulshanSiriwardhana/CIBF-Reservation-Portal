@@ -62,7 +62,7 @@ public class StallModel {
     public enum StallSize {
         SMALL,
         MEDIUM,
-        LARG
+        LARGE
     }
 
     public enum StallStatus {
