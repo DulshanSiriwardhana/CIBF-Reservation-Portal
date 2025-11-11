@@ -5,6 +5,7 @@ FROM eclipse-temurin:22-jdk-alpine
 WORKDIR /app
 
 # Copy Maven build files
+COPY mvnw .
 COPY pom.xml .
 COPY src ./src
 
