@@ -10,7 +10,7 @@ COPY pom.xml .
 COPY src ./src
 
 # Build the project
-RUN ./mvnw clean package -DskipTests
+RUN ./mvn clean package -DskipTests
 
 # Copy the built JAR to container
 COPY target/*.jar app.jar
