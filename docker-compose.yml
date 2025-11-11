@@ -1,0 +1,32 @@
+services:
+  mongo: 
+    image: mongo:6
+    ports:
+      - "27017:27017"
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  notification-services:
+    build: ./notification-service
+    ports:
+      - "8083:8083"
+    depends_on:
+      - mongo
+      - rabbitmq
+    networks:
+      - notification-network
+    
+  email-service:
+    build: ./email-service
+    ports:
+      - "8081:8081"
+    networks:
+      - notification-network   # <-- fix here
+
+networks:
+  notification-network:
+    driver: bridge
