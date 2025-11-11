@@ -6,14 +6,19 @@ WORKDIR /app
 
 # Copy Maven build files
 COPY mvnw .
+COPY .mvn .mvn
 COPY pom.xml .
 COPY src ./src
 
 # Build the project
+RUN chmod +x mvnw
 RUN ./mvn clean package -DskipTests
 
+# Run the built JAR
+FROM eclipse-temurin:22-jre-alpine
+
 # Copy the built JAR to container
-COPY target/*.jar app.jar
+COPY --from=builder /app/target/*.jar app.jar
 
 # Expose port
 EXPOSE 8081
