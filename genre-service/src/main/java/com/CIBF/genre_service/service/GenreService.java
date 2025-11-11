@@ -15,11 +15,15 @@ public class GenreService {
     }
 
     public List<Genre> getGenresByExhibitorId(String exhibitorId) {
-        return genreRepository.findByExhibitorId(exhibitorId);
+        return genreRepository.findByExhibitorIDsContaining(exhibitorId);
     }
 
     public Genre addGenre(Genre genre) {
         return genreRepository.save(genre);
+    }
+
+    public List<Genre> getAllGenres() {
+        return genreRepository.findAll();
     }
 
     public Optional<Genre> updateGenre(Long id, Genre updatedGenre) {
@@ -38,16 +42,7 @@ public class GenreService {
         Optional<Genre> genreOpt = genreRepository.findById(genreId);
         if (genreOpt.isPresent()) {
             Genre genre = genreOpt.get();
-            String[] exhibitors = genre.getExhibitor_IDs();
-            String[] updatedExhibitors;
-            if (exhibitors == null) {
-                updatedExhibitors = new String[] { exhibitorId };
-            } else {
-                updatedExhibitors = new String[exhibitors.length + 1];
-                System.arraycopy(exhibitors, 0, updatedExhibitors, 0, exhibitors.length);
-                updatedExhibitors[exhibitors.length] = exhibitorId;
-            }
-            genre.setExhibitor_IDs(updatedExhibitors);
+            genre.addExhibitorID(exhibitorId);
             return genreRepository.save(genre);
         } else {
             throw new RuntimeException("Genre not found");

@@ -3,11 +3,12 @@ package com.CIBF.genre_service.model;
 import java.beans.BeanProperty;
 import java.time.LocalDateTime;
 import jakarta.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "genres")
 public class Genre {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -17,8 +18,10 @@ public class Genre {
 
     private String description;
 
-    @Column(name = "exhibitor_IDs", columnDefinition = "TEXT[]")
-    private String[] exhibitor_IDs;
+    @ElementCollection
+    @CollectionTable(name = "genre_exhibitor_ids", joinColumns = @JoinColumn(name = "genre_id"))
+    @Column(name = "exhibitor_id")
+    private List<String> exhibitorIDs;
 
     private LocalDateTime createdAt = LocalDateTime.now();
     private LocalDateTime updatedAt = LocalDateTime.now();
@@ -41,8 +44,8 @@ public class Genre {
         return description;
     }
 
-    public String[] getExhibitor_IDs() {
-        return exhibitor_IDs;
+    public List<String> getExhibitorIDs() {
+        return exhibitorIDs;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -65,8 +68,7 @@ public class Genre {
         this.description = description;
     }
 
-    public void setExhibitor_IDs(String[] exhibitor_IDs) {
-        this.exhibitor_IDs = exhibitor_IDs;
+    public void addExhibitorID(String exhibitorID) {
+        this.exhibitorIDs.add(exhibitorID);
     }
-
 }

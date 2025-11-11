@@ -19,6 +19,12 @@ public class GenreController {
         this.genreService = genreService;
     }
 
+    @GetMapping
+    public ResponseEntity<List<Genre>> getAllGenres() {
+        List<Genre> genres = genreService.getAllGenres();
+        return ResponseEntity.ok(genres);
+    }
+
     @GetMapping("/{exhibitorId}")
     public ResponseEntity<List<Genre>> getGenresByExhibitorId(@PathVariable String exhibitorId) {
         List<Genre> genres = genreService.getGenresByExhibitorId(exhibitorId);
