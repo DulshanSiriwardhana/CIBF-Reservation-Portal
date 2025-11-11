@@ -35,10 +35,7 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-
-//import javax.mail.internet.MimeMessage;
 import jakarta.mail.internet.MimeMessage;
-
 
 @Service
 public class EmailSenderService {
@@ -56,14 +53,41 @@ public class EmailSenderService {
 
         helper.setTo(request.getTo());
         helper.setSubject(request.getSubject());
-        helper.setText(
-                request.getBody() +
-                        "\n\nReservation ID: " + request.getReservationId() +
-                        "\nStall: " + request.getStallName()
-        );
 
-        // QR content (unique)
-        String qrContent = "Reservation ID: " + request.getReservationId();
+        // Build rich email body using all provided fields
+        StringBuilder emailText = new StringBuilder();
+
+        emailText.append("Dear ").append(request.getBusinessName()).append(",\n\n")
+                .append("Your reservation for the Colombo International Book Fair has been confirmed.\n\n")
+                .append("Reservation Details:\n")
+                .append("- Reservation ID: ").append(request.getReservationId()).append("\n")
+                .append("- Status: ").append(request.getStatus()).append("\n")
+                .append("- Reserved On: ").append(request.getReserveDate()).append("\n")
+                .append("- Confirmed On: ").append(request.getReserveConfirmDate()).append("\n")
+                .append("- Amount: Rs. ").append(request.getAmount()).append("\n\n")
+
+                .append("Stall Details:\n")
+                .append("- Stall ID: ").append(request.getStallId()).append("\n")
+                .append("- Stall Name: ").append(request.getStallName()).append("\n")
+                .append("- Stall Size: ").append(request.getStallSize()).append("\n")
+                .append("- Location: ").append(request.getStallLocation()).append("\n\n")
+
+                .append("Please find your QR pass attached with this email.\n")
+                .append("Present it at the exhibition entrance for verification.\n\n")
+                .append("Thank you,\n")
+                .append("Sri Lanka Book Publishers’ Association\n\n")
+
+                .append(request.getBody()); // Append any custom body text at the end
+
+        helper.setText(emailText.toString());
+
+        // QR Content in simple text format
+        String qrContent = "BusinessName: " + request.getBusinessName() + "\n"
+                + "ReservationID: " + request.getReservationId() + "\n"
+                + "StallID:" + request.getStallId() +"\n"
+                + "StallName: " + request.getStallName() + "\n"
+                + "StallSize: " + request.getStallSize();
+
 
         byte[] qrBytes = qrGenerator.generateQR(qrContent);
         helper.addAttachment("QR-PASS.png", new ByteArrayResource(qrBytes));
