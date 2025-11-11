@@ -12,7 +12,7 @@ COPY src ./src
 
 # Build the project
 RUN chmod +x mvnw
-RUN ./mvn clean package -DskipTests
+RUN ./mvnw clean package -DskipTests
 
 # Run the built JAR
 FROM eclipse-temurin:22-jre-alpine
