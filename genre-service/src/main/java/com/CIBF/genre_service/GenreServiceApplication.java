@@ -16,7 +16,7 @@ public class GenreServiceApplication {
 
         app.addListeners((ApplicationListener<ApplicationReadyEvent>) event -> {
             Environment env = event.getApplicationContext().getEnvironment();
-            String port = env.getProperty("server.port", "8081");
+            String port = env.getProperty("server.port", "8082");
             try {
                 String hostAddress = InetAddress.getLocalHost().getHostAddress();
                 System.out.println("======================================");
