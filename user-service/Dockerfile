@@ -21,7 +21,7 @@ FROM eclipse-temurin:22-jre-alpine
 COPY --from=builder /app/target/*.jar app.jar
 
 # Expose port
-EXPOSE 8086
+EXPOSE 8084
 
 # Run the Spring Boot app
 ENTRYPOINT ["java", "-jar", "app.jar"]
