@@ -1,1 +1,38 @@
 @import "tailwindcss";
+
+@theme {
+  --font-family-notoserif: "NotoSerifSinhala", serif;
+  --font-family-varela: "VarelaRound", sans-serif;
+}
+
+@font-face {
+  font-family: 'NotoSerifSinhala';
+  src: url('/src/assets/fonts/Noto_Serif_Sinhala/static/NotoSerifSinhala-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NotoSerifSinhala';
+  src: url('/src/assets/fonts/Noto_Serif_Sinhala/static/NotoSerifSinhala-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NotoSerifSinhala';
+  src: url('/src/assets/fonts/Noto_Serif_Sinhala/static/NotoSerifSinhala-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'VarelaRound';
+  src: url('/src/assets/fonts/Varela_Round/VarelaRound-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
