@@ -4,6 +4,7 @@ import AuthPage from "./pages/AuthPage";
 import NavBar from "./components/navbar/NavBar";
 import Dashboard from "./pages/Dashboard";
 import Footer from "./components/footer/Footer";
+import { LoaderProvider } from "./context/LoaderContext";
 
 function App() {
   return (
@@ -12,10 +13,12 @@ function App() {
         <div>
           <NavBar/>
         </div>
-        <Routes>
-          <Route path="/" element={<AuthPage />} />
-          <Route path="/dashboard/*" element={<Dashboard />} />
-        </Routes>
+        <LoaderProvider>
+          <Routes>
+            <Route path="/" element={<AuthPage />} />
+            <Route path="/dashboard/*" element={<Dashboard />} />
+          </Routes>
+        </LoaderProvider>
         <div>
           <Footer/>
         </div>
