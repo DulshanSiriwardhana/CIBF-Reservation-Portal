@@ -10,7 +10,7 @@ interface StatCardProps {
   trendColor?: string;
 }
 
-const StatCard: React.FC<StatCardProps> = ({ title, value, icon, bgColor="bg-gray-200", iconBgColor, trend, trendColor }) => {
+const StatCard: React.FC<StatCardProps> = ({ title, value, icon, bgColor="bg-black", iconBgColor, trend, trendColor }) => {
   return (
     <div className={`${bgColor} rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-white`}>
       <div className="flex items-start justify-between mb-4">
@@ -25,8 +25,8 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, icon, bgColor="bg-gra
         )}
       </div>
       <div className="space-y-1">
-        <h3 className="text-slate-600 text-sm font-semibold">{title}</h3>
-        <p className="text-4xl font-black text-slate-800">{value.toLocaleString()}</p>
+        <h3 className="text-white text-sm font-semibold">{title}</h3>
+        <p className="text-4xl font-black text-white">{value.toLocaleString()}</p>
       </div>
     </div>
   );
