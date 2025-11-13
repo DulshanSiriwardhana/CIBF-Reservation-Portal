@@ -1,25 +1,58 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FiUsers, FiBox, FiClock, FiCheckCircle, FiXCircle, FiShoppingBag } from "react-icons/fi";
 import StatCard from "../components/dashboard/StatCard";
 import ReservationCard from "../components/dashboard/ReservationCard";
 import ActionButton from "../components/dashboard/ActionButton";
 import ActivityItem from "../components/dashboard/ActivityItem";
+import { useLoader } from "../context/LoaderContext";
+
+interface DashboardStats {
+  vendors: number;
+  stalls: number;
+  pendingReservations: number;
+  confirmedReservations: number;
+  cancelledReservations: number;
+}
 
 const Dashboard: React.FC = () => {
-  const stats = {
-    vendors: 247,
-    stalls: 180,
-    pendingReservations: 38,
-    confirmedReservations: 156,
-    cancelledReservations: 24,
-  };
+  const { showLoader, hideLoader } = useLoader();
+  const [stats, setStats] = useState<DashboardStats>({
+    vendors: 0,
+    stalls: 0,
+    pendingReservations: 0,
+    confirmedReservations: 0,
+    cancelledReservations: 0,
+  });
+
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      showLoader();
+      try {
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        
+        setStats({
+          vendors: 247,
+          stalls: 180,
+          pendingReservations: 38,
+          confirmedReservations: 156,
+          cancelledReservations: 24,
+        });
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+      } finally {
+        hideLoader();
+      }
+    };
+
+    fetchDashboardData();
+  }, [showLoader, hideLoader]);
 
   const occupancyRate = ((stats.confirmedReservations / stats.stalls) * 100).toFixed(1);
   const totalReservations = stats.confirmedReservations + stats.cancelledReservations + stats.pendingReservations;
   const cancellationRate = ((stats.cancelledReservations / totalReservations) * 100).toFixed(1);
 
   return (
-    <div className="min-h-screen bg-slate-50 pt-24 pb-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-slate-50 pt-12 pb-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
           <h1 className="text-5xl font-black text-slate-800 mb-3">
