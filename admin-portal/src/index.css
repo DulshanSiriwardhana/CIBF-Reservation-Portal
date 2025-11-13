@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+@theme {
+  --font-family-notoserif: "NotoSerifSinhala", serif;
+  --font-family-varela: "VarelaRound", sans-serif;
+  --img-background: url('/src/assets/images/backgrounds/bg1.jpg');
+  --color-primary: #219C90;
+  --color-secondary: #FFF455;
+  --color-accent: #FFC700;
+  --color-danger: #EE4E4E;
+}
+
+@font-face {
+  font-family: 'NotoSerifSinhala';
+  src: url('/src/assets/fonts/Noto_Serif_Sinhala/static/NotoSerifSinhala-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NotoSerifSinhala';
+  src: url('/src/assets/fonts/Noto_Serif_Sinhala/static/NotoSerifSinhala-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NotoSerifSinhala';
+  src: url('/src/assets/fonts/Noto_Serif_Sinhala/static/NotoSerifSinhala-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'VarelaRound';
+  src: url('/src/assets/fonts/Varela_Round/VarelaRound-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+.background-default {
+  background-image: var(--img-background);
+  @apply bg-cover bg-center bg-no-repeat;
+}
+
+/* Lets we use these colors guys if you have any we will change in here
+
+gree: #219C90 -> primary
+yellow: #FFF455 -> secondary
+amber: #FFC700 -> accent
+red: #EE4E4E -> danger
+
+*/

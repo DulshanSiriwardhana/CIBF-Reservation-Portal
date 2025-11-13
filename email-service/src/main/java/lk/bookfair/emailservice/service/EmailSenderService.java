@@ -29,13 +29,14 @@
 
 package lk.bookfair.emailservice.service;
 
-import lk.bookfair.emailservice.model.EmailRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+
 import jakarta.mail.internet.MimeMessage;
+import lk.bookfair.emailservice.model.EmailRequest;
 
 @Service
 public class EmailSenderService {
