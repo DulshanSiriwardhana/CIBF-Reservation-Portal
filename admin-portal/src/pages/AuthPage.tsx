@@ -8,7 +8,7 @@ const AuthPage: React.FC = () => {
 
   return (
     <div className="flex items-center justify-center h-screen bg-gray-900 text-white background-default">
-      <div className="w-full h-full flex items-center justify-center backdrop-blur-sm backdrop-brightness-20">
+      <div className="w-full h-full flex items-center justify-center backdrop-blur-sm backdrop-brightness-20 p-4">
         {isLogin ? <LoginCard onSwitch={toggleForm} /> : <SignupCard onSwitch={toggleForm} />}
       </div>
     </div>
