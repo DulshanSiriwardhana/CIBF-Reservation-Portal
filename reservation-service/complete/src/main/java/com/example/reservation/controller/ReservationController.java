@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/reservations")
@@ -29,6 +30,16 @@ public class ReservationController {
     @GetMapping("/{id}")
     public ResponseEntity<Reservation> getById(@PathVariable String id) {
         return ResponseEntity.ok(reservationService.getReservationById(id));
+    }
+    
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<Reservation>> getByUserId(@PathVariable String userId) {
+        return ResponseEntity.ok(reservationService.getReservationsByUserId(userId));
+    }
+    
+    @GetMapping("/user/{userId}/summary")
+    public ResponseEntity<Map<String, Object>> getUserSummary(@PathVariable String userId) {
+        return ResponseEntity.ok(reservationService.getUserReservationSummary(userId));
     }
 
     @PutMapping("/{id}/confirm")
