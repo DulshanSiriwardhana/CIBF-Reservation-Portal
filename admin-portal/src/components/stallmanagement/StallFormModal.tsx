@@ -1,81 +1,48 @@
 import React, { useState, useEffect } from "react";
+import type { Stall } from "../../types/stall";
+import type { Genre } from "../../types/genre";
 
-interface StallFormModalProps {
+interface Props {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (stall: any) => void;
-  initialData?: any;
+  onSubmit: (stall: Stall) => void;
+  initialData?: Stall;
+  genres: Genre[];
 }
 
-const StallFormModal: React.FC<StallFormModalProps> = ({ isOpen, onClose, onSubmit, initialData }) => {
-  const [stallName, setStallName] = useState("");
-  const [size, setSize] = useState("SMALL");
-  const [dimension, setDimension] = useState(10);
-  const [price, setPrice] = useState(100);
-  const [status, setStatus] = useState("AVAILABLE");
+const StallFormModal: React.FC<Props> = ({ isOpen, onClose, onSubmit, initialData, genres }) => {
+  const [stall, setStall] = useState<Stall>({ id: 0, stallName: "", size: "SMALL", dimension: 0, price: 0, status: "AVAILABLE", positionX: 50, positionY: 50, genreIds: [] });
 
   useEffect(() => {
-    if (initialData) {
-      setStallName(initialData.stallName);
-      setSize(initialData.size);
-      setDimension(initialData.dimension);
-      setPrice(initialData.price);
-      setStatus(initialData.status);
-    }
+    if (initialData) setStall(initialData);
   }, [initialData]);
 
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-      <div className="bg-white rounded-xl p-6 w-full max-w-md">
+      <div className="bg-white rounded-xl p-6 w-96">
         <h2 className="text-xl font-bold mb-4">{initialData ? "Edit Stall" : "Add Stall"}</h2>
-        <div className="space-y-3">
-          <input
-            type="text"
-            placeholder="Stall Name"
-            className="w-full p-2 border rounded"
-            value={stallName}
-            onChange={(e) => setStallName(e.target.value)}
-          />
-          <select className="w-full p-2 border rounded" value={size} onChange={(e) => setSize(e.target.value)}>
-            <option value="SMALL">SMALL</option>
-            <option value="MEDIUM">MEDIUM</option>
-            <option value="LARGE">LARGE</option>
-          </select>
-          <input
-            type="number"
-            placeholder="Dimension"
-            className="w-full p-2 border rounded"
-            value={dimension}
-            onChange={(e) => setDimension(Number(e.target.value))}
-          />
-          <input
-            type="number"
-            placeholder="Price"
-            className="w-full p-2 border rounded"
-            value={price}
-            onChange={(e) => setPrice(Number(e.target.value))}
-          />
-          <select className="w-full p-2 border rounded" value={status} onChange={(e) => setStatus(e.target.value)}>
-            <option value="AVAILABLE">AVAILABLE</option>
-            <option value="RESERVED">RESERVED</option>
-            <option value="MAINTENANCE">MAINTENANCE</option>
+        <input className="border p-2 w-full mb-2" placeholder="Stall Name" value={stall.stallName} onChange={(e) => setStall({ ...stall, stallName: e.target.value })} />
+        <select className="border p-2 w-full mb-2" value={stall.size} onChange={(e) => setStall({ ...stall, size: e.target.value as Stall["size"] })}>
+          <option value="SMALL">SMALL</option>
+          <option value="MEDIUM">MEDIUM</option>
+          <option value="LARGE">LARGE</option>
+        </select>
+        <input className="border p-2 w-full mb-2" placeholder="Dimension" type="number" value={stall.dimension} onChange={(e) => setStall({ ...stall, dimension: Number(e.target.value) })} />
+        <input className="border p-2 w-full mb-2" placeholder="Price" type="number" value={stall.price} onChange={(e) => setStall({ ...stall, price: Number(e.target.value) })} />
+        <div className="mb-2">
+          <label className="font-bold mb-1 block">Genres:</label>
+          <select multiple className="border p-2 w-full" value={stall.genreIds?.map(String)} onChange={(e) => {
+            const selected = Array.from(e.target.selectedOptions).map(opt => Number(opt.value));
+            setStall({ ...stall, genreIds: selected });
+          }}>
+            {genres.map(g => <option key={g.id} value={g.id}>{g.name}</option>)}
           </select>
         </div>
-        <div className="mt-4 flex justify-end space-x-2">
-          <button className="px-4 py-2 rounded bg-gray-400 text-white" onClick={onClose}>
-            Cancel
-          </button>
-          <button
-            className="px-4 py-2 rounded bg-teal-600 text-white"
-            onClick={() => {
-              onSubmit({ id: initialData?.id, stallName, size, dimension, price, status });
-              onClose();
-            }}
-          >
-            Save
-          </button>
+        <div className="flex justify-end space-x-2 mt-4">
+          <button className="px-4 py-2 bg-gray-300 rounded" onClick={onClose}>Cancel</button>
+          <button className="px-4 py-2 bg-teal-600 text-white rounded" onClick={() => onSubmit(stall)}>Save</button>
         </div>
       </div>
     </div>

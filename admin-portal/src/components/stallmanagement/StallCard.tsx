@@ -1,23 +1,17 @@
 import React from "react";
-import ReservationActions from "./ReservationActions";
+import type { Stall } from "../../types/stall";
+import type { Genre } from "../../types/genre";
 
-interface StallCardProps {
-  id: number;
-  stallName: string;
-  size: "SMALL" | "MEDIUM" | "LARGE";
-  dimension: number;
-  price: number;
-  status: "AVAILABLE" | "RESERVED" | "MAINTENANCE";
-  reservedBy?: string;
-  reservationId?: string;
+interface StallCardProps extends Stall {
   onEdit: (stallName: string) => void;
-  onApprove?: () => void;
-  onCancel?: () => void;
+  onApprove: () => void;
+  onCancel: () => void;
+  genres?: Genre[];
 }
 
-const statusColors = {
+const statusColors: Record<Stall["status"], string> = {
   AVAILABLE: "bg-green-500",
-  RESERVED: "bg-yellow-400",
+  RESERVED: "bg-yellow-500",
   MAINTENANCE: "bg-red-500",
 };
 
@@ -28,38 +22,35 @@ const StallCard: React.FC<StallCardProps> = ({
   price,
   status,
   reservedBy,
-  reservationId,
   onEdit,
   onApprove,
   onCancel,
+  genres,
 }) => {
   return (
-    <div className="bg-white rounded-xl shadow-lg p-4 flex flex-col justify-between hover:shadow-2xl transition cursor-pointer">
-      <div>
-        <div className={`inline-block px-2 py-1 rounded text-white font-bold ${statusColors[status]}`}>
+    <div className="border rounded-xl p-4 shadow-lg flex flex-col space-y-2">
+      <div className="flex justify-between items-center">
+        <div className={`px-3 py-1 rounded-xl text-white font-bold ${statusColors[status]}`}>
           {status}
         </div>
-        <h3 className="text-xl font-semibold mt-2">{stallName}</h3>
-        <p className="text-gray-600 mt-1">Size: {size}</p>
-        <p className="text-gray-600">Dimension: {dimension} m²</p>
-        <p className="text-gray-600">Price: ${price}</p>
-        {reservedBy && <p className="text-gray-800 mt-1">Reserved By: {reservedBy}</p>}
-      </div>
-      <div className="mt-4 flex justify-between items-center">
-        <button
-          onClick={() => onEdit(stallName)}
-          className="px-3 py-1 rounded bg-teal-600 text-white hover:bg-teal-700 transition"
-        >
+        <button onClick={() => onEdit(stallName)} className="text-blue-600 font-bold hover:underline">
           Edit
         </button>
-        {status === "RESERVED" && reservationId && onApprove && onCancel && (
-          <ReservationActions
-            reservationId={reservationId}
-            onApprove={onApprove}
-            onCancel={onCancel}
-          />
-        )}
       </div>
+      <h2 className="text-lg font-bold">{stallName}</h2>
+      <p>Size: {size}</p>
+      <p>Dimension: {dimension} m²</p>
+      <p>Price: ${price}</p>
+      {reservedBy && <p>Reserved By: {reservedBy}</p>}
+      {status === "AVAILABLE" && <button onClick={onApprove} className="px-4 py-2 bg-green-600 text-white rounded-xl">Approve</button>}
+      {status === "RESERVED" && <button onClick={onCancel} className="px-4 py-2 bg-red-600 text-white rounded-xl">Cancel</button>}
+      {genres && genres.length > 0 && (
+        <div className="flex flex-wrap gap-1 mt-2">
+          {genres.map((g) => (
+            <span key={g.id} className="bg-gray-200 px-2 py-1 rounded text-sm">{g.name}</span>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
