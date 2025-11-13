@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { FiMenu, FiX, FiUser, FiLogOut } from "react-icons/fi";
+import React, { useState, useRef, useEffect } from "react";
+import { FiMenu, FiX, FiUser } from "react-icons/fi";
+import ProfilePopup from "./ProfilePopup";
 
 const menuItems = [
   { name: "Dashboard", href: "/dashboard" },
@@ -9,7 +10,23 @@ const menuItems = [
 
 const NavBar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const profileRef = useRef<HTMLDivElement>(null);
+
   const toggleMenu = () => setIsOpen(!isOpen);
+  const toggleProfile = () => setProfileOpen(!profileOpen);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
+        setProfileOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleLogout = () => alert("Logout clicked");
 
   return (
     <nav className="bg-teal-600 to-cyan-600 text-white shadow-2xl fixed w-full z-50 backdrop-blur-sm">
@@ -29,27 +46,36 @@ const NavBar: React.FC = () => {
             </div>
           </div>
 
-          <div className="hidden md:flex space-x-2 items-center">
+          <div className="hidden md:flex space-x-2 items-center relative">
             {menuItems.map((item) => (
-              <a 
-                key={item.name} 
+              <a
+                key={item.name}
                 href={item.href}
                 className="px-4 py-2 rounded-xl hover:bg-white/20 transition-all duration-300 font-bold text-base backdrop-blur-sm hover:scale-105 active:scale-95 text-white"
               >
                 {item.name}
               </a>
             ))}
-            <button className="ml-2 bg-gradient-to-r from-rose-500 to-pink-600 px-5 py-2.5 rounded-xl hover:from-rose-600 hover:to-pink-700 transition-all duration-300 font-bold text-base shadow-lg hover:shadow-rose-500/50 flex items-center space-x-2 hover:scale-105 active:scale-95 text-white">
-              <FiLogOut className="w-5 h-5" />
-              <span>Logout</span>
-            </button>
-            <div className="ml-2 bg-gradient-to-br from-white to-gray-100 rounded-full p-2.5 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer hover:scale-110 active:scale-95 border-2 border-white/20">
-              <FiUser className="w-5 h-5 text-emerald-600" />
+            <div ref={profileRef} className="ml-2 relative">
+              <div
+                className="bg-gradient-to-br from-white to-gray-100 rounded-full p-2.5 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer hover:scale-110 active:scale-95 border-2 border-white/20"
+                onClick={toggleProfile}
+              >
+                <FiUser className="w-5 h-5 text-emerald-600" />
+              </div>
+              {profileOpen && <ProfilePopup onLogout={handleLogout} />}
             </div>
           </div>
 
-          <div className="md:hidden flex items-center">
-            <button 
+          <div className="md:hidden flex items-center space-x-2">
+            <div
+              className="bg-gradient-to-br from-white to-gray-100 rounded-full p-2.5 shadow-lg cursor-pointer border-2 border-white/20"
+              onClick={toggleProfile}
+            >
+              <FiUser className="w-5 h-5 text-emerald-600" />
+            </div>
+            {profileOpen && <ProfilePopup onLogout={handleLogout} />}
+            <button
               onClick={toggleMenu}
               className="p-2 rounded-xl hover:bg-white/10 transition-all duration-300 backdrop-blur-sm"
               aria-label="Toggle menu"
@@ -63,23 +89,14 @@ const NavBar: React.FC = () => {
       {isOpen && (
         <div className="md:hidden bg-gradient-to-b from-emerald-700/95 to-teal-700/95 backdrop-blur-lg px-4 pt-4 pb-6 space-y-2 shadow-2xl border-t border-white/10">
           {menuItems.map((item) => (
-            <a 
-              key={item.name} 
-              href={item.href} 
+            <a
+              key={item.name}
+              href={item.href}
               className="block py-3 px-4 rounded-xl hover:bg-white/20 transition-all duration-300 font-bold text-base backdrop-blur-sm hover:translate-x-2 text-white"
             >
               {item.name}
             </a>
           ))}
-          <button className="w-full bg-gradient-to-r from-rose-500 to-pink-600 px-4 py-3 rounded-xl hover:from-rose-600 hover:to-pink-700 transition-all duration-300 font-bold text-base shadow-lg flex items-center justify-center space-x-2 mt-4 text-white">
-            <FiLogOut className="w-5 h-5" />
-            <span>Logout</span>
-          </button>
-          <div className="flex justify-center pt-4">
-            <div className="bg-gradient-to-br from-white to-gray-100 rounded-full p-3 shadow-lg border-2 border-white/20">
-              <FiUser className="w-6 h-6 text-emerald-600" />
-            </div>
-          </div>
         </div>
       )}
     </nav>
