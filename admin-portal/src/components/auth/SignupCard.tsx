@@ -22,7 +22,7 @@ const SignupCard: React.FC<{ onSwitch: () => void }> = ({ onSwitch }) => {
         />
         <button
           type="submit"
-          className="bg-primary text-white p-3 rounded-md font-semibold hover:bg-primary/80 transition cursor-pointer"
+          className="bg-teal-600 hover:bg-cyan-600 text-white p-3 rounded-md font-semibold hover:bg-primary/80 transition cursor-pointer"
         >
           Sign Up
         </button>

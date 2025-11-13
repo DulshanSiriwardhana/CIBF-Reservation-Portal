@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { FiMenu, FiX, FiUser } from "react-icons/fi";
 import ProfilePopup from "./ProfilePopup";
+import { useNavigate } from "react-router-dom";
 
 const menuItems = [
   { name: "Dashboard", href: "/dashboard" },
@@ -12,6 +13,7 @@ const NavBar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   const toggleMenu = () => setIsOpen(!isOpen);
   const toggleProfile = () => setProfileOpen(!profileOpen);
@@ -26,7 +28,7 @@ const NavBar: React.FC = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleLogout = () => alert("Logout clicked");
+  const handleLogout = () => navigate('/');
 
   return (
     <nav className="bg-teal-600 to-cyan-600 text-white shadow-2xl fixed w-full z-50 backdrop-blur-sm">
