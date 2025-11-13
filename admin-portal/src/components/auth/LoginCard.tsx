@@ -2,7 +2,7 @@ import React from "react";
 
 const LoginCard: React.FC<{ onSwitch: () => void }> = ({ onSwitch }) => {
   return (
-    <div className="bg-white text-gray-900 p-8 rounded-2xl shadow-xl w-96 max-w-full">
+    <div className="bg-white text-gray-900 p-8 rounded-2xl shadow-xl max-w-96 w-full">
       <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
       <form className="flex flex-col gap-4">
         <input
