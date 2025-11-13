@@ -52,7 +52,7 @@ const Dashboard: React.FC = () => {
   const cancellationRate = ((stats.cancelledReservations / totalReservations) * 100).toFixed(1);
 
   return (
-    <div className="min-h-screen bg-slate-50 pt-24 pb-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-slate-50 pt-12 pb-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
           <h1 className="text-5xl font-black text-slate-800 mb-3">

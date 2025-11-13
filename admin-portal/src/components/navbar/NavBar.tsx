@@ -4,7 +4,7 @@ import ProfilePopup from "./ProfilePopup";
 
 const menuItems = [
   { name: "Dashboard", href: "/dashboard" },
-  { name: "Stall Management", href: "/stalls" },
+  { name: "Stall Management", href: "/stall-management" },
   { name: "Map", href: "/map" },
 ];
 
