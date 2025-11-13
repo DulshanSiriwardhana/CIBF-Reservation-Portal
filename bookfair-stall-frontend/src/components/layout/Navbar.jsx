@@ -12,6 +12,7 @@ const Navbar = () => {
     { path: '/', label: 'Home' },
     { path: '/stalls', label: 'Browse Stalls' },
     { path: '/map', label: 'Stall Map' },
+    { path: '/genres', label: 'Genres'},
     { path: '/my-reservations', label: 'My Reservations' },
   ];
 

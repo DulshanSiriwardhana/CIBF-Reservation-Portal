@@ -14,6 +14,7 @@ import StallMap from './pages/StallMap';
 import ReservationForm from './pages/ReservationForm';
 import MyReservations from './pages/MyReservations';
 import AdminDashboard from './pages/AdminDashboard';
+import Genres from './pages/Genre';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/stalls" element={<StallList />} />
             <Route path="/map" element={<StallMap />} />
+            <Route path="/genres" element={<Genres/>}/>
             <Route path="/reserve/:stallId" element={<ReservationForm />} />
             <Route path="/my-reservations" element={<MyReservations />} />
             <Route path="/admin" element={<AdminDashboard />} />
