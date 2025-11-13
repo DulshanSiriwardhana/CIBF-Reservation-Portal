@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AuthPage from "./pages/AuthPage";
 import NavBar from "./components/navbar/NavBar";
 import Dashboard from "./pages/Dashboard";
+import Footer from "./components/footer/Footer";
 
 function App() {
   return (
@@ -15,6 +16,9 @@ function App() {
           <Route path="/" element={<AuthPage />} />
           <Route path="/dashboard/*" element={<Dashboard />} />
         </Routes>
+        <div>
+          <Footer/>
+        </div>
       </div>
     </BrowserRouter>
   );
