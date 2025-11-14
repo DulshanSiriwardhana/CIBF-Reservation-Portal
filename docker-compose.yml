@@ -9,24 +9,12 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
-
-  notification-services:
-    build: ./notification-service
-    ports:
-      - "8083:8083"
-    depends_on:
-      - mongo
-      - rabbitmq
-    networks:
-      - notification-network
-    
+  
   email-service:
     build: ./email-service
     ports:
       - "8081:8081"
     networks:
-      - notification-network   # <-- fix here
+      - notification-network
 
-networks:
-  notification-network:
-    driver: bridge
+
