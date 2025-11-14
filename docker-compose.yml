@@ -157,15 +157,14 @@ services:
 
   # Volumes
   volumes:
-  stalldb_data:
-    driver: local
-  rabbitmq_stall_data:
-    driver: local
-  pgadmin_data:
-    driver: local
-  rabbitmq_email_data: {}
-    
-  userdb_data: {}
+    stalldb_data:
+      driver: local
+    rabbitmq_stall_data:
+      driver: local
+    pgadmin_data:
+      driver: local
+    rabbitmq_email_data: {}
+    userdb_data: {}
     
 
 networks:
