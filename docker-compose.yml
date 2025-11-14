@@ -163,10 +163,10 @@ services:
     driver: local
   pgadmin_data:
     driver: local
-  rabbitmq_email_data:
-    driver: local
-  userdb_data:
-    driver: local
+  rabbitmq_email_data: {}
+    
+  userdb_data: {}
+    
 
 networks:
   bookfair-network:
