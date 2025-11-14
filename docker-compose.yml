@@ -1,9 +1,31 @@
 services:
 
+  rabbitmq:
+    image: rabbitmq:3.12-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
   email-service:
     build: ./email-service
+    container_name: email-service
+    depends_on:
+      - rabbitmq
     ports:
       - "8081:8081"
+    environment:
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: guest
+      SPRING_RABBITMQ_PASSWORD: guest
+      EMAIL_QUEUE_NAME: email_queue
+    volumes:
+      - ~/.m2:/root/.m2   
+
       
   user-db:
     image: postgres:15
