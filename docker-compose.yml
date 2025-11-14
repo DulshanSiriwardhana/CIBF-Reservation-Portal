@@ -1,20 +1,36 @@
 services:
-  mongo: 
-    image: mongo:6
-    ports:
-      - "27017:27017"
 
-  rabbitmq:
-    image: rabbitmq:3-management
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-  
   email-service:
     build: ./email-service
     ports:
       - "8081:8081"
+      
+  user-db:
+    image: postgres:15
+    container_name: user-db
+    environment:
+      POSTGRES_DB: userdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
     networks:
-      - notification-network
+      - user-network
+
+  user-service:
+    image: user-service
+    container_name: user-service
+    environment:
+      URL: jdbc:postgresql://user-db:5432/userdb
+      USERNAME: postgres
+      PASSWORD: postgres
+    ports:
+      - "8084:8084"
+    depends_on:
+      - user-db
+    networks:
+      - user-network
+
+
 
 
