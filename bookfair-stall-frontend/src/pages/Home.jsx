@@ -27,9 +27,9 @@ const Home = () => {
   ];
 
   const stallTypes = [
-    { name: 'Small Stall', size: '10 sq.m', price: 'Rs. 5,000 - 6,000', color: 'bg-blue-500' },
-    { name: 'Medium Stall', size: '20 sq.m', price: 'Rs. 8,000 - 9,000', color: 'bg-green-500' },
-    { name: 'Large Stall', size: '30 sq.m', price: 'Rs. 12,000 - 15,000', color: 'bg-purple-500' },
+    { name: 'Small Stall', size: '10 sq.m', price: 'Rs. 10,000 - 20,000', color: 'bg-blue-500' },
+    { name: 'Medium Stall', size: '20 sq.m', price: 'Rs. 25,000 - 45,000', color: 'bg-green-500' },
+    { name: 'Large Stall', size: '30 sq.m', price: 'Rs. 50,000 - 100,000', color: 'bg-purple-500' },
   ];
 
   return (

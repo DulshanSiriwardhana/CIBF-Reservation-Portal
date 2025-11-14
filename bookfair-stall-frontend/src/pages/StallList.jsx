@@ -16,7 +16,7 @@ const StallList = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [sizeFilter, setSizeFilter] = useState('ALL');
   const [statusFilter, setStatusFilter] = useState('ALL');
-  const [priceRange, setPriceRange] = useState({ min: 0, max: 20000 });
+  const [priceRange, setPriceRange] = useState({ min: 0, max: 100000 });
 
   useEffect(() => {
     fetchStalls();
@@ -30,7 +30,12 @@ const StallList = () => {
     try {
       setLoading(true);
       const response = await stallService.getAllStalls();
-      setStalls(response.data || []);
+      if (response.success && response.data) {
+        setStalls(response.data); // ← This is the stalls array
+        console.log('Stalls data:', response.data);
+      } else {
+        throw new Error(response.message || 'Failed to fetch stalls');
+      }
       setError(null);
     } catch (err) {
       setError(err.message || 'Failed to fetch stalls');
@@ -145,7 +150,7 @@ const StallList = () => {
             <input
               type="range"
               min="0"
-              max="20000"
+              max="100000"
               step="1000"
               value={priceRange.max}
               onChange={(e) => setPriceRange({ ...priceRange, max: parseInt(e.target.value) })}
@@ -161,7 +166,7 @@ const StallList = () => {
               setSearchTerm('');
               setSizeFilter('ALL');
               setStatusFilter('ALL');
-              setPriceRange({ min: 0, max: 20000 });
+              setPriceRange({ min: 0, max: 100000 });
             }}
             className="text-primary-600 hover:text-primary-700 font-medium"
           >
