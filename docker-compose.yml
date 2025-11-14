@@ -1,46 +1,24 @@
 services:
 
-  rabbitmq:
-    image: rabbitmq:3.12-management
-    container_name: rabbitmq
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    environment:
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASS: guest
-
-  email-service:
-    build: ./email-service
-    container_name: email-service
-    depends_on:
-      - rabbitmq
-    ports:
-      - "8081:8081"
-    environment:
-      SPRING_RABBITMQ_HOST: rabbitmq
-      SPRING_RABBITMQ_PORT: 5672
-      SPRING_RABBITMQ_USERNAME: guest
-      SPRING_RABBITMQ_PASSWORD: guest
-      EMAIL_QUEUE_NAME: email_queue
-    volumes:
-      - ~/.m2:/root/.m2   
-
-      
+# user servive database   
   user-db:
-    image: postgres:15
+    image: postgres:15-alpine
     container_name: user-db
     environment:
       POSTGRES_DB: userdb
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     ports:
-      - "5432:5432"
+      - "5433:5432"  # avoid conflicts
+    volumes:
+      - userdb_data:/var/lib/postgresql/data
     networks:
-      - user-network
+      - bookfair-network
+
+# user service
 
   user-service:
-    image: user-service
+    build: ./user-service
     container_name: user-service
     environment:
       URL: jdbc:postgresql://user-db:5432/userdb
@@ -51,7 +29,151 @@ services:
     depends_on:
       - user-db
     networks:
-      - user-network
+      - bookfair-network
+
+# stall-db
+  stall-db:
+    image: postgres:15-alpine
+    container_name: stall-db
+    environment:
+      POSTGRES_DB: bookfair_stalls
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres123
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5434:5432" 
+    volumes:
+      - stalldb_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - bookfair-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+# rabbitmq
+  rabbitmq-stall:
+    image: rabbitmq:3.12-management-alpine
+    container_name: rabbitmq-stall
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - "5673:5672"  
+      - "15673:15672"
+    volumes:
+      - rabbitmq_stall_data:/var/lib/rabbitmq
+    networks:
+      - bookfair-network
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+# stall service
+
+  stall-service:
+    build: ./stall-service
+    container_name: stall-service
+    depends_on:
+      - stall-db
+      - rabbitmq-stall
+    ports:
+      - "8083:8083"
+    
+    environment:
+      DATABASE_URL: jdbc:postgresql://stall-db:5432/bookfair_stalls
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: postgres
+      RABBITMQ_HOST: rabbitmq-stall
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USERNAME: guest
+      RABBITMQ_PASSWORD: guest
+      RABBITMQ_QUEUE: stall_queue
+    
+    
+
+    networks:
+      - bookfair-network
+
+ # Email service rabbitmq
+
+  rabbitmq-email:
+    image: rabbitmq:3.12-management-alpine
+    container_name: rabbitmq-email
+    ports:
+      - "5674:5672"  # different port mapping
+      - "15674:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    volumes:
+      - rabbitmq_email_data:/var/lib/rabbitmq
+    networks:
+      - bookfair-network
+
+  # email service
+
+  email-service:
+    build: ./email-service
+    container_name: email-service
+    depends_on:
+      - rabbitmq-email
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_RABBITMQ_HOST: rabbitmq-email
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: guest
+      SPRING_RABBITMQ_PASSWORD: guest
+      EMAIL_QUEUE_NAME: email_queue
+
+    volumes:
+      - ~/.m2:/root/.m2 
+
+    networks:
+      - bookfair-network 
+  
+  # pgadmin
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: bookfair-stall-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@bookfair.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    networks:
+      - bookfair-network
+    depends_on:
+      - user-db
+      - stall-db
+
+  # Volumes
+  volumes:
+  stalldb_data:
+    driver: local
+  rabbitmq_stall_data:
+    driver: local
+  pgadmin_data:
+    driver: local
+  rabbitmq_email_data:
+    driver: local
+  userdb_data:
+    driver: local
+
+networks:
+  bookfair-network:
+    driver: bridge
+
+  
+
 
 
 
