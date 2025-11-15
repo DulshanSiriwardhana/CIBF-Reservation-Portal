@@ -19,6 +19,7 @@ import ReservationForm from './pages/ReservationForm';
 import MyReservations from './pages/MyReservations';
 import AdminDashboard from './pages/AdminDashboard';
 import Genres from './pages/Genre';
+import ReservationConfirmation from './pages/ReservationConfirmation';
 
 function App() {
   const [showProfile, setShowProfile] = useState(false);
@@ -38,7 +39,8 @@ function App() {
             <Route path="/reserve/:stallId" element={<ReservationForm />} />
             <Route path="/my-reservations" element={<MyReservations />} />
             <Route path="/admin" element={<AdminDashboard />} />
-          </Routes>
+            <Route path="/reservation-confirmation" element={<ReservationConfirmation />} />
+            </Routes>
         </main>
         <Footer />
         <ToastContainer position="top-right" autoClose={3000} />

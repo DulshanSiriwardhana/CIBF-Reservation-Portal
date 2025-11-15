@@ -5,6 +5,7 @@ import { stallService } from '../services/stallService';
 import { toast } from 'react-toastify';
 import Loading from '../components/common/Loading';
 import ErrorMessage from '../components/common/ErrorMessage';
+import ReservationConfirmation from './ReservationConfirmation';
 
 const StallList = () => {
   const [stalls, setStalls] = useState([]);
@@ -12,11 +13,19 @@ const StallList = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   
+  // Reservation Modal State
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedStall, setSelectedStall] = useState(null);
+  
   // Filters
   const [searchTerm, setSearchTerm] = useState('');
   const [sizeFilter, setSizeFilter] = useState('ALL');
   const [statusFilter, setStatusFilter] = useState('ALL');
   const [priceRange, setPriceRange] = useState({ min: 0, max: 100000 });
+
+  // TODO: Get from your auth context/state
+  const userEmail = "publisher@example.com"; // Replace with actual user email
+  const userId = "user123"; // Replace with actual user ID
 
   useEffect(() => {
     fetchStalls();
@@ -31,7 +40,7 @@ const StallList = () => {
       setLoading(true);
       const response = await stallService.getAllStalls();
       if (response.success && response.data) {
-        setStalls(response.data); // ← This is the stalls array
+        setStalls(response.data);
         console.log('Stalls data:', response.data);
       } else {
         throw new Error(response.message || 'Failed to fetch stalls');
@@ -72,6 +81,34 @@ const StallList = () => {
     );
 
     setFilteredStalls(filtered);
+  };
+
+  const handleReserveClick = (stall) => {
+    // Transform stall data to match modal's expected format
+    const stallData = {
+      id: stall.id,
+      name: stall.stallName,
+      size: stall.size?.toLowerCase(), // Convert to lowercase for badge colors
+      area: stall.dimension,
+      price: stall.price,
+      position: { x: stall.positionX, y: stall.positionY },
+      description: stall.description,
+      status: stall.status
+    };
+    
+    setSelectedStall(stallData);
+    setIsModalOpen(true);
+  };
+
+  const handleConfirmSuccess = (reservationData) => {
+    console.log('Reservation confirmed:', reservationData);
+    toast.success('Reservation confirmed! Check your email for QR code.');
+    
+    // Refresh stalls to update availability
+    fetchStalls();
+    
+    // Optionally navigate to My Reservations page
+    // navigate('/my-reservations');
   };
 
   const getStatusColor = (status) => {
@@ -229,12 +266,12 @@ const StallList = () => {
               {/* Actions */}
               <div className="flex gap-3">
                 {stall.status === 'AVAILABLE' ? (
-                  <Link
-                    to={`/reserve/${stall.id}`}
+                  <button
+                    onClick={() => handleReserveClick(stall)}
                     className="flex-1 btn-primary text-center"
                   >
                     Reserve Now
-                  </Link>
+                  </button>
                 ) : (
                   <button disabled className="flex-1 btn-primary opacity-50 cursor-not-allowed">
                     Not Available
@@ -250,6 +287,18 @@ const StallList = () => {
             </div>
           ))}
         </div>
+      )}
+
+      {/* Reservation Confirmation Modal */}
+      {selectedStall && (
+        <ReservationConfirmation
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          stall={selectedStall}
+          userEmail={userEmail}
+          userId={userId}
+          onConfirm={handleConfirmSuccess}
+        />
       )}
     </div>
   );
