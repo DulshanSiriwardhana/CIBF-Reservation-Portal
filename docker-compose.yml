@@ -182,7 +182,20 @@ services:
     networks:
       - bookfair-network
     
+# rabbitmq-reservation
 
+  rabbitmq-reservation:
+    image: rabbitmq:3.12-management-alpine
+    container_name: rabbitmq-reservation
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+    - "5675:5672"
+    - "15675:15672"
+
+    networks:
+    - bookfair-network
 
   # Volumes
 volumes:
