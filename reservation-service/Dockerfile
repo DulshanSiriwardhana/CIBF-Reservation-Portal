@@ -8,7 +8,7 @@ WORKDIR /app
 COPY mvnw .
 COPY .mvn .mvn
 COPY pom.xml .
-COPY src ./src
+COPY src ./complete/src
 
 # Build the project
 RUN chmod +x mvnw
