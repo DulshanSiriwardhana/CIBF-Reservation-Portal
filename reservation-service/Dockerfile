@@ -1,27 +1,35 @@
-# Use an official JDK image
-FROM eclipse-temurin:22-jdk-alpine As builder
+# ---------- Stage 1: Build with Maven wrapper ----------
+FROM eclipse-temurin:22-jdk-alpine AS builder
 
-# Set working directory
 WORKDIR /app
 
-# Copy Maven build files
-COPY mvnw .
-COPY .mvn .mvn
-COPY pom.xml .
-COPY src ./complete/src
+# Tools needed for mvnw
+RUN apk add --no-cache bash git
 
-# Build the project
-RUN chmod +x mvnw
-RUN ./mvnw clean package -DskipTests
+# Copy Maven project from "complete"
+COPY complete/pom.xml ./
+COPY complete/mvnw ./
+COPY complete/.mvn ./.mvn
+COPY complete/src ./src
 
-# Run the built JAR
+# Fix mvnw permissions + Windows line endings
+RUN chmod +x mvnw \
+    && sed -i 's/\r$//' mvnw
+
+# Build jar (skip tests)
+RUN ./mvnw package -DskipTests
+
+
+# ---------- Stage 2: Run the app ----------
 FROM eclipse-temurin:22-jre-alpine
 
-# Copy the built JAR to container
+WORKDIR /app
+
+# Copy the built jar from Maven target/
 COPY --from=builder /app/target/*.jar app.jar
 
-# Expose port
+# Expose reservation-service port
 EXPOSE 5003
 
-# Run the Spring Boot app
+# Run Spring Boot
 ENTRYPOINT ["java", "-jar", "app.jar"]
