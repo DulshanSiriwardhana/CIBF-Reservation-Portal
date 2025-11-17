@@ -2,7 +2,7 @@ services:
 
 #nginx container
   nginx-gateway:
-    build: ./api-service
+    build: ./api-gateway
     container_name: nginx-gateway
     ports:
       - "80:80"
@@ -14,6 +14,9 @@ services:
       - stall-service
       - user-service
       - reservation-service
+    
+    networks:
+    - bookfair-network
 
 # user servive database   
   user-db:
@@ -140,6 +143,11 @@ services:
       RABBITMQ_DEFAULT_PASS: guest
     volumes:
       - rabbitmq_email_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "check_running"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
     networks:
       - bookfair-network
 
@@ -149,7 +157,8 @@ services:
     build: ./email-service
     container_name: email-service
     depends_on:
-      - rabbitmq-email
+      rabbitmq-email:
+        condition: service_healthy
     ports:
       - "8081:8081"
     environment:
