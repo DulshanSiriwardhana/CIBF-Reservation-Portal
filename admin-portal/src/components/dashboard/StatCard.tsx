@@ -1,3 +1,4 @@
+import React from "react";
 import { FiTrendingUp } from "react-icons/fi";
 
 interface StatCardProps {
