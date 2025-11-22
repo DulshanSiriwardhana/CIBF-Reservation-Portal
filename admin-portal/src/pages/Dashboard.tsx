@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FiUsers, FiBox, FiClock, FiCheckCircle, FiXCircle, FiShoppingBag, FiTrendingUp } from "react-icons/fi";
-import StatCard from "../components/dashboard/StatCard";
-import ReservationCard from "../components/dashboard/ReservationCard";
-import ActionButton from "../components/dashboard/ActionButton";
-import ActivityItem from "../components/dashboard/ActivityItem";
+import { FiUsers, FiBox, FiClock, FiCheckCircle, FiXCircle, FiShoppingBag, FiArrowRight } from "react-icons/fi";
 import { useLoader } from "../context/LoaderContext";
 import { apiService } from "../services/api";
 import { useToast } from "../context/ToastContext";
@@ -33,26 +29,19 @@ const Dashboard: React.FC = () => {
     const fetchDashboardData = async () => {
       showLoader();
       try {
-        // Fetch all data in parallel
         const [stalls, reservations] = await Promise.all([
           apiService.getAllStalls().catch(() => []),
           apiService.getAllReservations().catch(() => []),
         ]);
 
-        // Process stalls data
         const totalStalls = Array.isArray(stalls) ? stalls.length : 0;
-        
-        // Process reservations data
         const reservationsArray = Array.isArray(reservations) ? reservations : [];
         const pending = reservationsArray.filter((r: any) => r.status === "PENDING").length;
         const confirmed = reservationsArray.filter((r: any) => r.status === "CONFIRMED").length;
         const cancelled = reservationsArray.filter((r: any) => r.status === "CANCELLED").length;
 
-        // Count unique vendors from reservations
         const uniqueVendors = new Set(
-          reservationsArray
-            .map((r: any) => r.userId)
-            .filter((id: any) => id)
+          reservationsArray.map((r: any) => r.userId).filter((id: any) => id)
         ).size;
 
         setStats({
@@ -71,7 +60,8 @@ const Dashboard: React.FC = () => {
     };
 
     fetchDashboardData();
-  }, [showLoader, hideLoader, showToast]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const occupancyRate = stats.stalls > 0 
     ? ((stats.confirmedReservations / stats.stalls) * 100).toFixed(1)
@@ -82,155 +72,153 @@ const Dashboard: React.FC = () => {
     ? ((stats.cancelledReservations / totalReservations) * 100).toFixed(1)
     : "0.0";
 
+  const statCards = [
+    {
+      title: "Total Vendors",
+      value: stats.vendors,
+      icon: <FiUsers className="w-6 h-6" />,
+      bgColor: "bg-slate-100",
+      iconColor: "text-slate-700",
+      borderColor: "border-slate-200",
+    },
+    {
+      title: "Total Stalls",
+      value: stats.stalls,
+      icon: <FiBox className="w-6 h-6" />,
+      bgColor: "bg-slate-100",
+      iconColor: "text-slate-700",
+      borderColor: "border-slate-200",
+    },
+    {
+      title: "Pending Reservations",
+      value: stats.pendingReservations,
+      icon: <FiClock className="w-6 h-6" />,
+      bgColor: "bg-amber-50",
+      iconColor: "text-amber-700",
+      borderColor: "border-amber-200",
+    },
+  ];
+
+  const reservationCards = [
+    {
+      title: "Confirmed",
+      value: stats.confirmedReservations,
+      icon: <FiCheckCircle className="w-5 h-5" />,
+      bgColor: "bg-emerald-50",
+      iconColor: "text-emerald-700",
+      borderColor: "border-emerald-200",
+      subtitle: `${occupancyRate}% occupancy`,
+    },
+    {
+      title: "Pending",
+      value: stats.pendingReservations,
+      icon: <FiClock className="w-5 h-5" />,
+      bgColor: "bg-amber-50",
+      iconColor: "text-amber-700",
+      borderColor: "border-amber-200",
+      subtitle: "Awaiting approval",
+    },
+    {
+      title: "Cancelled",
+      value: stats.cancelledReservations,
+      icon: <FiXCircle className="w-5 h-5" />,
+      bgColor: "bg-red-50",
+      iconColor: "text-red-700",
+      borderColor: "border-red-200",
+      subtitle: `${cancellationRate}% cancellation rate`,
+    },
+  ];
+
+  const quickActions = [
+    {
+      title: "Approve Reservations",
+      description: "Review and approve pending reservations",
+      action: () => navigate("/reservations"),
+      icon: <FiCheckCircle className="w-5 h-5" />,
+    },
+    {
+      title: "Manage Stalls",
+      description: "View and manage all exhibition stalls",
+      action: () => navigate("/stall-management"),
+      icon: <FiBox className="w-5 h-5" />,
+    },
+    {
+      title: "View Vendors",
+      description: "Browse and manage vendor accounts",
+      action: () => navigate("/vendors"),
+      icon: <FiUsers className="w-5 h-5" />,
+    },
+  ];
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-cyan-50 pt-12 pb-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-slate-50 pt-20 pb-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-5xl font-black bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent mb-3">
-            Dashboard Overview
-          </h1>
-          <p className="text-slate-600 text-lg font-medium">
-            Real-time insights and statistics for CIBF Admin Portal
-          </p>
+          <h1 className="text-3xl font-bold text-slate-900 mb-2">Dashboard</h1>
+          <p className="text-slate-600">Overview of your reservation system</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          <StatCard
-            title="Total Vendors"
-            value={stats.vendors}
-            icon={<FiUsers className="w-6 h-6 text-white" />}
-            iconBgColor="bg-gradient-to-br from-indigo-600 to-purple-600"
-            trend="Active"
-            trendColor="bg-indigo-100 text-indigo-800"
-          />
-          
-          <StatCard
-            title="Total Stalls"
-            value={stats.stalls}
-            icon={<FiBox className="w-6 h-6 text-white" />}
-            iconBgColor="bg-gradient-to-br from-purple-600 to-pink-600"
-            trend="Available"
-            trendColor="bg-purple-100 text-purple-800"
-          />
-          
-          <StatCard
-            title="Pending Reservations"
-            value={stats.pendingReservations}
-            icon={<FiClock className="w-6 h-6 text-white" />}
-            iconBgColor="bg-gradient-to-br from-pink-600 to-rose-600"
-          />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          {statCards.map((card, index) => (
+            <div
+              key={index}
+              className={`bg-white rounded-lg border ${card.borderColor} p-6 shadow-sm hover:shadow-md transition-shadow`}
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div className={`${card.bgColor} ${card.iconColor} p-3 rounded-lg`}>
+                  {card.icon}
+                </div>
+              </div>
+              <h3 className="text-sm font-semibold text-slate-600 mb-1">{card.title}</h3>
+              <p className="text-3xl font-bold text-slate-900">{card.value.toLocaleString()}</p>
+            </div>
+          ))}
         </div>
 
-        <div className="bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl p-8 mb-8 border-2 border-white/50">
+        <div className="bg-white rounded-lg border border-slate-200 shadow-sm p-6 mb-8">
           <div className="flex items-center space-x-3 mb-6">
-            <div className="bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 rounded-xl p-3 shadow-lg">
-              <FiShoppingBag className="w-6 h-6 text-white" />
+            <div className="bg-slate-900 text-white p-2 rounded-lg">
+              <FiShoppingBag className="w-5 h-5" />
             </div>
-            <h2 className="text-2xl font-black text-slate-800">Reservation Statistics</h2>
+            <h2 className="text-xl font-bold text-slate-900">Reservation Statistics</h2>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <ReservationCard
-              title="Confirmed"
-              value={stats.confirmedReservations}
-              icon={<FiCheckCircle className="w-6 h-6 text-white" />}
-              bgColor="bg-emerald-50"
-              iconBgColor="bg-emerald-600"
-              textColor="text-emerald-700"
-              borderColor="border-emerald-200"
-              hoverBorderColor="hover:border-emerald-400"
-              subtitle={`${occupancyRate}% occupancy rate`}
-            />
-
-            <ReservationCard
-              title="Pending"
-              value={stats.pendingReservations}
-              icon={<FiClock className="w-6 h-6 text-white" />}
-              bgColor="bg-amber-50"
-              iconBgColor="bg-amber-600"
-              textColor="text-amber-700"
-              borderColor="border-amber-200"
-              hoverBorderColor="hover:border-amber-400"
-              subtitle="Awaiting approval"
-            />
-
-            <ReservationCard
-              title="Cancelled"
-              value={stats.cancelledReservations}
-              icon={<FiXCircle className="w-6 h-6 text-white" />}
-              bgColor="bg-rose-50"
-              iconBgColor="bg-rose-600"
-              textColor="text-rose-700"
-              borderColor="border-rose-200"
-              hoverBorderColor="hover:border-rose-400"
-              subtitle={`${cancellationRate}% cancellation rate`}
-            />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {reservationCards.map((card, index) => (
+              <div
+                key={index}
+                className={`${card.bgColor} border ${card.borderColor} rounded-lg p-5`}
+              >
+                <div className="flex items-center space-x-3 mb-3">
+                  <div className={card.iconColor}>{card.icon}</div>
+                  <h3 className="text-sm font-semibold text-slate-700">{card.title}</h3>
+                </div>
+                <p className="text-2xl font-bold text-slate-900 mb-1">{card.value}</p>
+                <p className="text-xs text-slate-600">{card.subtitle}</p>
+              </div>
+            ))}
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl p-8 border-2 border-white/50">
-            <div className="flex items-center space-x-3 mb-6">
-              <div className="bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 rounded-xl p-2.5 shadow-lg">
-                <FiTrendingUp className="w-5 h-5 text-white" />
-              </div>
-              <h3 className="text-xl font-black text-slate-800">Quick Actions</h3>
-            </div>
-            <div className="space-y-3">
-              <ActionButton
-                text="Approve Pending Reservations"
-                bgColor="bg-gradient-to-r from-indigo-600 to-purple-600"
-                hoverBgColor="hover:from-indigo-700 hover:to-purple-700"
-                onClick={() => navigate("/reservations")}
-              />
-              <ActionButton
-                text="Manage Stalls"
-                bgColor="bg-gradient-to-r from-purple-600 to-pink-600"
-                hoverBgColor="hover:from-purple-700 hover:to-pink-700"
-                onClick={() => navigate("/stall-management")}
-              />
-              <ActionButton
-                text="View All Vendors"
-                bgColor="bg-gradient-to-r from-pink-600 to-rose-600"
-                hoverBgColor="hover:from-pink-700 hover:to-rose-700"
-                onClick={() => navigate("/vendors")}
-              />
-            </div>
-          </div>
-
-          <div className="bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl p-8 border-2 border-white/50">
-            <div className="flex items-center space-x-3 mb-6">
-              <div className="bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 rounded-xl p-2.5 shadow-lg">
-                <FiClock className="w-5 h-5 text-white" />
-              </div>
-              <h3 className="text-xl font-black text-slate-800">Recent Activity</h3>
-            </div>
-            <div className="space-y-4">
-              <ActivityItem
-                icon={<FiCheckCircle className="w-4 h-4 text-white" />}
-                iconBgColor="bg-emerald-600"
-                bgColor="bg-emerald-50"
-                borderColor="border-emerald-200"
-                title="System operational"
-                time="Just now"
-              />
-              <ActivityItem
-                icon={<FiClock className="w-4 h-4 text-white" />}
-                iconBgColor="bg-amber-600"
-                bgColor="bg-amber-50"
-                borderColor="border-amber-200"
-                title={`${stats.pendingReservations} reservations pending approval`}
-                time="Live"
-              />
-              <ActivityItem
-                icon={<FiBox className="w-4 h-4 text-white" />}
-                iconBgColor="bg-cyan-600"
-                bgColor="bg-cyan-50"
-                borderColor="border-cyan-200"
-                title={`${stats.stalls} stalls available`}
-                time="Live"
-              />
-            </div>
+        <div className="bg-white rounded-lg border border-slate-200 shadow-sm p-6">
+          <h2 className="text-xl font-bold text-slate-900 mb-6">Quick Actions</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {quickActions.map((action, index) => (
+              <button
+                key={index}
+                onClick={action.action}
+                className="text-left p-5 border border-slate-200 rounded-lg hover:border-slate-900 hover:bg-slate-50 transition-all group"
+              >
+                <div className="flex items-center justify-between mb-3">
+                  <div className="bg-slate-100 text-slate-700 p-2 rounded-lg group-hover:bg-slate-900 group-hover:text-white transition-colors">
+                    {action.icon}
+                  </div>
+                  <FiArrowRight className="w-5 h-5 text-slate-400 group-hover:text-slate-900 transition-colors" />
+                </div>
+                <h3 className="font-semibold text-slate-900 mb-1">{action.title}</h3>
+                <p className="text-sm text-slate-600">{action.description}</p>
+              </button>
+            ))}
           </div>
         </div>
       </div>

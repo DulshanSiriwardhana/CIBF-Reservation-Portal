@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api';
 
 export interface ApiResponse<T> {
   success: boolean;
@@ -28,24 +28,39 @@ class ApiService {
 
   private async handleResponse<T>(response: Response): Promise<T> {
     if (!response.ok) {
-      const error = await response.json().catch(() => ({ message: response.statusText }));
-      throw new Error(error.message || `HTTP error! status: ${response.status}`);
+      let errorMessage = response.statusText;
+      try {
+        const error = await response.json();
+        errorMessage = error.message || error.error || response.statusText;
+      } catch {
+        // If JSON parsing fails, use status text
+        errorMessage = response.statusText || `HTTP error! status: ${response.status}`;
+      }
+      throw new Error(errorMessage);
     }
 
-    const data = await response.json();
-    
-    // Handle ApiResponse wrapper format { success, message, data }
-    if (data && typeof data === 'object' && 'data' in data && data.data !== undefined) {
-      return data.data;
-    }
-    
-    // Handle direct array/object responses
-    if (Array.isArray(data) || (typeof data === 'object' && data !== null && !('success' in data))) {
+    try {
+      const data = await response.json();
+      
+      // Handle ApiResponse wrapper format { success, message, data }
+      if (data && typeof data === 'object' && 'data' in data && data.data !== undefined) {
+        return data.data;
+      }
+      
+      // Handle direct array/object responses
+      if (Array.isArray(data) || (typeof data === 'object' && data !== null && !('success' in data))) {
+        return data;
+      }
+      
+      // Return the data as-is if it's the response itself
       return data;
+    } catch (error) {
+      // If response is empty or not JSON, return empty array/object
+      if (response.status === 204 || response.headers.get('content-length') === '0') {
+        return {} as T;
+      }
+      throw new Error('Failed to parse response');
     }
-    
-    // Return the data as-is if it's the response itself
-    return data;
   }
 
   // Auth endpoints

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { FiX } from "react-icons/fi";
 import type { Stall } from "../../types/stall";
 import type { Genre } from "../../types/genre";
 
@@ -11,39 +12,189 @@ interface Props {
 }
 
 const StallFormModal: React.FC<Props> = ({ isOpen, onClose, onSubmit, initialData, genres }) => {
-  const [stall, setStall] = useState<Stall>({ id: 0, stallName: "", size: "SMALL", dimension: 0, price: 0, status: "AVAILABLE", positionX: 50, positionY: 50, genreIds: [] });
+  const [stall, setStall] = useState<Stall>({
+    id: 0,
+    stallName: "",
+    size: "SMALL",
+    dimension: 0,
+    price: 0,
+    status: "AVAILABLE",
+    positionX: 50,
+    positionY: 50,
+    genreIds: [],
+  });
 
   useEffect(() => {
-    if (initialData) setStall(initialData);
-  }, [initialData]);
+    if (initialData) {
+      setStall(initialData);
+    } else {
+      setStall({
+        id: 0,
+        stallName: "",
+        size: "SMALL",
+        dimension: 0,
+        price: 0,
+        status: "AVAILABLE",
+        positionX: 50,
+        positionY: 50,
+        genreIds: [],
+      });
+    }
+  }, [initialData, isOpen]);
 
   if (!isOpen) return null;
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSubmit(stall);
+  };
+
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-      <div className="bg-white rounded-xl p-6 w-96">
-        <h2 className="text-xl font-bold mb-4">{initialData ? "Edit Stall" : "Add Stall"}</h2>
-        <input className="border p-2 w-full mb-2" placeholder="Stall Name" value={stall.stallName} onChange={(e) => setStall({ ...stall, stallName: e.target.value })} />
-        <select className="border p-2 w-full mb-2" value={stall.size} onChange={(e) => setStall({ ...stall, size: e.target.value as Stall["size"] })}>
-          <option value="SMALL">SMALL</option>
-          <option value="MEDIUM">MEDIUM</option>
-          <option value="LARGE">LARGE</option>
-        </select>
-        <input className="border p-2 w-full mb-2" placeholder="Dimension" type="number" value={stall.dimension} onChange={(e) => setStall({ ...stall, dimension: Number(e.target.value) })} />
-        <input className="border p-2 w-full mb-2" placeholder="Price" type="number" value={stall.price} onChange={(e) => setStall({ ...stall, price: Number(e.target.value) })} />
-        <div className="mb-2">
-          <label className="font-bold mb-1 block">Genres:</label>
-          <select multiple className="border p-2 w-full" value={stall.genreIds?.map(String)} onChange={(e) => {
-            const selected = Array.from(e.target.selectedOptions).map(opt => Number(opt.value));
-            setStall({ ...stall, genreIds: selected });
-          }}>
-            {genres.map(g => <option key={g.id} value={g.id}>{g.name}</option>)}
-          </select>
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={onClose}>
+      <div className="bg-white rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-center justify-between p-6 border-b border-slate-200">
+          <h2 className="text-xl font-bold text-slate-900">{initialData ? "Edit Stall" : "Add Stall"}</h2>
+          <button
+            onClick={onClose}
+            className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+          >
+            <FiX className="w-5 h-5 text-slate-600" />
+          </button>
         </div>
-        <div className="flex justify-end space-x-2 mt-4">
-          <button className="px-4 py-2 bg-gray-300 rounded" onClick={onClose}>Cancel</button>
-          <button className="px-4 py-2 bg-teal-600 text-white rounded" onClick={() => onSubmit(stall)}>Save</button>
-        </div>
+
+        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+          <div>
+            <label className="block text-sm font-semibold text-slate-700 mb-2">Stall Name</label>
+            <input
+              type="text"
+              required
+              placeholder="Enter stall name"
+              value={stall.stallName}
+              onChange={(e) => setStall({ ...stall, stallName: e.target.value })}
+              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent text-slate-900"
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 mb-2">Size</label>
+              <select
+                value={stall.size}
+                onChange={(e) => setStall({ ...stall, size: e.target.value as Stall["size"] })}
+                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent text-slate-900"
+              >
+                <option value="SMALL">Small</option>
+                <option value="MEDIUM">Medium</option>
+                <option value="LARGE">Large</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 mb-2">Status</label>
+              <select
+                value={stall.status}
+                onChange={(e) => setStall({ ...stall, status: e.target.value as Stall["status"] })}
+                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent text-slate-900"
+              >
+                <option value="AVAILABLE">Available</option>
+                <option value="RESERVED">Reserved</option>
+                <option value="MAINTENANCE">Maintenance</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 mb-2">Dimension (m²)</label>
+              <input
+                type="number"
+                required
+                min="0"
+                step="0.1"
+                placeholder="0"
+                value={stall.dimension}
+                onChange={(e) => setStall({ ...stall, dimension: Number(e.target.value) })}
+                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent text-slate-900"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 mb-2">Price ($)</label>
+              <input
+                type="number"
+                required
+                min="0"
+                step="0.01"
+                placeholder="0.00"
+                value={stall.price}
+                onChange={(e) => setStall({ ...stall, price: Number(e.target.value) })}
+                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent text-slate-900"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 mb-2">Position X</label>
+              <input
+                type="number"
+                min="0"
+                placeholder="50"
+                value={stall.positionX}
+                onChange={(e) => setStall({ ...stall, positionX: Number(e.target.value) })}
+                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent text-slate-900"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 mb-2">Position Y</label>
+              <input
+                type="number"
+                min="0"
+                placeholder="50"
+                value={stall.positionY}
+                onChange={(e) => setStall({ ...stall, positionY: Number(e.target.value) })}
+                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent text-slate-900"
+              />
+            </div>
+          </div>
+
+          {genres.length > 0 && (
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 mb-2">Genres</label>
+              <select
+                multiple
+                value={stall.genreIds?.map(String) || []}
+                onChange={(e) => {
+                  const selected = Array.from(e.target.selectedOptions).map(opt => Number(opt.value));
+                  setStall({ ...stall, genreIds: selected });
+                }}
+                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent text-slate-900 min-h-[100px]"
+              >
+                {genres.map(g => (
+                  <option key={g.id} value={g.id}>{g.name}</option>
+                ))}
+              </select>
+              <p className="text-xs text-slate-500 mt-1">Hold Ctrl/Cmd to select multiple</p>
+            </div>
+          )}
+
+          <div className="flex justify-end gap-3 pt-4 border-t border-slate-200">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors font-semibold text-sm"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition-colors font-semibold text-sm"
+            >
+              {initialData ? "Update" : "Create"}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

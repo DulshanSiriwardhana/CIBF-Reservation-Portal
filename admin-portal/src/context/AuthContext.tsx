@@ -1,5 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
 import { apiService } from '../services/api';
 
 interface User {
@@ -26,7 +25,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const storedToken = localStorage.getItem('authToken');
@@ -86,19 +84,21 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         setUser(userObj);
       }
 
-      navigate('/dashboard');
+      // Navigation will be handled by the component calling login
+      return;
     } catch (error: any) {
       throw new Error(error.message || 'Login failed');
     }
   };
 
-  const logout = () => {
+  const logout = useCallback(() => {
     localStorage.removeItem('authToken');
     localStorage.removeItem('user');
     setToken(null);
     setUser(null);
-    navigate('/');
-  };
+    // Navigation will be handled by the component calling logout
+    window.location.href = '/';
+  }, []);
 
   return (
     <AuthContext.Provider
