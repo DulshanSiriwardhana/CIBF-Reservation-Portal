@@ -1,73 +1,80 @@
-# React + TypeScript + Vite
+# CIBF Admin Portal
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern control room for the Colombo International Book Fair. The portal helps administrators keep stalls, vendors, reservations, and QR verification in sync while presenting a cohesive, polished UI built with React 19 and Vite.
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **React 19 + TypeScript** – component-driven UI with type safety
+- **Vite 7** – fast dev server and bundler
+- **React Router** – client-side routing
+- **Tailwind-style utility classes** (via `index.css`) – custom design system inspired by neon/charcoal palette
+- **Custom contexts** – `AuthContext`, `LoaderContext`, `ToastContext` for auth, global loading, and notifications
+- **API service wrapper** – centralized fetch helper that injects auth headers and normalizes responses
 
-## React Compiler
+## Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Authentication** – login/signup with JWT handling, dark glassmorphism cards, hero marketing section
+- **Dashboard** – real-time stats for vendors, stalls, reservations; occupancy figures
+- **Stall Management** – CRUD for stalls and genres with modal forms
+- **Reservation Management** – search, filter, approve/reject reservations, refreshed light cards
+- **Vendor Directory** – vendor summaries with reservation counts
+- **QR Scanner** – webcam-based QR validation with manual input/upload fallback
+- **Unified Layout** – fixed glass navbar, marketing hero, footer with contact/system status
 
-## Expanding the ESLint configuration
+## Getting Started
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+cd admin-portal
+yarn install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Development
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+yarn dev
 ```
+
+This starts Vite on `http://localhost:5173`. The app expects backend APIs proxied through the nginx gateway at `http://localhost:8080/api` (set via `.env`).
+
+### Linting & Build
+
+```bash
+yarn lint   # runs eslint
+yarn build  # type-check + production build
+```
+
+### Environment Variables
+
+Create `admin-portal/.env`:
+
+```
+VITE_API_BASE_URL=http://localhost:8080/api
+```
+
+## Project Structure
+
+```
+admin-portal/
+├── src/
+│   ├── components/
+│   │   ├── auth/         # LoginCard, SignupCard
+│   │   ├── navbar/       # NavBar, ProfilePopup, Footer
+│   │   └── stallmanagement/
+│   ├── context/          # AuthContext, LoaderContext, ToastContext
+│   ├── pages/            # Dashboard, StallManagementPage, etc.
+│   ├── services/api.ts   # API service layer
+│   └── index.css         # Design tokens & utilities
+└── README.md
+```
+
+## API Expectations
+
+All requests hit the gateway (`/api`). Auth endpoints return JWTs stored in `localStorage`. Stalls, reservations, and genres use REST resources (GET/POST/PUT/DELETE). QR verification posts `{ code }` to `/reservations/verify-qr`.
+
+## Notes
+
+- Loader overlay is managed via reference counting to avoid flicker
+- Toasts surface success/error messages globally
+- Protected routes redirect to `/` when auth state is missing
+
+Feel free to customize the theme via `src/index.css` design tokens.
