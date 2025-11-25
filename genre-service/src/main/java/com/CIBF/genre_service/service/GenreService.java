@@ -18,12 +18,20 @@ public class GenreService {
         return genreRepository.findByExhibitorIDsContaining(exhibitorId);
     }
 
+    public List<String> getGenreNamesByExhibitorId(String exhibitorId) {
+        return genreRepository.findGenreNamesByExhibitorId(exhibitorId);
+    }
+
     public Genre addGenre(Genre genre) {
         return genreRepository.save(genre);
     }
 
     public List<Genre> getAllGenres() {
         return genreRepository.findAll();
+    }
+
+    public List<String> getAllGenreNames() {
+        return genreRepository.findAllNames();
     }
 
     public Optional<Genre> updateGenre(Long id, Genre updatedGenre) {
