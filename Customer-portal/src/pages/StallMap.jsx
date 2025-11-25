@@ -3,13 +3,20 @@ import { useSearchParams } from 'react-router-dom';
 import { stallService } from '../services/stallService';
 import { toast } from 'react-toastify';
 import Loading from '../components/common/Loading';
+import ReservationConfirmation from './ReservationConfirmation';
+import { useAuth } from '../context/AuthContext';
 
 const StallMap = () => {
   const [stalls, setStalls] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [openConfirmation, setOpenConfirmation ] = useState(null);
   const [selectedStall, setSelectedStall] = useState(null);
   const [searchParams] = useSearchParams();
   const highlightId = searchParams.get('highlight');
+  const {user} = useAuth();
+  const userEmail = user.email || "publisher@example.com"; // Replace with actual user email
+  const userId = user.userId; // Replace with actual user ID
 
   useEffect(() => {
     fetchStalls();
@@ -30,6 +37,35 @@ const StallMap = () => {
       setLoading(false);
     }
   };
+
+  const handleReserveClick = (stall) => {
+    // Transform stall data to match modal's expected format
+    const stallData = {
+      id: stall.id,
+      name: stall.stallName,
+      size: stall.size?.toLowerCase(), // Convert to lowercase for badge colors
+      area: stall.dimension,
+      price: stall.price,
+      position: { x: stall.positionX, y: stall.positionY },
+      description: stall.description,
+      status: stall.status
+    };
+    console.log(stall);
+    setOpenConfirmation(stallData);
+    setIsModalOpen(true);
+  };
+
+  const handleConfirmSuccess = (reservationData) => {
+    console.log('Reservation confirmed:', reservationData);
+    toast.success('Reservation confirmed! Check your email for QR code.');
+    
+    // Refresh stalls to update availability
+    fetchStalls();
+    
+    // Optionally navigate to My Reservations page
+    // navigate('/my-reservations');
+  };
+  
 
   const getStallColor = (stall) => {
     if (selectedStall?.id === stall.id) return 'bg-yellow-400 border-yellow-600';
@@ -172,12 +208,12 @@ const StallMap = () => {
                 )}
 
                 {selectedStall.status === 'AVAILABLE' && (
-                  <a
-                    href={`/reserve/${selectedStall.id}`}
-                    className="btn-primary w-full text-center block"
+                  <button
+                    onClick={() => handleReserveClick(selectedStall)}
+                    className="flex-1 self-center btn-primary content-center items-center text-center"
                   >
-                    Reserve This Stall
-                  </a>
+                    Reserve Now
+                  </button>
                 )}
               </div>
             ) : (
@@ -189,6 +225,17 @@ const StallMap = () => {
           </div>
         </div>
       </div>
+      {/* Reservation Confirmation Modal */}
+      {openConfirmation && (
+        <ReservationConfirmation
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          stall={openConfirmation}
+          userEmail={userEmail}
+          userId={userId}
+          onConfirm={handleConfirmSuccess}
+        />
+      )}
     </div>
   );
 };
