@@ -37,11 +37,11 @@ function AppRoutes() {
   return (
     <div className="font-family-notoserif min-h-screen flex flex-col bg-[#02060d]">
       {!isAuthPage && isAuthenticated && (
-        <div className="flex-shrink-0">
+        <div className="flex-shrink-0 mb-16">
           <NavBar/>
         </div>
       )}
-      <main className="flex-1 min-h-0 pt-16">
+      <main className="flex-1 min-h-0">
         <LoaderProvider>
           <ToastProvider>
             <Routes>

@@ -57,57 +57,106 @@ const SignupCard: React.FC<{ onSwitch: () => void }> = ({ onSwitch }) => {
       </div>
 
       <form className="space-y-5" onSubmit={handleSubmit}>
-        {[
-          { label: "Username", name: "username", icon: <FiUser />, type: "text", placeholder: "Enter username" },
-          { label: "Email", name: "email", icon: <FiMail />, type: "email", placeholder: "Enter email" },
-          { label: "Business Name", name: "businessName", icon: <FiBriefcase />, type: "text", placeholder: "Enter business name" },
-          { label: "Contact Number", name: "contactNumber", icon: <FiPhone />, type: "tel", placeholder: "10 digits", maxLength: 10 },
-        ].map((field) => (
-          <div key={field.name}>
-            <label className="block text-xs font-semibold text-[#94a3b8] uppercase tracking-widest mb-2">{field.label}</label>
-            <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#94a3b8] w-4 h-4">{field.icon}</span>
-              <input
-                type={field.type}
-                name={field.name}
-                placeholder={field.placeholder}
-                value={(formData as any)[field.name]}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          {/* Left Column */}
+          <div className="space-y-5">
+            <div>
+              <label className="block text-xs font-semibold text-[#94a3b8] uppercase tracking-widest mb-2">Username</label>
+              <div className="relative">
+                <FiUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#94a3b8] w-4 h-4" />
+                <input
+                  type="text"
+                  name="username"
+                  placeholder="Enter username"
+                  value={formData.username}
+                  onChange={handleChange}
+                  className="w-full pl-10 pr-4 py-3 bg-[#0b1320] border border-[#1f2b40] rounded-xl text-sm text-white placeholder:text-[#475569] focus:outline-none focus:ring-2 focus:ring-[#20b368]/60 focus:border-[#20b368]"
+                  disabled={loading}
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-[#94a3b8] uppercase tracking-widest mb-2">Business Name</label>
+              <div className="relative">
+                <FiBriefcase className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#94a3b8] w-4 h-4" />
+                <input
+                  type="text"
+                  name="businessName"
+                  placeholder="Enter business name"
+                  value={formData.businessName}
+                  onChange={handleChange}
+                  className="w-full pl-10 pr-4 py-3 bg-[#0b1320] border border-[#1f2b40] rounded-xl text-sm text-white placeholder:text-[#475569] focus:outline-none focus:ring-2 focus:ring-[#20b368]/60 focus:border-[#20b368]"
+                  disabled={loading}
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-[#94a3b8] uppercase tracking-widest mb-2">Role</label>
+              <select
+                name="role"
+                value={formData.role}
                 onChange={handleChange}
-                maxLength={field.maxLength}
-                className="w-full pl-10 pr-4 py-3 bg-[#0b1320] border border-[#1f2b40] rounded-xl text-sm text-white placeholder:text-[#475569] focus:outline-none focus:ring-2 focus:ring-[#20b368]/60 focus:border-[#20b368]"
+                className="w-full px-4 py-3 bg-[#0b1320] border border-[#1f2b40] rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#20b368]/60 focus:border-[#20b368]"
                 disabled={loading}
-              />
+              >
+                <option value="VENDOR" className="bg-[#0b1320]">Vendor</option>
+                <option value="EMPLOYEE" className="bg-[#0b1320]">Employee</option>
+              </select>
             </div>
           </div>
-        ))}
 
-        <div>
-          <label className="block text-xs font-semibold text-[#94a3b8] uppercase tracking-widest mb-2">Role</label>
-          <select
-            name="role"
-            value={formData.role}
-            onChange={handleChange}
-            className="w-full px-4 py-3 bg-[#0b1320] border border-[#1f2b40] rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#20b368]/60 focus:border-[#20b368]"
-            disabled={loading}
-          >
-            <option value="VENDOR" className="bg-[#0b1320]">Vendor</option>
-            <option value="EMPLOYEE" className="bg-[#0b1320]">Employee</option>
-          </select>
-        </div>
+          {/* Right Column */}
+          <div className="space-y-5">
+            <div>
+              <label className="block text-xs font-semibold text-[#94a3b8] uppercase tracking-widest mb-2">Email</label>
+              <div className="relative">
+                <FiMail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#94a3b8] w-4 h-4" />
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Enter email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className="w-full pl-10 pr-4 py-3 bg-[#0b1320] border border-[#1f2b40] rounded-xl text-sm text-white placeholder:text-[#475569] focus:outline-none focus:ring-2 focus:ring-[#20b368]/60 focus:border-[#20b368]"
+                  disabled={loading}
+                />
+              </div>
+            </div>
 
-        <div>
-          <label className="block text-xs font-semibold text-[#94a3b8] uppercase tracking-widest mb-2">Password</label>
-          <div className="relative">
-            <FiLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#94a3b8] w-4 h-4" />
-            <input
-              type="password"
-              name="password"
-              placeholder="Enter password"
-              value={formData.password}
-              onChange={handleChange}
-              className="w-full pl-10 pr-4 py-3 bg-[#0b1320] border border-[#1f2b40] rounded-xl text-sm text-white placeholder:text-[#475569] focus:outline-none focus:ring-2 focus:ring-[#20b368]/60 focus:border-[#20b368]"
-              disabled={loading}
-            />
+            <div>
+              <label className="block text-xs font-semibold text-[#94a3b8] uppercase tracking-widest mb-2">Contact Number</label>
+              <div className="relative">
+                <FiPhone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#94a3b8] w-4 h-4" />
+                <input
+                  type="tel"
+                  name="contactNumber"
+                  placeholder="10 digits"
+                  value={formData.contactNumber}
+                  onChange={handleChange}
+                  maxLength={10}
+                  className="w-full pl-10 pr-4 py-3 bg-[#0b1320] border border-[#1f2b40] rounded-xl text-sm text-white placeholder:text-[#475569] focus:outline-none focus:ring-2 focus:ring-[#20b368]/60 focus:border-[#20b368]"
+                  disabled={loading}
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-[#94a3b8] uppercase tracking-widest mb-2">Password</label>
+              <div className="relative">
+                <FiLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#94a3b8] w-4 h-4" />
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="Enter password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  className="w-full pl-10 pr-4 py-3 bg-[#0b1320] border border-[#1f2b40] rounded-xl text-sm text-white placeholder:text-[#475569] focus:outline-none focus:ring-2 focus:ring-[#20b368]/60 focus:border-[#20b368]"
+                  disabled={loading}
+                />
+              </div>
+            </div>
           </div>
         </div>
 

@@ -23,15 +23,24 @@ const NavBar: React.FC = () => {
   const toggleProfile = () => setProfileOpen(!profileOpen);
 
   useEffect(() => {
+    if (!profileOpen) return;
+
     const handleClickOutside = (event: MouseEvent) => {
       if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
         setProfileOpen(false);
       }
     };
-    // Use click instead of mousedown to allow button clicks to complete first
-    document.addEventListener("click", handleClickOutside);
-    return () => document.removeEventListener("click", handleClickOutside);
-  }, []);
+    
+    // Use setTimeout to ensure button click completes first
+    const timeoutId = setTimeout(() => {
+      document.addEventListener("click", handleClickOutside);
+    }, 0);
+    
+    return () => {
+      clearTimeout(timeoutId);
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [profileOpen]);
 
   const handleLogout = () => {
     // Close popup first to prevent visual glitch
@@ -72,10 +81,14 @@ const NavBar: React.FC = () => {
                 {item.name}
               </Link>
             ))}
-            <div ref={profileRef} className="ml-4 relative">
+            <div ref={profileRef} className="ml-4 relative z-50">
               <button
-                onClick={toggleProfile}
-                className="w-10 h-10 rounded-xl border border-[#1f2b40] bg-[#0b1320] flex items-center justify-center text-[#e2e8f0]"
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleProfile();
+                }}
+                className="w-10 h-10 rounded-xl border border-[#1f2b40] bg-[#0b1320] flex items-center justify-center text-[#e2e8f0] hover:bg-[#111e34] transition-colors cursor-pointer"
               >
                 <FiUser className="w-4 h-4" />
               </button>
@@ -83,11 +96,15 @@ const NavBar: React.FC = () => {
             </div>
           </div>
 
-          <div className="md:hidden flex items-center space-x-2">
+          <div className="md:hidden flex items-center space-x-2 z-50">
             <div ref={profileRef} className="relative">
               <button
-                onClick={toggleProfile}
-                className="w-10 h-10 rounded-xl border border-[#1f2b40] bg-[#0b1320] flex items-center justify-center text-[#e2e8f0]"
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleProfile();
+                }}
+                className="w-10 h-10 rounded-xl border border-[#1f2b40] bg-[#0b1320] flex items-center justify-center text-[#e2e8f0] hover:bg-[#111e34] transition-colors cursor-pointer"
               >
                 <FiUser className="w-4 h-4" />
               </button>
