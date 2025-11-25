@@ -93,12 +93,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const logout = useCallback(() => {
+    // Clear all auth data
     localStorage.removeItem('authToken');
     localStorage.removeItem('user');
     setToken(null);
     setUser(null);
-    // Navigation will be handled by the component calling logout
-    window.location.href = '/';
   }, []);
 
   return (

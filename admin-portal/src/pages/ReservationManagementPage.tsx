@@ -107,25 +107,25 @@ const ReservationManagementPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#02060d] pt-16 pb-8 px-6">
+    <div className="min-h-[calc(100vh-5rem)] bg-[#02060d] pt-6 pb-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-6 flex justify-between items-center">
+        <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h1 className="text-2xl font-semibold text-white mb-1">Reservation Management</h1>
+            <h1 className="text-2xl sm:text-3xl font-semibold text-white mb-1">Reservation Management</h1>
             <p className="text-sm text-[#94a3b8]">Manage and review all stall reservations</p>
           </div>
           <button
             onClick={fetchReservations}
             disabled={loading}
-            className="flex items-center gap-2 px-4 py-2 bg-[#0b1320] border border-[#1f2b40] rounded text-sm font-medium disabled:opacity-50"
+            className="flex items-center gap-2 px-4 py-2 bg-[#0b1320] border border-[#1f2b40] rounded-lg text-sm font-medium disabled:opacity-50 hover:border-[#22c55e] transition-colors"
           >
             <FiRefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
             Refresh
           </button>
         </div>
 
-        <div className="bg-[#0b1320] border border-[#1f2b40] rounded p-4 mb-6">
-          <div className="flex flex-col md:flex-row gap-4">
+        <div className="bg-[#0b1320] border border-[#1f2b40] rounded-xl p-4 mb-6">
+          <div className="flex flex-col sm:flex-row gap-4">
             <div className="relative flex-1">
               <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#94a3b8] w-4 h-4" />
               <input
@@ -133,7 +133,7 @@ const ReservationManagementPage: React.FC = () => {
                 placeholder="Search by reservation ID, user ID, or stall..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-[#273654] rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                className="w-full pl-10 pr-4 py-2.5 bg-[#111e34] border border-[#1f2b40] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50 focus:border-[#22c55e] text-sm text-white placeholder:text-[#475569]"
               />
             </div>
             <div className="relative">
@@ -141,12 +141,12 @@ const ReservationManagementPage: React.FC = () => {
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value as typeof statusFilter)}
-                className="pl-10 pr-8 py-2 border border-[#273654] rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm appearance-none bg-[#0b1320]"
+                className="pl-10 pr-8 py-2.5 bg-[#111e34] border border-[#1f2b40] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50 focus:border-[#22c55e] text-sm appearance-none text-white"
               >
-                <option value="ALL">All Status</option>
-                <option value="PENDING">Pending</option>
-                <option value="CONFIRMED">Confirmed</option>
-                <option value="CANCELLED">Cancelled</option>
+                <option value="ALL" className="bg-[#111e34]">All Status</option>
+                <option value="PENDING" className="bg-[#111e34]">Pending</option>
+                <option value="CONFIRMED" className="bg-[#111e34]">Confirmed</option>
+                <option value="CANCELLED" className="bg-[#111e34]">Cancelled</option>
               </select>
             </div>
           </div>
@@ -161,7 +161,7 @@ const ReservationManagementPage: React.FC = () => {
             filteredReservations.map((reservation) => (
               <div
                 key={reservation.reservationId}
-                className="bg-[#0b1320] border border-[#1f2b40] rounded p-5"
+                className="bg-[#0b1320] border border-[#1f2b40] rounded-xl p-5 hover:border-[#22c55e]/30 transition-colors"
               >
                 <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                   <div className="flex-1">
@@ -212,7 +212,7 @@ const ReservationManagementPage: React.FC = () => {
                       <button
                         onClick={() => handleApprove(reservation.reservationId)}
                         disabled={loading}
-                        className="flex items-center justify-center gap-2 px-4 py-2 bg-green-600 text-white rounded text-sm font-medium disabled:opacity-50"
+                        className="flex items-center justify-center gap-2 px-4 py-2 bg-[#22c55e] text-black rounded-lg text-sm font-semibold disabled:opacity-50 hover:opacity-90 transition-opacity"
                       >
                         <FiCheckCircle className="w-4 h-4" />
                         Approve
@@ -220,7 +220,7 @@ const ReservationManagementPage: React.FC = () => {
                       <button
                         onClick={() => handleCancel(reservation.reservationId)}
                         disabled={loading}
-                        className="flex items-center justify-center gap-2 px-4 py-2 bg-red-600 text-white rounded text-sm font-medium disabled:opacity-50"
+                        className="flex items-center justify-center gap-2 px-4 py-2 bg-[#ef4444] text-white rounded-lg text-sm font-semibold disabled:opacity-50 hover:opacity-90 transition-opacity"
                       >
                         <FiXCircle className="w-4 h-4" />
                         Reject

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FiMenu, FiX, FiUser } from "react-icons/fi";
 import ProfilePopup from "./ProfilePopup";
 import { useAuth } from "../../context/AuthContext";
@@ -9,7 +9,7 @@ const menuItems = [
   { name: "Stall Management", href: "/stall-management" },
   { name: "Reservations", href: "/reservations" },
   { name: "Vendors", href: "/vendors" },
-  { name: "Map", href: "/map" },
+  { name: "QR Scanner", href: "/qr-scanner" },
 ];
 
 const NavBar: React.FC = () => {
@@ -17,6 +17,7 @@ const NavBar: React.FC = () => {
   const [profileOpen, setProfileOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
+  const navigate = useNavigate();
   const { logout, user } = useAuth();
 
   const toggleMenu = () => setIsOpen(!isOpen);
@@ -35,6 +36,7 @@ const NavBar: React.FC = () => {
   const handleLogout = () => {
     logout();
     setProfileOpen(false);
+    navigate('/', { replace: true });
   };
 
   const isActive = (path: string) => location.pathname === path;
@@ -44,8 +46,8 @@ const NavBar: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           <Link to="/dashboard" className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#22c55e] to-[#a3e635] flex items-center justify-center shadow-lg shadow-[#22c55e]/40">
-              <span className="text-black font-semibold text-base">C</span>
+            <div className="w-10 h-10 rounded-xl bg-[#20b368] flex items-center justify-center shadow-lg shadow-black/30">
+              <span className="text-[#04110a] font-semibold text-base">C</span>
             </div>
             <div>
               <div className="font-semibold text-base text-white tracking-wide">CIBF</div>
@@ -60,7 +62,7 @@ const NavBar: React.FC = () => {
                 to={item.href}
                 className={`px-4 py-2 text-xs font-semibold rounded-lg transition-colors ${
                   isActive(item.href)
-                    ? "bg-[#22c55e] text-black"
+                    ? "bg-[#20b368] text-[#04110a]"
                     : "text-[#cbd5f5] hover:text-white hover:bg-[#0f172a]"
                 }`}
               >

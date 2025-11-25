@@ -143,11 +143,11 @@ const StallManagementPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#02060d] pt-16 pb-8 px-6">
+    <div className="min-h-[calc(100vh-5rem)] bg-[#02060d] pt-6 pb-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-6 flex justify-between items-center">
+        <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h1 className="text-2xl font-semibold text-white mb-1">Stall Management</h1>
+            <h1 className="text-2xl sm:text-3xl font-semibold text-white mb-1">Stall Management</h1>
             <p className="text-sm text-[#94a3b8]">Manage exhibition stalls and genres</p>
           </div>
           <button
@@ -155,7 +155,7 @@ const StallManagementPage: React.FC = () => {
               setEditingStall(undefined);
               setStallModalOpen(true);
             }}
-            className="flex items-center gap-2 px-4 py-2 bg-[#050c1c] text-white rounded text-sm font-medium"
+            className="flex items-center gap-2 px-4 py-2 bg-[#20b368] text-[#04110a] rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity"
           >
             <FiPlus className="w-4 h-4" />
             Add Stall
@@ -244,7 +244,7 @@ const StallManagementPage: React.FC = () => {
                 setEditingGenre(undefined);
                 setGenreModalOpen(true);
               }}
-              className="flex items-center gap-2 px-4 py-2 bg-[#050c1c] text-white rounded text-sm font-medium"
+              className="flex items-center gap-2 px-4 py-2 bg-[#20b368] text-[#04110a] rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity"
             >
               <FiPlus className="w-4 h-4" />
               Add Genre

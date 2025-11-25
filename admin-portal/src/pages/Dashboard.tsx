@@ -76,22 +76,22 @@ const Dashboard: React.FC = () => {
       title: "Total Vendors",
       value: stats.vendors,
       icon: <FiUsers className="w-5 h-5" />,
-      color: "text-blue-600",
-      bg: "bg-blue-50",
+      color: "text-[#22c55e]",
+      bg: "bg-[#0d2a1a]",
     },
     {
       title: "Total Stalls",
       value: stats.stalls,
       icon: <FiBox className="w-5 h-5" />,
-      color: "text-gray-600",
-      bg: "bg-gray-50",
+      color: "text-[#facc15]",
+      bg: "bg-[#2a2410]",
     },
     {
       title: "Pending Reservations",
       value: stats.pendingReservations,
       icon: <FiClock className="w-5 h-5" />,
-      color: "text-amber-600",
-      bg: "bg-amber-50",
+      color: "text-[#facc15]",
+      bg: "bg-[#2a2410]",
     },
   ];
 
@@ -100,27 +100,27 @@ const Dashboard: React.FC = () => {
       title: "Confirmed",
       value: stats.confirmedReservations,
       icon: <FiCheckCircle className="w-4 h-4" />,
-      bg: "bg-green-50",
-      border: "border-green-200",
-      text: "text-green-700",
+      bg: "bg-[#0d2a1a]",
+      border: "border-[#22c55e]/30",
+      text: "text-[#22c55e]",
       subtitle: `${occupancyRate}% occupancy`,
     },
     {
       title: "Pending",
       value: stats.pendingReservations,
       icon: <FiClock className="w-4 h-4" />,
-      bg: "bg-amber-50",
-      border: "border-amber-200",
-      text: "text-amber-700",
+      bg: "bg-[#2a2410]",
+      border: "border-[#facc15]/30",
+      text: "text-[#facc15]",
       subtitle: "Awaiting approval",
     },
     {
       title: "Cancelled",
       value: stats.cancelledReservations,
       icon: <FiXCircle className="w-4 h-4" />,
-      bg: "bg-red-50",
-      border: "border-red-200",
-      text: "text-red-700",
+      bg: "bg-[#2a0f0f]",
+      border: "border-[#ef4444]/30",
+      text: "text-[#ef4444]",
       subtitle: `${cancellationRate}% cancellation rate`,
     },
   ];
@@ -147,77 +147,77 @@ const Dashboard: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#02060d] pt-20 pb-10 px-4 lg:px-8">
-      <div className="max-w-7xl mx-auto space-y-8">
+    <div className="min-h-[calc(100vh-5rem)] bg-[#02060d] pt-6 pb-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto space-y-6">
         <div className="flex flex-col gap-2">
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#94a3b8]">CIBF CONTROL ROOM</p>
-          <h1 className="text-3xl lg:text-4xl font-semibold text-white">Operational Dashboard</h1>
+          <p className="text-xs font-semibold uppercase tracking-wider text-[#94a3b8]">CIBF Control Room</p>
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-white">Operational Dashboard</h1>
           <p className="text-sm text-[#94a3b8]">Pulse of the reservation platform at a glance</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {statCards.map((card, index) => (
             <div
               key={index}
-              className="dark-card p-6 text-white relative overflow-hidden"
+              className="bg-[#0b1320] border border-[#1f2b40] rounded-xl p-5 text-white relative overflow-hidden"
             >
-              <div className="absolute inset-0 opacity-5" style={{ background: "radial-gradient(circle at top, #22c55e, transparent)" }} />
-              <div className="relative flex items-center justify-between mb-6">
-                <div className={`${card.bg} ${card.color.replace("text", "text")} p-2.5 rounded-lg`}>
+              <div className="absolute inset-0 opacity-5 bg-[#1f2d47]" />
+              <div className="relative flex items-center justify-between mb-4">
+                <div className={`${card.bg} ${card.color} p-2.5 rounded-lg border border-[#1f2b40]`}>
                   {card.icon}
                 </div>
-                <span className="text-xs font-semibold uppercase tracking-[0.4em] text-[#475569]">LIVE</span>
+                <span className="text-xs font-semibold uppercase tracking-wider text-[#475569]">Live</span>
               </div>
-              <h3 className="text-xs font-semibold text-[#94a3b8] uppercase tracking-[0.3em] mb-2">{card.title}</h3>
-              <p className="text-3xl font-semibold">{card.value.toLocaleString()}</p>
+              <h3 className="text-xs font-medium text-[#94a3b8] uppercase tracking-wider mb-2">{card.title}</h3>
+              <p className="text-2xl sm:text-3xl font-semibold">{card.value.toLocaleString()}</p>
             </div>
           ))}
         </div>
 
-        <div className="dark-card p-8 shadow-[0_25px_120px_rgba(0,0,0,0.6)]">
+        <div className="bg-[#0b1320] border border-[#1f2b40] rounded-xl p-6 shadow-xl">
           <div className="flex items-center gap-3 mb-6">
-            <div className="bg-[#0d1627] border border-[#1f2b40] rounded-xl p-3 text-[#22c55e]">
+            <div className="bg-[#111e34] border border-[#1f2b40] rounded-lg p-3 text-[#22c55e]">
               <FiShoppingBag className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-xl font-semibold text-white">Reservation Statistics</h2>
-              <p className="text-xs uppercase tracking-[0.3em] text-[#94a3b8]">Realtime tracking</p>
+              <h2 className="text-lg sm:text-xl font-semibold text-white">Reservation Statistics</h2>
+              <p className="text-xs uppercase tracking-wider text-[#94a3b8]">Realtime tracking</p>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {reservationCards.map((card, index) => (
               <div
                 key={index}
-                className="bg-[#0b1320] border border-[#1f2b40] rounded-2xl p-5 text-white"
+                className={`${card.bg} border ${card.border} rounded-xl p-5 text-white`}
               >
                 <div className="flex items-center gap-3 mb-4">
-                  <div className={`p-2.5 rounded-lg border border-[#1f2b40] ${card.text.replace("text", "text")}`}>{card.icon}</div>
-                  <h3 className="text-sm font-semibold">{card.title}</h3>
+                  <div className={`p-2.5 rounded-lg border border-[#1f2b40] ${card.text}`}>{card.icon}</div>
+                  <h3 className="text-sm font-medium">{card.title}</h3>
                 </div>
-                <p className="text-3xl font-semibold mb-1">{card.value}</p>
+                <p className="text-2xl sm:text-3xl font-semibold mb-1">{card.value}</p>
                 <p className="text-xs text-[#94a3b8]">{card.subtitle}</p>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="dark-card p-8">
+        <div className="bg-[#0b1320] border border-[#1f2b40] rounded-xl p-6">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <p className="text-xs uppercase tracking-[0.3em] text-[#94a3b8]">Shortcuts</p>
-              <h2 className="text-xl text-white font-semibold mt-1">Quick Actions</h2>
+              <p className="text-xs uppercase tracking-wider text-[#94a3b8]">Shortcuts</p>
+              <h2 className="text-lg sm:text-xl text-white font-semibold mt-1">Quick Actions</h2>
             </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {quickActions.map((action, index) => (
               <button
                 key={index}
                 onClick={action.action}
-                className="text-left bg-[#0b1320] border border-[#1f2b40] rounded-xl p-5 text-white hover:border-[#22c55e] transition-colors"
+                className="text-left bg-[#111e34] border border-[#1f2b40] rounded-xl p-5 text-white hover:border-[#22c55e] transition-colors"
               >
                 <div className="flex items-center justify-between mb-4">
-                  <div className="bg-[#091122] text-[#e2e8f0] p-3 rounded-lg border border-[#1f2b40]">
+                  <div className="bg-[#0b1320] text-[#e2e8f0] p-3 rounded-lg border border-[#1f2b40]">
                     {action.icon}
                   </div>
                   <FiArrowRight className="w-4 h-4 text-[#94a3b8]" />

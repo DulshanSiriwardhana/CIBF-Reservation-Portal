@@ -82,10 +82,10 @@ const VendorManagementPage: React.FC = () => {
   }, [searchTerm, vendors]);
 
   return (
-    <div className="min-h-screen bg-[#02060d] pt-20 pb-10 px-4 lg:px-8">
+    <div className="min-h-[calc(100vh-5rem)] bg-[#02060d] pt-6 pb-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto text-white">
         <div className="mb-6">
-          <h1 className="text-3xl font-semibold">Vendor Management</h1>
+          <h1 className="text-2xl sm:text-3xl font-semibold mb-1">Vendor Management</h1>
           <p className="text-sm text-[#94a3b8]">View and manage all registered vendors</p>
         </div>
 

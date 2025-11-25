@@ -50,38 +50,38 @@ const StallFormModal: React.FC<Props> = ({ isOpen, onClose, onSubmit, initialDat
   };
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-in" onClick={onClose}>
-      <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto animate-scale-in" onClick={(e) => e.stopPropagation()}>
-        <div className="flex items-center justify-between p-6 border-b border-slate-200">
-          <h2 className="text-2xl font-bold text-slate-900">{initialData ? "Edit Stall" : "Add Stall"}</h2>
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-in" onClick={onClose}>
+      <div className="bg-[#0b1320] border border-[#1f2b40] rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto animate-scale-in" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-center justify-between p-6 border-b border-[#1f2b40] sticky top-0 bg-[#0b1320] z-10">
+          <h2 className="text-xl font-semibold text-white">{initialData ? "Edit Stall" : "Add Stall"}</h2>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-slate-100 rounded-xl transition-colors"
+            className="p-2 hover:bg-[#111e34] rounded-lg transition-colors text-[#94a3b8] hover:text-white"
           >
-            <FiX className="w-5 h-5 text-slate-600" />
+            <FiX className="w-5 h-5" />
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-2">Stall Name</label>
+            <label className="block text-sm font-medium text-[#94a3b8] mb-2">Stall Name</label>
             <input
               type="text"
               required
               placeholder="Enter stall name"
               value={stall.stallName}
               onChange={(e) => setStall({ ...stall, stallName: e.target.value })}
-              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent text-slate-900"
+              className="w-full px-4 py-2.5 bg-[#111e34] border border-[#1f2b40] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50 focus:border-[#22c55e] text-white placeholder:text-[#475569]"
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-2">Size</label>
+              <label className="block text-sm font-medium text-[#94a3b8] mb-2">Size</label>
               <select
                 value={stall.size}
                 onChange={(e) => setStall({ ...stall, size: e.target.value as Stall["size"] })}
-                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent text-slate-900"
+                className="w-full px-4 py-2.5 bg-[#111e34] border border-[#1f2b40] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50 focus:border-[#22c55e] text-white"
               >
                 <option value="SMALL">Small</option>
                 <option value="MEDIUM">Medium</option>
@@ -90,11 +90,11 @@ const StallFormModal: React.FC<Props> = ({ isOpen, onClose, onSubmit, initialDat
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-2">Status</label>
+              <label className="block text-sm font-medium text-[#94a3b8] mb-2">Status</label>
               <select
                 value={stall.status}
                 onChange={(e) => setStall({ ...stall, status: e.target.value as Stall["status"] })}
-                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent text-slate-900"
+                className="w-full px-4 py-2.5 bg-[#111e34] border border-[#1f2b40] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50 focus:border-[#22c55e] text-white"
               >
                 <option value="AVAILABLE">Available</option>
                 <option value="RESERVED">Reserved</option>
@@ -103,9 +103,9 @@ const StallFormModal: React.FC<Props> = ({ isOpen, onClose, onSubmit, initialDat
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-2">Dimension (m²)</label>
+              <label className="block text-sm font-medium text-[#94a3b8] mb-2">Dimension (m²)</label>
               <input
                 type="number"
                 required
@@ -114,12 +114,12 @@ const StallFormModal: React.FC<Props> = ({ isOpen, onClose, onSubmit, initialDat
                 placeholder="0"
                 value={stall.dimension}
                 onChange={(e) => setStall({ ...stall, dimension: Number(e.target.value) })}
-                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent text-slate-900"
+                className="w-full px-4 py-2.5 bg-[#111e34] border border-[#1f2b40] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50 focus:border-[#22c55e] text-white placeholder:text-[#475569]"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-2">Price ($)</label>
+              <label className="block text-sm font-medium text-[#94a3b8] mb-2">Price ($)</label>
               <input
                 type="number"
                 required
@@ -128,40 +128,40 @@ const StallFormModal: React.FC<Props> = ({ isOpen, onClose, onSubmit, initialDat
                 placeholder="0.00"
                 value={stall.price}
                 onChange={(e) => setStall({ ...stall, price: Number(e.target.value) })}
-                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent text-slate-900"
+                className="w-full px-4 py-2.5 bg-[#111e34] border border-[#1f2b40] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50 focus:border-[#22c55e] text-white placeholder:text-[#475569]"
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-2">Position X</label>
+              <label className="block text-sm font-medium text-[#94a3b8] mb-2">Position X</label>
               <input
                 type="number"
                 min="0"
                 placeholder="50"
                 value={stall.positionX}
                 onChange={(e) => setStall({ ...stall, positionX: Number(e.target.value) })}
-                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent text-slate-900"
+                className="w-full px-4 py-2.5 bg-[#111e34] border border-[#1f2b40] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50 focus:border-[#22c55e] text-white placeholder:text-[#475569]"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-2">Position Y</label>
+              <label className="block text-sm font-medium text-[#94a3b8] mb-2">Position Y</label>
               <input
                 type="number"
                 min="0"
                 placeholder="50"
                 value={stall.positionY}
                 onChange={(e) => setStall({ ...stall, positionY: Number(e.target.value) })}
-                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent text-slate-900"
+                className="w-full px-4 py-2.5 bg-[#111e34] border border-[#1f2b40] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50 focus:border-[#22c55e] text-white placeholder:text-[#475569]"
               />
             </div>
           </div>
 
           {genres.length > 0 && (
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-2">Genres</label>
+              <label className="block text-sm font-medium text-[#94a3b8] mb-2">Genres</label>
               <select
                 multiple
                 value={stall.genreIds?.map(String) || []}
@@ -169,27 +169,27 @@ const StallFormModal: React.FC<Props> = ({ isOpen, onClose, onSubmit, initialDat
                   const selected = Array.from(e.target.selectedOptions).map(opt => Number(opt.value));
                   setStall({ ...stall, genreIds: selected });
                 }}
-                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent text-slate-900 min-h-[100px]"
+                className="w-full px-4 py-2 bg-[#111e34] border border-[#1f2b40] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50 focus:border-[#22c55e] text-white min-h-[100px]"
               >
                 {genres.map(g => (
-                  <option key={g.id} value={g.id}>{g.name}</option>
+                  <option key={g.id} value={g.id} className="bg-[#111e34]">{g.name}</option>
                 ))}
               </select>
-              <p className="text-xs text-slate-500 mt-1">Hold Ctrl/Cmd to select multiple</p>
+              <p className="text-xs text-[#475569] mt-1">Hold Ctrl/Cmd to select multiple</p>
             </div>
           )}
 
-          <div className="flex justify-end gap-3 pt-4 border-t border-slate-200">
+          <div className="flex justify-end gap-3 pt-4 border-t border-[#1f2b40]">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors font-semibold text-sm"
+              className="px-5 py-2.5 border border-[#1f2b40] text-[#94a3b8] rounded-lg hover:bg-[#111e34] hover:border-[#273654] transition-colors font-medium text-sm"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition-colors font-semibold text-sm"
+              className="px-5 py-2.5 bg-[#20b368] text-[#04110a] rounded-lg hover:opacity-90 transition-opacity font-semibold text-sm"
             >
               {initialData ? "Update" : "Create"}
             </button>

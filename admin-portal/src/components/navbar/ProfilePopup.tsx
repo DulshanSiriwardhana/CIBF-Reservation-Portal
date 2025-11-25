@@ -1,5 +1,5 @@
 import React from "react";
-import { FiSettings, FiLogOut, FiUser } from "react-icons/fi";
+import { FiLogOut, FiUser } from "react-icons/fi";
 
 interface User {
   userId: string;
@@ -19,7 +19,7 @@ const ProfilePopup: React.FC<ProfilePopupProps> = ({ onLogout, user }) => {
     <div className="absolute right-0 mt-3 w-72 rounded-2xl border border-[#1f2b40] bg-[#0c1525] text-white shadow-2xl shadow-black/40 z-50">
       <div className="p-5 border-b border-[#1f2b40]">
         <div className="flex items-center space-x-4">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#22c55e] to-[#facc15] flex items-center justify-center text-black">
+          <div className="w-12 h-12 rounded-xl bg-[#20b368] flex items-center justify-center text-[#04110a]">
             <FiUser className="w-6 h-6" />
           </div>
           <div className="flex-1 min-w-0">
@@ -37,13 +37,6 @@ const ProfilePopup: React.FC<ProfilePopupProps> = ({ onLogout, user }) => {
         </div>
       </div>
       <div className="p-2">
-        <button
-          className="flex items-center w-full px-4 py-2.5 rounded-lg text-sm font-semibold text-[#e2e8f0] hover:bg-[#111f33]"
-          onClick={() => {}}
-        >
-          <FiSettings className="mr-3 w-4 h-4" />
-          Settings
-        </button>
         <button
           className="flex items-center w-full px-4 py-2.5 rounded-lg text-sm font-semibold text-[#f87171] hover:bg-[#18111f]"
           onClick={onLogout}
