@@ -59,13 +59,13 @@ export const LoaderProvider: React.FC<LoaderProviderProps> = ({ children }) => {
 
 const Loader: React.FC = () => {
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9999] flex items-center justify-center">
-      <div className="bg-white rounded-lg p-8 shadow-2xl">
-        <div className="flex flex-col items-center gap-4">
-          <div className="relative w-16 h-16">
-            <div className="w-16 h-16 border-4 border-slate-200 border-t-slate-900 rounded-full animate-spin"></div>
+    <div className="fixed inset-0 bg-[#02060d]/80 backdrop-blur z-[9999] flex items-center justify-center">
+      <div className="bg-[#0b1320] rounded-2xl p-10 shadow-[0_20px_90px_rgba(0,0,0,0.7)] border border-[#1f2b40]">
+        <div className="flex flex-col items-center gap-4 text-white">
+          <div className="w-12 h-12 border-4 border-[#1f2b40] border-t-[#22c55e] rounded-full animate-spin"></div>
+          <div className="text-center">
+            <p className="text-sm font-semibold text-white tracking-[0.3em]">Loading</p>
           </div>
-          <p className="text-sm font-semibold text-slate-700">Loading...</p>
         </div>
       </div>
     </div>

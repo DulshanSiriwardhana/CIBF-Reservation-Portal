@@ -16,32 +16,39 @@ interface ProfilePopupProps {
 
 const ProfilePopup: React.FC<ProfilePopupProps> = ({ onLogout, user }) => {
   return (
-    <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-slate-200 z-50">
-      <div className="p-4">
-        <div className="flex items-center space-x-3 mb-4 pb-4 border-b border-slate-200">
-          <div className="w-10 h-10 bg-slate-900 rounded-lg flex items-center justify-center">
-            <FiUser className="w-5 h-5 text-white" />
+    <div className="absolute right-0 mt-3 w-72 rounded-2xl border border-[#1f2b40] bg-[#0c1525] text-white shadow-2xl shadow-black/40 z-50">
+      <div className="p-5 border-b border-[#1f2b40]">
+        <div className="flex items-center space-x-4">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#22c55e] to-[#facc15] flex items-center justify-center text-black">
+            <FiUser className="w-6 h-6" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-slate-900 truncate">{user?.username || "Admin"}</p>
-            <p className="text-xs text-slate-600 truncate">{user?.email || ""}</p>
+            <p className="text-sm font-semibold truncate">{user?.username || "Admin"}</p>
+            <p className="text-xs text-[#94a3b8] truncate">{user?.email || ""}</p>
             {user?.businessName && (
-              <p className="text-xs text-slate-500 truncate">{user.businessName}</p>
+              <p className="text-xs text-[#94a3b8] truncate mt-1">{user.businessName}</p>
             )}
+            <div className="mt-2">
+              <span className="inline-flex px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#111f33] border border-[#1f2b40] text-[#facc15]">
+                {user?.role || "ADMIN"}
+              </span>
+            </div>
           </div>
         </div>
+      </div>
+      <div className="p-2">
         <button
-          className="flex items-center w-full px-3 py-2 rounded-lg hover:bg-slate-100 transition-colors text-sm font-medium text-slate-700 mb-1"
+          className="flex items-center w-full px-4 py-2.5 rounded-lg text-sm font-semibold text-[#e2e8f0] hover:bg-[#111f33]"
           onClick={() => {}}
         >
-          <FiSettings className="mr-2 w-4 h-4" />
+          <FiSettings className="mr-3 w-4 h-4" />
           Settings
         </button>
         <button
-          className="flex items-center w-full px-3 py-2 rounded-lg hover:bg-slate-100 transition-colors text-sm font-medium text-slate-700"
+          className="flex items-center w-full px-4 py-2.5 rounded-lg text-sm font-semibold text-[#f87171] hover:bg-[#18111f]"
           onClick={onLogout}
         >
-          <FiLogOut className="mr-2 w-4 h-4" />
+          <FiLogOut className="mr-3 w-4 h-4" />
           Logout
         </button>
       </div>

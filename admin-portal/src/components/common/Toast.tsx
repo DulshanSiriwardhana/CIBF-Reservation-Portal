@@ -20,28 +20,28 @@ export const Toast: React.FC<ToastProps> = ({ message, type, onClose, duration =
   }, [duration, onClose]);
 
   const icons = {
-    success: <FiCheckCircle className="w-5 h-5" />,
-    error: <FiXCircle className="w-5 h-5" />,
-    warning: <FiAlertCircle className="w-5 h-5" />,
-    info: <FiInfo className="w-5 h-5" />,
+    success: <FiCheckCircle className="w-4 h-4" />,
+    error: <FiXCircle className="w-4 h-4" />,
+    warning: <FiAlertCircle className="w-4 h-4" />,
+    info: <FiInfo className="w-4 h-4" />,
   };
 
   const colors = {
-    success: 'bg-emerald-50 border-emerald-200 text-emerald-800',
-    error: 'bg-rose-50 border-rose-200 text-rose-800',
-    warning: 'bg-amber-50 border-amber-200 text-amber-800',
-    info: 'bg-blue-50 border-blue-200 text-blue-800',
+    success: 'bg-[#0b1320] border border-[#10492d] text-[#22c55e]',
+    error: 'bg-[#1f0f19] border border-[#b91c1c]/40 text-[#f87171]',
+    warning: 'bg-[#1f1a0b] border border-[#facc15]/40 text-[#facc15]',
+    info: 'bg-[#0b1426] border border-[#1d4ed8]/40 text-[#60a5fa]',
   };
 
   return (
     <div
-      className={`fixed top-20 right-4 z-50 flex items-center space-x-3 px-6 py-4 rounded-xl shadow-2xl border-2 ${colors[type]} animate-slide-in-right max-w-md`}
+      className={`fixed top-16 right-4 z-50 flex items-center space-x-3 px-4 py-3 rounded-xl shadow-[0_15px_60px_rgba(0,0,0,0.6)] ${colors[type]} max-w-md backdrop-blur`}
     >
-      <div className="flex-shrink-0">{icons[type]}</div>
-      <p className="font-semibold flex-1">{message}</p>
+      <div className="flex-shrink-0 bg-black/20 rounded-lg p-2">{icons[type]}</div>
+      <p className="font-medium flex-1 text-sm text-white">{message}</p>
       <button
         onClick={onClose}
-        className="flex-shrink-0 hover:opacity-70 transition-opacity"
+        className="flex-shrink-0 p-1 rounded text-white/70 hover:text-white"
       >
         <FiXCircle className="w-4 h-4" />
       </button>
@@ -50,4 +50,3 @@ export const Toast: React.FC<ToastProps> = ({ message, type, onClose, duration =
 };
 
 export default Toast;
-

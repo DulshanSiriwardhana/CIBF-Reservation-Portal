@@ -5,11 +5,11 @@ import ProfilePopup from "./ProfilePopup";
 import { useAuth } from "../../context/AuthContext";
 
 const menuItems = [
-  { name: "Dashboard", href: "/dashboard", icon: "📊" },
-  { name: "Stall Management", href: "/stall-management", icon: "🏪" },
-  { name: "Reservations", href: "/reservations", icon: "📋" },
-  { name: "Vendors", href: "/vendors", icon: "👥" },
-  { name: "Map", href: "/map", icon: "🗺️" },
+  { name: "Dashboard", href: "/dashboard" },
+  { name: "Stall Management", href: "/stall-management" },
+  { name: "Reservations", href: "/reservations" },
+  { name: "Vendors", href: "/vendors" },
+  { name: "Map", href: "/map" },
 ];
 
 const NavBar: React.FC = () => {
@@ -40,16 +40,16 @@ const NavBar: React.FC = () => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <nav className="bg-white border-b border-slate-200 shadow-sm fixed w-full z-50 backdrop-blur-sm bg-white/95">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <nav className="fixed w-full z-50 border-b border-[#121e32] bg-[#050a15]/95 backdrop-blur-sm shadow-[0_5px_30px_rgba(0,0,0,0.35)]">
+      <div className="max-w-7xl mx-auto px-4 lg:px-8">
         <div className="flex justify-between h-16 items-center">
-          <Link to="/dashboard" className="flex items-center space-x-3 hover:opacity-90 transition-all group">
-            <div className="w-10 h-10 bg-slate-900 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
-              <span className="text-white font-bold text-lg">C</span>
+          <Link to="/dashboard" className="flex items-center space-x-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#22c55e] to-[#a3e635] flex items-center justify-center shadow-lg shadow-[#22c55e]/40">
+              <span className="text-black font-semibold text-base">C</span>
             </div>
             <div>
-              <div className="font-bold text-lg text-slate-900">CIBF</div>
-              <div className="text-xs text-slate-500 font-medium">Admin Portal</div>
+              <div className="font-semibold text-base text-white tracking-wide">CIBF</div>
+              <div className="text-[11px] uppercase text-[#94a3b8] tracking-[0.2em]">Admin Portal</div>
             </div>
           </Link>
 
@@ -58,10 +58,10 @@ const NavBar: React.FC = () => {
               <Link
                 key={item.name}
                 to={item.href}
-                className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${
+                className={`px-4 py-2 text-xs font-semibold rounded-lg transition-colors ${
                   isActive(item.href)
-                    ? "bg-slate-900 text-white shadow-md"
-                    : "text-slate-700 hover:bg-slate-100 hover:text-slate-900"
+                    ? "bg-[#22c55e] text-black"
+                    : "text-[#cbd5f5] hover:text-white hover:bg-[#0f172a]"
                 }`}
               >
                 {item.name}
@@ -70,9 +70,9 @@ const NavBar: React.FC = () => {
             <div ref={profileRef} className="ml-4 relative">
               <button
                 onClick={toggleProfile}
-                className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center hover:bg-slate-200 transition-all border border-slate-200 hover:border-slate-300 hover:shadow-sm"
+                className="w-10 h-10 rounded-xl border border-[#1f2b40] bg-[#0b1320] flex items-center justify-center text-[#e2e8f0]"
               >
-                <FiUser className="w-5 h-5 text-slate-700" />
+                <FiUser className="w-4 h-4" />
               </button>
               {profileOpen && <ProfilePopup onLogout={handleLogout} user={user} />}
             </div>
@@ -82,33 +82,33 @@ const NavBar: React.FC = () => {
             <div ref={profileRef} className="relative">
               <button
                 onClick={toggleProfile}
-                className="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center border border-slate-200"
+                className="w-10 h-10 rounded-xl border border-[#1f2b40] bg-[#0b1320] flex items-center justify-center text-[#e2e8f0]"
               >
-                <FiUser className="w-5 h-5 text-slate-700" />
+                <FiUser className="w-4 h-4" />
               </button>
               {profileOpen && <ProfilePopup onLogout={handleLogout} user={user} />}
             </div>
             <button
               onClick={toggleMenu}
-              className="p-2 rounded-lg hover:bg-slate-100 transition-colors"
+              className="p-2 rounded-lg border border-[#1f2b40] text-[#cbd5f5]"
               aria-label="Toggle menu"
             >
-              {isOpen ? <FiX className="w-6 h-6 text-slate-700" /> : <FiMenu className="w-6 h-6 text-slate-700" />}
+              {isOpen ? <FiX className="w-5 h-5" /> : <FiMenu className="w-5 h-5" />}
             </button>
           </div>
         </div>
       </div>
 
       {isOpen && (
-        <div className="md:hidden bg-white border-t border-slate-200 px-4 pt-2 pb-4 space-y-1">
+        <div className="md:hidden bg-[#050a15] border-t border-[#121e32] px-4 py-3 space-y-1">
           {menuItems.map((item) => (
             <Link
               key={item.name}
               to={item.href}
-              className={`block py-2 px-4 rounded-lg text-sm font-semibold transition-colors ${
+              className={`block py-2 px-3 text-sm font-medium rounded ${
                 isActive(item.href)
-                  ? "bg-slate-900 text-white"
-                  : "text-slate-700 hover:bg-slate-100"
+                  ? "bg-[#22c55e] text-black"
+                  : "text-[#cbd5f5]"
               }`}
               onClick={() => setIsOpen(false)}
             >

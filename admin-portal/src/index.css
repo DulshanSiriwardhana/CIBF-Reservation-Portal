@@ -1,67 +1,5 @@
 @import "tailwindcss";
 
-@theme {
-  --font-family-notoserif: "NotoSerifSinhala", -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', serif;
-  --font-family-varela: "VarelaRound", -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
-  --img-background: url('/src/assets/images/backgrounds/bg1.jpg');
-  
-  /* Professional Masculine Color Palette */
-  --color-charcoal-50: #F8F9FA;
-  --color-charcoal-100: #E9ECEF;
-  --color-charcoal-200: #DEE2E6;
-  --color-charcoal-300: #CED4DA;
-  --color-charcoal-400: #ADB5BD;
-  --color-charcoal-500: #6C757D;
-  --color-charcoal-600: #495057;
-  --color-charcoal-700: #343A40;
-  --color-charcoal-800: #212529;
-  --color-charcoal-900: #1A1D20;
-  
-  --color-navy-50: #F0F4F8;
-  --color-navy-100: #D9E2EC;
-  --color-navy-200: #BCCCDC;
-  --color-navy-300: #9FB3C8;
-  --color-navy-400: #829AB1;
-  --color-navy-500: #627D98;
-  --color-navy-600: #486581;
-  --color-navy-700: #334E68;
-  --color-navy-800: #243B53;
-  --color-navy-900: #102A43;
-  
-  --color-slate-50: #F8FAFC;
-  --color-slate-100: #F1F5F9;
-  --color-slate-200: #E2E8F0;
-  --color-slate-300: #CBD5E1;
-  --color-slate-400: #94A3B8;
-  --color-slate-500: #64748B;
-  --color-slate-600: #475569;
-  --color-slate-700: #334155;
-  --color-slate-800: #1E293B;
-  --color-slate-900: #0F172A;
-  
-  --color-steel-50: #F5F7FA;
-  --color-steel-100: #E4E7EB;
-  --color-steel-200: #CBD2D9;
-  --color-steel-300: #9AA5B1;
-  --color-steel-400: #7B8794;
-  --color-steel-500: #616E7C;
-  --color-steel-600: #52606D;
-  --color-steel-700: #3E4C59;
-  --color-steel-800: #323F4B;
-  --color-steel-900: #1F2933;
-  
-  /* Accent Colors - Professional */
-  --color-accent-600: #2563EB;
-  --color-accent-700: #1D4ED8;
-  --color-success-600: #059669;
-  --color-success-700: #047857;
-  --color-warning-600: #D97706;
-  --color-warning-700: #B45309;
-  --color-danger-600: #DC2626;
-  --color-danger-700: #B91C1C;
-}
-
-/* Custom fonts - using optional display to prevent blocking and fallback to system fonts */
 @font-face {
   font-family: 'NotoSerifSinhala';
   src: url('/src/assets/fronts/Noto_Serif_Sinhala/static/NotoSerifSinhala-Regular.ttf') format('truetype');
@@ -104,11 +42,11 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #02060d;
+  color: #f8fafc;
 }
 
 @keyframes slide-in-right {
@@ -123,7 +61,7 @@ body {
 }
 
 .animate-slide-in-right {
-  animation: slide-in-right 0.3s ease-out;
+  animation: slide-in-right 0.2s ease-out;
 }
 
 @keyframes fade-in {
@@ -136,12 +74,12 @@ body {
 }
 
 .animate-fade-in {
-  animation: fade-in 0.3s ease-out;
+  animation: fade-in 0.2s ease-out;
 }
 
 @keyframes scale-in {
   from {
-    transform: scale(0.95);
+    transform: scale(0.98);
     opacity: 0;
   }
   to {
@@ -151,16 +89,64 @@ body {
 }
 
 .animate-scale-in {
-  animation: scale-in 0.2s ease-out;
+  animation: scale-in 0.15s ease-out;
 }
 
-/* Smooth transitions for interactive elements */
 button, a, input, select, textarea {
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.15s ease;
 }
 
-/* Enhanced focus styles */
 *:focus-visible {
-  outline: 2px solid #1E293B;
+  outline: 2px solid #22c55e;
   outline-offset: 2px;
+}
+
+:root {
+  --surface-primary: #050a15;
+  --surface-secondary: #0d1627;
+  --surface-tertiary: #111e34;
+  --surface-border: #1f2b40;
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --accent-green: #22c55e;
+  --accent-yellow: #facc15;
+  --accent-slate: #1e293b;
+}
+
+.dark-surface {
+  background-color: var(--surface-secondary);
+  border: 1px solid var(--surface-border);
+  border-radius: 1rem;
+}
+
+.dark-card {
+  background-color: var(--surface-tertiary);
+  border: 1px solid var(--surface-border);
+  border-radius: 1rem;
+}
+
+.gradient-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(120deg, #111e34, rgba(34,197,94,0.4), rgba(250,204,21,0.4));
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.noise-overlay {
+  position: absolute;
+  inset: 0;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cpath fill='%23ffffff' fill-opacity='0.07' d='M0 .5h160M0 40.5h160M0 80.5h160M0 120.5h160M.5 0v160M40.5 0v160M80.5 0v160M120.5 0v160'/%3E%3C/svg%3E");
+  pointer-events: none;
 }

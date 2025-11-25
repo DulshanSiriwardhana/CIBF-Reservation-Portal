@@ -47,137 +47,99 @@ const SignupCard: React.FC<{ onSwitch: () => void }> = ({ onSwitch }) => {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-8 backdrop-blur-sm">
-      <div className="text-center mb-8">
-        <div className="inline-flex items-center justify-center w-14 h-14 bg-slate-900 rounded-2xl mb-4 shadow-lg">
-          <FiUser className="w-7 h-7 text-white" />
-        </div>
-        <h2 className="text-3xl font-bold text-slate-900 mb-2">Create Account</h2>
-        <p className="text-slate-600 text-sm">Register for admin portal access</p>
-      </div>
-
-      <form className="space-y-4" onSubmit={handleSubmit}>
-        <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-2">Username</label>
-          <div className="relative">
-            <FiUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
-            <input
-              type="text"
-              name="username"
-              placeholder="Enter username"
-              value={formData.username}
-              onChange={handleChange}
-              className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-all text-slate-900"
-              disabled={loading}
-            />
+    <div className="bg-[#101a2c] border border-[#1f2b40] rounded-2xl shadow-[0_20px_80px_rgba(0,0,0,0.6)] p-10 text-white relative overflow-hidden">
+      <div className="absolute inset-0 opacity-10 bg-gradient-to-br from-[#facc15] via-transparent to-[#22c55e]" />
+      <div className="relative">
+        <div className="text-center mb-10">
+          <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-[#22c55e] to-[#facc15] rounded-2xl mb-5 shadow-lg shadow-[#22c55e]/30">
+            <FiUser className="w-7 h-7 text-black" />
           </div>
+          <h2 className="text-2xl font-semibold text-white mb-2">Create Account</h2>
+          <p className="text-sm text-[#94a3b8]">Register for admin portal access</p>
         </div>
 
-        <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-2">Email</label>
-          <div className="relative">
-            <FiMail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
-            <input
-              type="email"
-              name="email"
-              placeholder="Enter email"
-              value={formData.email}
+        <form className="space-y-5" onSubmit={handleSubmit}>
+          {[
+            { label: "Username", name: "username", icon: <FiUser />, type: "text", placeholder: "Enter username" },
+            { label: "Email", name: "email", icon: <FiMail />, type: "email", placeholder: "Enter email" },
+            { label: "Business Name", name: "businessName", icon: <FiBriefcase />, type: "text", placeholder: "Enter business name" },
+            { label: "Contact Number", name: "contactNumber", icon: <FiPhone />, type: "tel", placeholder: "10 digits", maxLength: 10 },
+          ].map((field) => (
+            <div key={field.name}>
+              <label className="block text-xs font-semibold text-[#94a3b8] uppercase tracking-widest mb-2">{field.label}</label>
+              <div className="relative">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#94a3b8] w-4 h-4">{field.icon}</span>
+                <input
+                  type={field.type}
+                  name={field.name}
+                  placeholder={field.placeholder}
+                  value={(formData as any)[field.name]}
+                  onChange={handleChange}
+                  maxLength={field.maxLength}
+                  className="w-full pl-10 pr-4 py-3 bg-[#0b1320] border border-[#1f2b40] rounded-xl text-sm text-white placeholder:text-[#475569] focus:outline-none focus:ring-2 focus:ring-[#22c55e]/60 focus:border-[#22c55e]"
+                  disabled={loading}
+                />
+              </div>
+            </div>
+          ))}
+
+          <div>
+            <label className="block text-xs font-semibold text-[#94a3b8] uppercase tracking-widest mb-2">Role</label>
+            <select
+              name="role"
+              value={formData.role}
               onChange={handleChange}
-              className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-all text-slate-900"
+              className="w-full px-4 py-3 bg-[#0b1320] border border-[#1f2b40] rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#22c55e]/60 focus:border-[#22c55e]"
               disabled={loading}
-            />
+            >
+              <option value="VENDOR">Vendor</option>
+              <option value="EMPLOYEE">Employee</option>
+            </select>
           </div>
-        </div>
 
-        <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-2">Business Name</label>
-          <div className="relative">
-            <FiBriefcase className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
-            <input
-              type="text"
-              name="businessName"
-              placeholder="Enter business name"
-              value={formData.businessName}
-              onChange={handleChange}
-              className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-all text-slate-900"
-              disabled={loading}
-            />
+          <div>
+            <label className="block text-xs font-semibold text-[#94a3b8] uppercase tracking-widest mb-2">Password</label>
+            <div className="relative">
+              <FiLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#94a3b8] w-4 h-4" />
+              <input
+                type="password"
+                name="password"
+                placeholder="Enter password"
+                value={formData.password}
+                onChange={handleChange}
+                className="w-full pl-10 pr-4 py-3 bg-[#0b1320] border border-[#1f2b40] rounded-xl text-sm text-white placeholder:text-[#475569] focus:outline-none focus:ring-2 focus:ring-[#22c55e]/60 focus:border-[#22c55e]"
+                disabled={loading}
+              />
+            </div>
           </div>
-        </div>
 
-        <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-2">Contact Number</label>
-          <div className="relative">
-            <FiPhone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
-            <input
-              type="tel"
-              name="contactNumber"
-              placeholder="10 digits"
-              value={formData.contactNumber}
-              onChange={handleChange}
-              maxLength={10}
-              className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-all text-slate-900"
-              disabled={loading}
-            />
-          </div>
-        </div>
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full py-3 rounded-xl font-semibold bg-gradient-to-r from-[#22c55e] to-[#facc15] text-black shadow-lg shadow-[#22c55e]/40 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          >
+            {loading ? (
+              <>
+                <FiLoader className="w-4 h-4 animate-spin" />
+                Creating account...
+              </>
+            ) : (
+              "Sign Up"
+            )}
+          </button>
+        </form>
 
-        <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-2">Role</label>
-          <select
-            name="role"
-            value={formData.role}
-            onChange={handleChange}
-            className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-all text-slate-900"
+        <p className="mt-6 text-center text-sm text-[#94a3b8]">
+          Already have an account?{" "}
+          <button
+            onClick={onSwitch}
+            className="text-[#facc15] font-semibold underline decoration-dotted"
             disabled={loading}
           >
-            <option value="VENDOR">Vendor</option>
-            <option value="EMPLOYEE">Employee</option>
-          </select>
-        </div>
-
-        <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-2">Password</label>
-          <div className="relative">
-            <FiLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
-            <input
-              type="password"
-              name="password"
-              placeholder="Enter password"
-              value={formData.password}
-              onChange={handleChange}
-              className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-all text-slate-900"
-              disabled={loading}
-            />
-          </div>
-        </div>
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-slate-900 text-white py-3.5 rounded-xl font-semibold shadow-md hover:bg-slate-800 hover:shadow-lg active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-slate-900 disabled:hover:shadow-md disabled:active:scale-100 flex items-center justify-center gap-2"
-        >
-          {loading ? (
-            <>
-              <FiLoader className="w-5 h-5 animate-spin" />
-              Creating account...
-            </>
-          ) : (
-            "Sign Up"
-          )}
-        </button>
-      </form>
-
-      <p className="mt-6 text-center text-sm text-slate-600">
-        Already have an account?{" "}
-        <button
-          onClick={onSwitch}
-          className="text-slate-900 font-semibold hover:underline"
-          disabled={loading}
-        >
-          Login
-        </button>
-      </p>
+            Login
+          </button>
+        </p>
+      </div>
     </div>
   );
 };
