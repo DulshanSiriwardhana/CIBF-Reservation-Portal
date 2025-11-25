@@ -19,4 +19,7 @@ public interface GenreRepository extends JpaRepository<Genre, Long> {
 
     @Query("SELECT g.name FROM Genre g")
     List<String> findAllNames();
+
+    @Query("SELECT g FROM Genre g WHERE g.name IN :names")
+    List<Genre> findByNameIn(@Param("names") List<String> names);
 }

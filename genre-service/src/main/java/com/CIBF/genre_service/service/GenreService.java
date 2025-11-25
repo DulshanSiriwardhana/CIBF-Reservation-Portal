@@ -56,4 +56,18 @@ public class GenreService {
             throw new RuntimeException("Genre not found");
         }
     }
+
+    public List<Genre> addExhibitorToMultipleGenres(String exhibitorId, List<String> genreNames) {
+
+        List<Genre> genres = genreRepository.findByNameIn(genreNames);
+
+        for (Genre genre : genres) {
+            if (!genre.getExhibitorIDs().contains(exhibitorId)) {
+                genre.getExhibitorIDs().add(exhibitorId);
+            }
+        }
+
+        return genreRepository.saveAll(genres);
+    }
+
 }

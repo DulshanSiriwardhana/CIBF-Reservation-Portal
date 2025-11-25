@@ -22,10 +22,10 @@ export const genreService = {
     return response.data;
   },
 
-   // Get genre names by exhibitor ID
-  addGenreToUser: async (exhibitorId, genreId) => {
-    const response = await api.post(`/${exhibitorId}/${genreId}`);
-    return response.data;
+   // Add genres to User
+  addGenreToUser: async (exhibitorId, genreNames) => {
+    const response = await api.post(`/add/${exhibitorId}`, genreNames);
+    return response.status;
   },
 
   // Check stall availability

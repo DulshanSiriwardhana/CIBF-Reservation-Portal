@@ -74,10 +74,14 @@ const Genres = () => {
     setSelectedGenres(selectedGenres.filter(g => g !== genre));
   };
 
-  const handleSaveGenres = () => {
-    
-    setShowSuccess(true);
-    setTimeout(() => setShowSuccess(false), 3000);
+  const handleSaveGenres = async () => {
+    const response = await genreService.addGenreToUser(user.userId, selectedGenres);
+    if(response === 200) {
+      setShowSuccess(true);
+      setTimeout(() => setShowSuccess(false), 3000);
+    } else {
+      alert('Error saving genres. Please try again.');
+    }
   };
 
   return (

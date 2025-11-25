@@ -47,7 +47,16 @@ public class GenreController {
     public ResponseEntity<Genre> addExhibitorToGenre(@PathVariable String exhibitorId, @PathVariable Long genreId) {
         Genre updatedGenre = genreService.addExhibitorToGenre(exhibitorId, genreId);
         return ResponseEntity.ok(updatedGenre);
-    }   
+    }
+
+    @PostMapping("/add/{exhibitorId}")
+    public ResponseEntity<String> addExhibitorToMultipleGenres(
+            @PathVariable String exhibitorId,
+            @RequestBody List<String> genreNames) {
+
+        List<Genre> updatedGenres = genreService.addExhibitorToMultipleGenres(exhibitorId, genreNames);
+        return ResponseEntity.ok("Success");
+    }
 
     @PutMapping("/{id}")
     public ResponseEntity<Genre> updateGenre(@PathVariable Long id, @RequestBody Genre genre) {
