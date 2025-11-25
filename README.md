@@ -35,7 +35,7 @@ CIBF-Reservation-Portal/
 │   ├── reservation-service/
 │   ├── genre-service/
 │   └── email-service/
-└── README.md                  # (this file)
+└── README.md
 ```
 
 Each Spring Boot service exposes REST endpoints documented in its own module. All services share JWT-based auth via the user-service and exchange messages through RabbitMQ for notification workflows.
@@ -103,13 +103,3 @@ This performs TypeScript checking and outputs static assets to `admin-portal/dis
 - **ToastContext** pushes errors/success messages globally
 - **API service layer** normalizes REST responses (arrays, wrapped payloads, empty bodies)
 - **nginx gateway** handles CORS, hides duplicate headers, and enforces a single origin (`http://localhost:5173` when running locally)
-
-## Contributing
-
-1. Fork + branch per feature
-2. Keep TypeScript lint/`yarn build` and backend `mvn test` passing
-3. Submit PRs referencing the relevant services and include UI screenshots when modifying the admin theme
-
-## License
-
-Internal project for the Colombo International Book Fair. No public license is distributed (see individual modules for any exceptions).
