@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { FiMenu, FiX, FiUser } from "react-icons/fi";
 import ProfilePopup from "./ProfilePopup";
 import { useAuth } from "../../context/AuthContext";
@@ -16,7 +16,6 @@ const NavBar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
-  const navigate = useNavigate();
   const location = useLocation();
   const { logout, user } = useAuth();
 

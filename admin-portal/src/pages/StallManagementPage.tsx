@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FiBox, FiPlus, FiEdit, FiTrash2, FiRefreshCw, FiLoader, FiTag } from "react-icons/fi";
+import { FiBox, FiPlus, FiEdit, FiTrash2, FiLoader, FiTag } from "react-icons/fi";
 import { useLoader } from "../context/LoaderContext";
 import { apiService } from "../services/api";
 import { useToast } from "../context/ToastContext";
