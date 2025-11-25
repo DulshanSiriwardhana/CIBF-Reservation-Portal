@@ -73,8 +73,6 @@ public class UserController {
     
     @PostMapping("/logout")
     public ResponseEntity<ApiResponse> logoutUser() {
-        // JWT tokens are stateless, so logout is handled on the client side
-        // by removing the token from storage
         return ResponseEntity.ok(new ApiResponse(true, "Logout successful"));
     }
 }
