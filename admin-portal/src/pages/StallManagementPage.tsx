@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { FiBox, FiPlus, FiEdit, FiTrash2, FiRefreshCw, FiLoader, FiTag } from "react-icons/fi";
+import { FiBox, FiPlus, FiEdit, FiTrash2, FiLoader, FiTag } from "react-icons/fi";
 import { useLoader } from "../context/LoaderContext";
 import { apiService } from "../services/api";
 import { useToast } from "../context/ToastContext";
+import { useConfirm } from "../context/ConfirmContext";
 import StallFormModal from "../components/stallmanagement/StallFormModal";
 import GenreFormModal from "../components/stallmanagement/GenreFormModal";
 import type { Stall } from "../types/stall";
@@ -11,6 +12,7 @@ import type { Genre } from "../types/genre";
 const StallManagementPage: React.FC = () => {
   const { showLoader, hideLoader } = useLoader();
   const { showToast } = useToast();
+  const { confirm } = useConfirm();
   const [stalls, setStalls] = useState<Stall[]>([]);
   const [genres, setGenres] = useState<Genre[]>([]);
   const [stallModalOpen, setStallModalOpen] = useState(false);
@@ -46,7 +48,6 @@ const StallManagementPage: React.FC = () => {
       setLoading(false);
     };
     loadData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleEditStall = (stall: Stall) => {
@@ -55,7 +56,14 @@ const StallManagementPage: React.FC = () => {
   };
 
   const handleDeleteStall = async (id: number) => {
-    if (!window.confirm("Are you sure you want to delete this stall?")) return;
+    const confirmed = await confirm({
+      title: "Delete Stall",
+      message: "Are you sure you want to delete this stall? This action cannot be undone.",
+      confirmText: "Delete",
+      cancelText: "Cancel",
+      type: "danger",
+    });
+    if (!confirmed) return;
 
     setLoading(true);
     try {
@@ -95,7 +103,14 @@ const StallManagementPage: React.FC = () => {
   };
 
   const handleDeleteGenre = async (id: number) => {
-    if (!window.confirm("Are you sure you want to delete this genre?")) return;
+    const confirmed = await confirm({
+      title: "Delete Genre",
+      message: "Are you sure you want to delete this genre? This action cannot be undone.",
+      confirmText: "Delete",
+      cancelText: "Cancel",
+      type: "danger",
+    });
+    if (!confirmed) return;
 
     setLoading(true);
     try {
@@ -112,11 +127,12 @@ const StallManagementPage: React.FC = () => {
   const handleSaveGenre = async (genre: Genre) => {
     setLoading(true);
     try {
-      if (genre.id) {
+      if (genre.id && genre.id > 0) {
         await apiService.updateGenre(genre.id, genre);
         showToast("Genre updated successfully", "success");
       } else {
-        await apiService.createGenre(genre);
+        const { id, ...genreData } = genre;
+        await apiService.createGenre(genreData);
         showToast("Genre created successfully", "success");
       }
       await fetchGenres();
@@ -131,64 +147,71 @@ const StallManagementPage: React.FC = () => {
 
   const getStatusBadge = (status: Stall["status"]) => {
     const styles = {
-      AVAILABLE: "bg-emerald-100 text-emerald-800 border-emerald-300",
+      AVAILABLE: "bg-green-100 text-green-800 border-green-300",
       RESERVED: "bg-amber-100 text-amber-800 border-amber-300",
       MAINTENANCE: "bg-red-100 text-red-800 border-red-300",
     };
     return (
-      <span className={`px-2 py-1 rounded text-xs font-semibold border ${styles[status]}`}>
+      <span className={`px-2 py-1 rounded text-xs font-medium border ${styles[status]}`}>
         {status}
       </span>
     );
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 pt-20 pb-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-[calc(100vh-5rem)] bg-[#f6f8fb] pt-24 pb-16 px-4 sm:px-6 lg:px-8 lg:pt-32 lg:pb-32">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-8 flex justify-between items-center">
+        <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-slate-900 mb-2">Stall Management</h1>
-            <p className="text-slate-600">Manage exhibition stalls and genres</p>
+            <h1 className="text-2xl sm:text-3xl font-semibold text-[#0f172a] mb-1">Stall Management</h1>
+            <p className="text-sm text-[#475569]">Manage exhibition stalls and genres</p>
           </div>
           <button
             onClick={() => {
               setEditingStall(undefined);
               setStallModalOpen(true);
             }}
-            className="flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition-colors text-sm font-semibold"
+            className="flex items-center gap-2 px-4 py-2 bg-[#0f0f0f] text-white rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity"
           >
             <FiPlus className="w-4 h-4" />
             Add Stall
           </button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
           {loading && stalls.length === 0 ? (
-            <div className="col-span-full flex justify-center py-20">
-              <FiLoader className="w-8 h-8 text-slate-400 animate-spin" />
+            <div className="col-span-full flex justify-center py-12">
+              <FiLoader className="w-6 h-6 text-[#475569] animate-spin" />
             </div>
           ) : stalls.length > 0 ? (
             stalls.map((stall) => (
               <div
                 key={stall.id}
-                className="bg-white rounded-lg border border-slate-200 shadow-sm p-6 hover:shadow-md transition-shadow"
+                className="surface-card border border-[#e1e7ef] rounded p-5"
               >
                 <div className="flex items-start justify-between mb-4">
-                  <div>
-                    <h3 className="text-lg font-bold text-slate-900 mb-1">{stall.stallName}</h3>
-                    {getStatusBadge(stall.status)}
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="w-8 h-8 bg-[#f8fafc] rounded flex items-center justify-center">
+                        <FiBox className="w-4 h-4 text-[#475569]" />
+                      </div>
+                      <div>
+                        <h3 className="text-base font-semibold text-[#0f172a]">{stall.stallName}</h3>
+                        {getStatusBadge(stall.status)}
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex gap-1">
                     <button
                       onClick={() => handleEditStall(stall)}
-                      className="p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors"
+                      className="p-2 text-[#475569] surface-card rounded"
                       title="Edit"
                     >
                       <FiEdit className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => handleDeleteStall(stall.id)}
-                      className="p-2 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
+                      className="p-2 text-[#f87171] bg-[#fee2e2] rounded"
                       title="Delete"
                     >
                       <FiTrash2 className="w-4 h-4" />
@@ -196,48 +219,48 @@ const StallManagementPage: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="space-y-2 text-sm">
+                <div className="space-y-2 text-sm pt-4 border-t border-[#e1e7ef]">
                   <div className="flex justify-between">
-                    <span className="text-slate-600">Size:</span>
-                    <span className="font-semibold text-slate-900">{stall.size}</span>
+                    <span className="text-[#475569]">Size:</span>
+                    <span className="font-medium text-[#0f172a]">{stall.size}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-slate-600">Dimension:</span>
-                    <span className="font-semibold text-slate-900">{stall.dimension} m²</span>
+                    <span className="text-[#475569]">Dimension:</span>
+                    <span className="font-medium text-[#0f172a]">{stall.dimension} m²</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-slate-600">Price:</span>
-                    <span className="font-semibold text-slate-900">${stall.price}</span>
+                    <span className="text-[#475569]">Price:</span>
+                    <span className="font-medium text-[#0f172a]">${stall.price}</span>
                   </div>
                   {stall.reservedBy && (
-                    <div className="flex justify-between">
-                      <span className="text-slate-600">Reserved By:</span>
-                      <span className="font-semibold text-slate-900">{stall.reservedBy}</span>
+                    <div className="flex justify-between pt-2 border-t border-[#e1e7ef]">
+                      <span className="text-[#475569]">Reserved By:</span>
+                      <span className="font-medium text-[#0f172a]">{stall.reservedBy}</span>
                     </div>
                   )}
                 </div>
               </div>
             ))
           ) : (
-            <div className="col-span-full text-center py-12 bg-white rounded-lg border border-slate-200">
-              <FiBox className="w-12 h-12 text-slate-400 mx-auto mb-4" />
-              <p className="text-slate-600 font-medium">No stalls found</p>
+            <div className="col-span-full text-center py-12 surface-card rounded border border-[#e1e7ef]">
+              <FiBox className="w-10 h-10 text-[#475569] mx-auto mb-3" />
+              <p className="text-[#475569] text-sm">No stalls found</p>
             </div>
           )}
         </div>
 
-        <div className="bg-white rounded-lg border border-slate-200 shadow-sm p-6">
-          <div className="flex justify-between items-center mb-6">
+        <div className="surface-card border border-[#e1e7ef] rounded p-6">
+          <div className="flex justify-between items-center mb-4">
             <div>
-              <h2 className="text-xl font-bold text-slate-900 mb-1">Genres</h2>
-              <p className="text-sm text-slate-600">Manage book genres for categorization</p>
+              <h2 className="text-lg font-semibold text-[#0f172a] mb-1">Genres</h2>
+              <p className="text-xs text-[#475569]">Manage book genres for categorization</p>
             </div>
             <button
               onClick={() => {
                 setEditingGenre(undefined);
                 setGenreModalOpen(true);
               }}
-              className="flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition-colors text-sm font-semibold"
+              className="flex items-center gap-2 px-4 py-2 bg-[#0f0f0f] text-white rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity"
             >
               <FiPlus className="w-4 h-4" />
               Add Genre
@@ -249,37 +272,37 @@ const StallManagementPage: React.FC = () => {
               genres.map((genre) => (
                 <div
                   key={genre.id}
-                  className="border border-slate-200 rounded-lg p-4 hover:border-slate-300 transition-colors"
+                  className="border border-[#e1e7ef] rounded p-4"
                 >
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex items-center gap-2">
-                      <FiTag className="w-4 h-4 text-slate-600" />
-                      <h3 className="font-semibold text-slate-900">{genre.name}</h3>
+                      <FiTag className="w-4 h-4 text-[#475569]" />
+                      <h3 className="font-medium text-[#0f172a]">{genre.name}</h3>
                     </div>
                     <div className="flex gap-1">
                       <button
                         onClick={() => handleEditGenre(genre)}
-                        className="p-1.5 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded transition-colors"
+                        className="p-1.5 text-[#475569] surface-card rounded"
                         title="Edit"
                       >
                         <FiEdit className="w-3.5 h-3.5" />
                       </button>
                       <button
                         onClick={() => handleDeleteGenre(genre.id!)}
-                        className="p-1.5 text-red-600 hover:text-red-700 hover:bg-red-50 rounded transition-colors"
+                        className="p-1.5 text-[#f87171] bg-[#fee2e2] rounded"
                         title="Delete"
                       >
                         <FiTrash2 className="w-3.5 h-3.5" />
                       </button>
                     </div>
                   </div>
-                  <p className="text-sm text-slate-600">{genre.description || "No description"}</p>
+                  <p className="text-sm text-[#475569]">{genre.description || "No description"}</p>
                 </div>
               ))
             ) : (
               <div className="col-span-full text-center py-8">
-                <FiTag className="w-8 h-8 text-slate-400 mx-auto mb-2" />
-                <p className="text-slate-600 text-sm">No genres found</p>
+                <FiTag className="w-8 h-8 text-[#475569] mx-auto mb-2" />
+                <p className="text-[#475569] text-sm">No genres found</p>
               </div>
             )}
           </div>

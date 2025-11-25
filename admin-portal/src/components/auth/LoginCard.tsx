@@ -33,41 +33,41 @@ const LoginCard: React.FC<{ onSwitch: () => void }> = ({ onSwitch }) => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-2xl border border-slate-200 p-8">
-      <div className="text-center mb-8">
-        <div className="inline-flex items-center justify-center w-12 h-12 bg-slate-900 rounded-lg mb-4">
-          <FiLock className="w-6 h-6 text-white" />
+    <div className="bg-[#101a2c] border border-[#1f2b40] rounded-2xl shadow-[0_20px_80px_rgba(0,0,0,0.6)] p-10 text-white">
+      <div className="text-center mb-10">
+        <div className="inline-flex items-center justify-center w-14 h-14 bg-[#20b368] rounded-2xl mb-5 shadow-lg shadow-black/30">
+          <FiLock className="w-7 h-7 text-[#05120a]" />
         </div>
-        <h2 className="text-2xl font-bold text-slate-900 mb-2">Sign In</h2>
-        <p className="text-slate-600 text-sm">Enter your credentials to access the admin portal</p>
+        <h2 className="text-2xl font-semibold text-white mb-2">Sign In</h2>
+        <p className="text-sm text-[#94a3b8]">Access the CIBF administration portal</p>
       </div>
 
       <form className="space-y-5" onSubmit={handleSubmit}>
         <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-2">Username</label>
+          <label className="block text-xs font-semibold text-[#94a3b8] uppercase tracking-widest mb-2">Username</label>
           <div className="relative">
-            <FiUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
+            <FiUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#94a3b8] w-4 h-4" />
             <input
               type="text"
               placeholder="Enter your username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-all text-slate-900"
+              className="w-full pl-10 pr-4 py-3 bg-[#0b1320] border border-[#1f2b40] rounded-xl text-sm text-white placeholder:text-[#475569] focus:outline-none focus:ring-2 focus:ring-[#20b368]/60 focus:border-[#20b368]"
               disabled={loading}
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-2">Password</label>
+          <label className="block text-xs font-semibold text-[#94a3b8] uppercase tracking-widest mb-2">Password</label>
           <div className="relative">
-            <FiLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
+            <FiLock className="absolute left-3.top-1/2 transform -translate-y-1/2 text-[#94a3b8] w-4 h-4" />
             <input
               type="password"
               placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-all text-slate-900"
+              className="w-full pl-10 pr-4 py-3 bg-[#0b1320] border border-[#1f2b40] rounded-xl text-sm text-white placeholder:text-[#475569] focus:outline-none focus:ring-2 focus:ring-[#20b368]/60 focus:border-[#20b368]"
               disabled={loading}
             />
           </div>
@@ -76,11 +76,11 @@ const LoginCard: React.FC<{ onSwitch: () => void }> = ({ onSwitch }) => {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-slate-900 text-white py-3 rounded-lg font-semibold shadow-lg hover:bg-slate-800 active:bg-slate-950 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          className="w-full py-3 rounded-xl font-semibold bg-[#20b368] text-[#04110a] shadow-lg shadow-black/30 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
         >
           {loading ? (
             <>
-              <FiLoader className="w-5 h-5 animate-spin" />
+              <FiLoader className="w-4 h-4 animate-spin" />
               Signing in...
             </>
           ) : (
@@ -89,11 +89,11 @@ const LoginCard: React.FC<{ onSwitch: () => void }> = ({ onSwitch }) => {
         </button>
       </form>
 
-      <p className="mt-6 text-center text-sm text-slate-600">
+      <p className="mt-6 text-center text-sm text-[#94a3b8]">
         Don't have an account?{" "}
         <button
           onClick={onSwitch}
-          className="text-slate-900 font-semibold hover:underline"
+          className="text-[#e4b63f] font-semibold underline decoration-dotted"
           disabled={loading}
         >
           Sign Up

@@ -1,5 +1,5 @@
 import React from "react";
-import { FiSettings, FiLogOut, FiUser } from "react-icons/fi";
+import { FiLogOut, FiUser } from "react-icons/fi";
 
 interface User {
   userId: string;
@@ -15,33 +15,50 @@ interface ProfilePopupProps {
 }
 
 const ProfilePopup: React.FC<ProfilePopupProps> = ({ onLogout, user }) => {
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+  };
+
   return (
-    <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-slate-200 z-50">
-      <div className="p-4">
-        <div className="flex items-center space-x-3 mb-4 pb-4 border-b border-slate-200">
-          <div className="w-10 h-10 bg-slate-900 rounded-lg flex items-center justify-center">
-            <FiUser className="w-5 h-5 text-white" />
+    <div 
+      className="absolute right-0 mt-3 w-72 rounded-2xl border border-[#e1e7ef] bg-white text-[#0f172a] shadow-[0_18px_65px_rgba(15,23,42,0.15)] z-50"
+      onClick={handleClick}
+      onMouseDown={handleClick}
+    >
+      <div className="p-5 border-b border-[#e1e7ef]">
+        <div className="flex items-center space-x-4">
+          <div className="w-12 h-12 rounded-2xl bg-[#0f0f0f] flex items-center justify-center text-white">
+            <FiUser className="w-6 h-6" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-slate-900 truncate">{user?.username || "Admin"}</p>
-            <p className="text-xs text-slate-600 truncate">{user?.email || ""}</p>
+            <p className="text-sm font-semibold truncate">{user?.username || "Admin"}</p>
+            <p className="text-xs text-[#64748b] truncate">{user?.email || ""}</p>
             {user?.businessName && (
-              <p className="text-xs text-slate-500 truncate">{user.businessName}</p>
+              <p className="text-xs text-[#94a3b8] truncate mt-1">{user.businessName}</p>
             )}
+            <div className="mt-2">
+              <span className="inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-[#f1f5f9] border border-[#e1e7ef] text-[#0f172a]">
+                {user?.role || "ADMIN"}
+              </span>
+            </div>
           </div>
         </div>
+      </div>
+      <div className="p-2">
         <button
-          className="flex items-center w-full px-3 py-2 rounded-lg hover:bg-slate-100 transition-colors text-sm font-medium text-slate-700 mb-1"
-          onClick={() => {}}
+          type="button"
+          className="flex items-center w-full px-4 py-2.5 rounded-xl text-sm font-semibold text-[#ef4444] hover:bg-[#fef2f2] transition-colors"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            onLogout();
+          }}
+          onMouseDown={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          }}
         >
-          <FiSettings className="mr-2 w-4 h-4" />
-          Settings
-        </button>
-        <button
-          className="flex items-center w-full px-3 py-2 rounded-lg hover:bg-slate-100 transition-colors text-sm font-medium text-slate-700"
-          onClick={onLogout}
-        >
-          <FiLogOut className="mr-2 w-4 h-4" />
+          <FiLogOut className="mr-3 w-4 h-4" />
           Logout
         </button>
       </div>

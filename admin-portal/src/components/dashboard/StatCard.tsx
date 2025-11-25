@@ -11,22 +11,22 @@ interface StatCardProps {
   trendColor?: string;
 }
 
-const StatCard: React.FC<StatCardProps> = ({ title, value, icon, bgColor="bg-black", iconBgColor, trend, trendColor }) => {
+const StatCard: React.FC<StatCardProps> = ({ title, value, icon, bgColor="bg-slate-900", iconBgColor, trend, trendColor }) => {
   return (
-    <div className={`${bgColor} rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-white`}>
+    <div className={`${bgColor} rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-slate-800 group`}>
       <div className="flex items-start justify-between mb-4">
-        <div className={`${iconBgColor} rounded-xl p-3 shadow-md`}>
+        <div className={`${iconBgColor} rounded-xl p-3 shadow-md group-hover:scale-110 transition-transform`}>
           {icon}
         </div>
         {trend && (
-          <div className={`${trendColor} px-3 py-1 rounded-full flex items-center space-x-1`}>
-            <FiTrendingUp className="w-3 h-3" />
+          <div className={`${trendColor} px-3 py-1.5 rounded-full flex items-center space-x-1.5 shadow-sm`}>
+            <FiTrendingUp className="w-3.5 h-3.5" />
             <span className="text-xs font-bold">{trend}</span>
           </div>
         )}
       </div>
       <div className="space-y-1">
-        <h3 className="text-white text-sm font-semibold">{title}</h3>
+        <h3 className="text-slate-300 text-sm font-semibold uppercase tracking-wide">{title}</h3>
         <p className="text-4xl font-black text-white">{value.toLocaleString()}</p>
       </div>
     </div>

@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { FiClock, FiCheckCircle, FiXCircle, FiSearch, FiFilter, FiRefreshCw, FiLoader, FiEye } from "react-icons/fi";
+import { FiClock, FiCheckCircle, FiXCircle, FiSearch, FiFilter, FiRefreshCw, FiLoader } from "react-icons/fi";
 import { useLoader } from "../context/LoaderContext";
 import { apiService } from "../services/api";
 import { useToast } from "../context/ToastContext";
+import { useConfirm } from "../context/ConfirmContext";
 import type { Reservation } from "../types/reservation";
 
 const ReservationManagementPage: React.FC = () => {
   const { showLoader, hideLoader } = useLoader();
   const { showToast } = useToast();
+  const { confirm } = useConfirm();
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [filteredReservations, setFilteredReservations] = useState<Reservation[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -33,7 +35,6 @@ const ReservationManagementPage: React.FC = () => {
 
   useEffect(() => {
     fetchReservations();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -56,7 +57,14 @@ const ReservationManagementPage: React.FC = () => {
   }, [searchTerm, statusFilter, reservations]);
 
   const handleApprove = async (reservationId: string) => {
-    if (!window.confirm("Are you sure you want to approve this reservation?")) return;
+    const confirmed = await confirm({
+      title: "Approve Reservation",
+      message: "Are you sure you want to approve this reservation?",
+      confirmText: "Approve",
+      cancelText: "Cancel",
+      type: "info",
+    });
+    if (!confirmed) return;
 
     setLoading(true);
     try {
@@ -71,7 +79,14 @@ const ReservationManagementPage: React.FC = () => {
   };
 
   const handleCancel = async (reservationId: string) => {
-    if (!window.confirm("Are you sure you want to cancel this reservation?")) return;
+    const confirmed = await confirm({
+      title: "Cancel Reservation",
+      message: "Are you sure you want to cancel this reservation?",
+      confirmText: "Cancel Reservation",
+      cancelText: "Keep",
+      type: "danger",
+    });
+    if (!confirmed) return;
 
     setLoading(true);
     try {
@@ -88,11 +103,11 @@ const ReservationManagementPage: React.FC = () => {
   const getStatusBadge = (status: Reservation["status"]) => {
     const styles = {
       PENDING: "bg-amber-100 text-amber-800 border-amber-300",
-      CONFIRMED: "bg-emerald-100 text-emerald-800 border-emerald-300",
+      CONFIRMED: "bg-green-100 text-green-800 border-green-300",
       CANCELLED: "bg-red-100 text-red-800 border-red-300",
     };
     return (
-      <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${styles[status]}`}>
+      <span className={`px-2 py-1 rounded text-xs font-medium border ${styles[status]}`}>
         {status}
       </span>
     );
@@ -108,46 +123,47 @@ const ReservationManagementPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 pt-20 pb-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="mb-8 flex justify-between items-center">
+    <div className="min-h-[calc(100vh-5rem)] bg-[#f6f8fb] pt-24 pb-16 px-4 sm:px-6 lg:px-8 lg:pt-32 lg:pb-32">
+      <div className="max-w-7xl mx-auto space-y-8">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-slate-900 mb-2">Reservation Management</h1>
-            <p className="text-slate-600">Manage and review all stall reservations</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.4em] text-[#94a3b8]">Operations</p>
+            <h1 className="text-3xl sm:text-4xl font-semibold text-[#0f172a]">Reservation Management</h1>
+            <p className="text-sm text-[#475569]">Manage and review all stall reservations</p>
           </div>
           <button
             onClick={fetchReservations}
             disabled={loading}
-            className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-300 rounded-lg text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors disabled:opacity-50"
+            className="flex items-center gap-2 px-4 py-2 rounded-full border border-[#e1e7ef] text-sm font-semibold text-[#0f172a] hover:border-[#0f172a] transition-colors disabled:opacity-50"
           >
-            <FiRefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+            <FiRefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
             Refresh
           </button>
         </div>
 
-        <div className="bg-white rounded-lg border border-slate-200 shadow-sm p-4 mb-6">
-          <div className="flex flex-col md:flex-row gap-4">
+        <div className="surface-card p-5">
+          <div className="flex flex-col sm:flex-row gap-4">
             <div className="relative flex-1">
-              <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
+              <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#94a3b8] w-4 h-4" />
               <input
                 type="text"
                 placeholder="Search by reservation ID, user ID, or stall..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent text-sm"
+                className="w-full pl-10 pr-4 py-3 bg-[#f8fafc] border border-[#e1e7ef] rounded-xl text-sm text-[#0f172a] placeholder:text-[#94a3b8] focus:outline-none focus:ring-2 focus:ring-[#b7ff5e]/60 focus:border-[#0f172a]"
               />
             </div>
             <div className="relative">
-              <FiFilter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
+              <FiFilter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#94a3b8] w-4 h-4" />
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value as typeof statusFilter)}
-                className="pl-10 pr-8 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent text-sm appearance-none bg-white"
+                className="pl-10 pr-8 py-3 bg-[#f8fafc] border border-[#e1e7ef] rounded-xl text-sm text-[#0f172a] focus:outline-none focus:ring-2 focus:ring-[#b7ff5e]/60 focus:border-[#0f172a] appearance-none"
               >
-                <option value="ALL">All Status</option>
-                <option value="PENDING">Pending</option>
-                <option value="CONFIRMED">Confirmed</option>
-                <option value="CANCELLED">Cancelled</option>
+                <option value="ALL" className="bg-white text-[#0f172a]">All Status</option>
+                <option value="PENDING" className="bg-white text-[#0f172a]">Pending</option>
+                <option value="CONFIRMED" className="bg-white text-[#0f172a]">Confirmed</option>
+                <option value="CANCELLED" className="bg-white text-[#0f172a]">Cancelled</option>
               </select>
             </div>
           </div>
@@ -155,54 +171,57 @@ const ReservationManagementPage: React.FC = () => {
 
         <div className="space-y-4">
           {loading && !filteredReservations.length ? (
-            <div className="flex justify-center items-center py-20 bg-white rounded-lg border border-slate-200">
-              <FiLoader className="w-8 h-8 text-slate-400 animate-spin" />
+            <div className="flex justify-center items-center py-12 surface-card">
+              <FiLoader className="w-6 h-6 text-[#94a3b8] animate-spin" />
             </div>
           ) : filteredReservations.length > 0 ? (
             filteredReservations.map((reservation) => (
               <div
                 key={reservation.reservationId}
-                className="bg-white rounded-lg border border-slate-200 shadow-sm p-6 hover:shadow-md transition-shadow"
+                className="surface-card p-5 hover:shadow-lifted transition-shadow"
               >
                 <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                   <div className="flex-1">
                     <div className="flex items-center space-x-3 mb-4">
                       {getStatusBadge(reservation.status)}
-                      <span className="text-lg font-bold text-slate-900">
+                      <span className="text-base font-semibold text-[#0f172a]">
                         {reservation.reservationId || "N/A"}
                       </span>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                       <div>
-                        <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">User ID</p>
-                        <p className="text-sm font-semibold text-slate-900">{reservation.userId || "N/A"}</p>
+                        <p className="text-xs font-medium text-[#94a3b8] mb-1">User ID</p>
+                        <p className="text-sm font-medium text-[#0f172a]">{reservation.userId || "N/A"}</p>
                       </div>
                       <div>
-                        <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">Stall ID</p>
-                        <p className="text-sm font-semibold text-slate-900">{reservation.stallId || "N/A"}</p>
+                        <p className="text-xs font-medium text-[#94a3b8] mb-1">Stall ID</p>
+                        <p className="text-sm font-medium text-[#0f172a]">{reservation.stallId || "N/A"}</p>
                       </div>
                       <div>
-                        <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">Email</p>
-                        <p className="text-sm font-semibold text-slate-900">{reservation.email || "N/A"}</p>
+                        <p className="text-xs font-medium text-[#94a3b8] mb-1">Email</p>
+                        <p className="text-sm font-medium text-[#0f172a]">{reservation.email || "N/A"}</p>
                       </div>
                       <div>
-                        <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">
-                          {reservation.status === "CONFIRMED" ? "Confirmed Date" : 
-                           reservation.status === "CANCELLED" ? "Cancelled Date" : "Reserved Date"}
+                        <p className="text-xs font-medium text-[#94a3b8] mb-1">
+                          {reservation.status === "CONFIRMED"
+                            ? "Confirmed Date"
+                            : reservation.status === "CANCELLED"
+                            ? "Cancelled Date"
+                            : "Reserved Date"}
                         </p>
-                        <p className="text-sm font-semibold text-slate-900">
+                        <p className="text-sm font-medium text-[#0f172a]">
                           {formatDate(
                             reservation.reserveConfirmDate ||
-                            reservation.reserveCancelDate ||
-                            reservation.reserveDate
+                              reservation.reserveCancelDate ||
+                              reservation.reserveDate
                           )}
                         </p>
                       </div>
                       {reservation.amount && (
                         <div>
-                          <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">Amount</p>
-                          <p className="text-sm font-semibold text-slate-900">${reservation.amount.toFixed(2)}</p>
+                          <p className="text-xs font-medium text-[#94a3b8] mb-1">Amount</p>
+                          <p className="text-sm font-medium text-[#0f172a]">${reservation.amount.toFixed(2)}</p>
                         </div>
                       )}
                     </div>
@@ -213,7 +232,7 @@ const ReservationManagementPage: React.FC = () => {
                       <button
                         onClick={() => handleApprove(reservation.reservationId)}
                         disabled={loading}
-                        className="flex items-center justify-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors text-sm font-semibold disabled:opacity-50"
+                        className="flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-[#0f0f0f] text-white text-sm font-semibold disabled:opacity-50"
                       >
                         <FiCheckCircle className="w-4 h-4" />
                         Approve
@@ -221,7 +240,7 @@ const ReservationManagementPage: React.FC = () => {
                       <button
                         onClick={() => handleCancel(reservation.reservationId)}
                         disabled={loading}
-                        className="flex items-center justify-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-semibold disabled:opacity-50"
+                        className="flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-[#ef4444] text-white text-sm font-semibold disabled:opacity-50"
                       >
                         <FiXCircle className="w-4 h-4" />
                         Reject
@@ -232,11 +251,11 @@ const ReservationManagementPage: React.FC = () => {
               </div>
             ))
           ) : (
-            <div className="text-center py-12 bg-white rounded-lg border border-slate-200">
-              <FiClock className="w-12 h-12 text-slate-400 mx-auto mb-4" />
-              <p className="text-slate-600 font-medium">
-                {searchTerm || statusFilter !== "ALL" 
-                  ? "No reservations found matching your filters" 
+            <div className="text-center py-12 surface-card">
+              <FiClock className="w-10 h-10 text-[#94a3b8] mx-auto mb-3" />
+              <p className="text-[#475569] text-sm">
+                {searchTerm || statusFilter !== "ALL"
+                  ? "No reservations found matching your filters"
                   : "No reservations found"}
               </p>
             </div>

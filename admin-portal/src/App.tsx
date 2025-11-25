@@ -7,20 +7,21 @@ import Footer from "./components/footer/Footer";
 import { LoaderProvider } from "./context/LoaderContext";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import { ToastProvider } from "./context/ToastContext";
+import { ConfirmProvider } from "./context/ConfirmContext";
 import StallManagementPage from "./pages/StallManagementPage";
 import VendorManagementPage from "./pages/VendorManagementPage";
 import ReservationManagementPage from "./pages/ReservationManagementPage";
-import MapPage from "./pages/MapPage";
+import QRScannerPage from "./pages/QRScannerPage";
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+      <div className="min-h-screen flex items-center justify-center bg-[#f6f8fb]">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-4 border-slate-200 border-t-slate-900 mx-auto mb-4"></div>
-          <p className="text-slate-600 font-semibold">Loading...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-4 border-[#d7dde8] border-t-[#b7ff5e] mx-auto mb-4"></div>
+          <p className="text-[#475569] font-medium">Loading...</p>
         </div>
       </div>
     );
@@ -35,16 +36,17 @@ function AppRoutes() {
   const isAuthPage = location.pathname === "/";
 
   return (
-    <div className="font-family-notoserif min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-[#f6f8fb]">
       {!isAuthPage && isAuthenticated && (
-        <div className="h-20 flex-shrink-0">
+        <div className="flex-shrink-0">
           <NavBar/>
         </div>
       )}
-      <div className="flex-1">
+      <main className="flex-1 min-h-0">
         <LoaderProvider>
           <ToastProvider>
-            <Routes>
+            <ConfirmProvider>
+              <Routes>
               <Route path="/" element={<AuthPage />} />
               <Route
                 path="/dashboard"
@@ -79,17 +81,18 @@ function AppRoutes() {
                 }
               />
               <Route
-                path="/map"
+                path="/qr-scanner"
                 element={
                   <ProtectedRoute>
-                    <MapPage />
+                    <QRScannerPage />
                   </ProtectedRoute>
                 }
               />
             </Routes>
+            </ConfirmProvider>
           </ToastProvider>
         </LoaderProvider>
-      </div>
+      </main>
       {!isAuthPage && isAuthenticated && (
         <div className="flex-shrink-0">
           <Footer/>

@@ -1,5 +1,5 @@
 export interface Genre {
-  id: number;
+  id?: number;
   name: string;
   description: string;
   exhibitorIDs?: string[];

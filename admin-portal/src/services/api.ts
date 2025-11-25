@@ -176,6 +176,15 @@ class ApiService {
     return this.handleResponse(response);
   }
 
+  async verifyReservationQr(code: string): Promise<any> {
+    const response = await fetch(`${API_BASE_URL}/reservations/verify-qr`, {
+      method: 'POST',
+      headers: this.getHeaders(true),
+      body: JSON.stringify({ code }),
+    });
+    return this.handleResponse(response);
+  }
+
   // Genre endpoints
   async getAllGenres(): Promise<any[]> {
     const response = await fetch(`${API_BASE_URL}/genres`, {

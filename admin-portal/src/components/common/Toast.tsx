@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { FiCheckCircle, FiXCircle, FiAlertCircle, FiInfo } from 'react-icons/fi';
+import { FiCheckCircle, FiXCircle, FiAlertCircle, FiInfo, FiX } from 'react-icons/fi';
 
 export type ToastType = 'success' | 'error' | 'warning' | 'info';
 
@@ -26,28 +26,37 @@ export const Toast: React.FC<ToastProps> = ({ message, type, onClose, duration =
     info: <FiInfo className="w-5 h-5" />,
   };
 
-  const colors = {
-    success: 'bg-emerald-50 border-emerald-200 text-emerald-800',
-    error: 'bg-rose-50 border-rose-200 text-rose-800',
-    warning: 'bg-amber-50 border-amber-200 text-amber-800',
-    info: 'bg-blue-50 border-blue-200 text-blue-800',
+  const iconBgColors = {
+    success: 'bg-[#dcfce7] text-[#16a34a]',
+    error: 'bg-[#fee2e2] text-[#dc2626]',
+    warning: 'bg-[#fef3c7] text-[#d97706]',
+    info: 'bg-[#dbeafe] text-[#2563eb]',
+  };
+
+  const borderColors = {
+    success: 'border-[#86efac]',
+    error: 'border-[#fca5a5]',
+    warning: 'border-[#fde047]',
+    info: 'border-[#93c5fd]',
   };
 
   return (
     <div
-      className={`fixed top-20 right-4 z-50 flex items-center space-x-3 px-6 py-4 rounded-xl shadow-2xl border-2 ${colors[type]} animate-slide-in-right max-w-md`}
+      className={`fixed top-20 right-4 z-50 flex items-center gap-3 px-4 py-3.5 rounded-xl border ${borderColors[type]} bg-white shadow-[0_20px_70px_rgba(15,23,42,0.12)] max-w-md animate-slide-in-right`}
     >
-      <div className="flex-shrink-0">{icons[type]}</div>
-      <p className="font-semibold flex-1">{message}</p>
+      <div className={`flex-shrink-0 ${iconBgColors[type]} rounded-lg p-2.5`}>
+        {icons[type]}
+      </div>
+      <p className="font-medium flex-1 text-sm text-[#0f172a] leading-relaxed">{message}</p>
       <button
         onClick={onClose}
-        className="flex-shrink-0 hover:opacity-70 transition-opacity"
+        className="flex-shrink-0 p-1 rounded-lg text-[#94a3b8] hover:text-[#0f172a] hover:bg-[#f1f5f9] transition-all duration-200"
+        aria-label="Close notification"
       >
-        <FiXCircle className="w-4 h-4" />
+        <FiX className="w-4 h-4" />
       </button>
     </div>
   );
 };
 
 export default Toast;
-

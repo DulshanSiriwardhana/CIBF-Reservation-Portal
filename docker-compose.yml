@@ -117,7 +117,7 @@ services:
     ports:
     - "5003:5003"
     env_file:
-      - ./reservation-service/complete/.env     
+      - ./reservation-service/complete/.env
     networks:
     - bookfair-network
 
