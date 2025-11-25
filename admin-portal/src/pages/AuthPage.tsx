@@ -12,7 +12,7 @@ const AuthPage: React.FC = () => {
         <div className="surface-card hidden lg:block p-10">
           <span className="badge-dark">CIBF Admin</span>
           <h1 className="mt-6 text-4xl font-semibold text-[#0f172a] leading-tight">
-            Navigate the digital landscape for success
+            Navigating the digital landscape for success
           </h1>
           <p className="mt-4 text-[#475569]">
             Manage reservations, stalls, and vendor relationships from a single, beautifully simple workspace.

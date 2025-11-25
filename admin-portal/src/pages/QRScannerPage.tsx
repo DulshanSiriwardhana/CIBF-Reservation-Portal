@@ -13,7 +13,7 @@ type VerificationState = {
 const QRScannerPage: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const animationRef = useRef<number>();
+  const animationRef = useRef<number | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const lastVerifiedCodeRef = useRef<string | null>(null);
 
@@ -198,7 +198,7 @@ const QRScannerPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-[calc(100vh-5rem)] bg-[#f6f8fb] pt-24 pb-16 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-[calc(100vh-5rem)] bg-[#f6f8fb] pt-24 pb-16 px-4 sm:px-6 lg:px-8 lg:pt-32 lg:pb-32">
       <div className="max-w-6xl mx-auto space-y-8">
         <div className="flex flex-col gap-2">
           <p className="text-xs font-semibold uppercase tracking-[0.4em] text-[#94a3b8]">Reservation Security</p>

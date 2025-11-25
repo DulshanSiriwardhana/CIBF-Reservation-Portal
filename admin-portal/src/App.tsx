@@ -41,7 +41,7 @@ function AppRoutes() {
           <NavBar/>
         </div>
       )}
-      <main className="flex-1 min-h-0 pt-8 pb-16">
+      <main className="flex-1 min-h-0">
         <LoaderProvider>
           <ToastProvider>
             <Routes>
