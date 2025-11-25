@@ -112,11 +112,13 @@ const StallManagementPage: React.FC = () => {
   const handleSaveGenre = async (genre: Genre) => {
     setLoading(true);
     try {
-      if (genre.id) {
+      if (genre.id && genre.id > 0) {
         await apiService.updateGenre(genre.id, genre);
         showToast("Genre updated successfully", "success");
       } else {
-        await apiService.createGenre(genre);
+        // Remove id field when creating new genre
+        const { id, ...genreData } = genre;
+        await apiService.createGenre(genreData);
         showToast("Genre created successfully", "success");
       }
       await fetchGenres();
@@ -145,19 +147,19 @@ const StallManagementPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-slate-50 pt-20 pb-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-8 flex justify-between items-center">
+        <div className="mb-10 flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold text-slate-900 mb-2">Stall Management</h1>
-            <p className="text-slate-600">Manage exhibition stalls and genres</p>
+            <h1 className="text-4xl font-bold text-slate-900 mb-2">Stall Management</h1>
+            <p className="text-slate-600 text-lg">Manage exhibition stalls and genres</p>
           </div>
           <button
             onClick={() => {
               setEditingStall(undefined);
               setStallModalOpen(true);
             }}
-            className="flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition-colors text-sm font-semibold"
+            className="flex items-center gap-2 px-5 py-3 bg-slate-900 text-white rounded-xl hover:bg-slate-800 hover:shadow-lg active:scale-[0.98] transition-all text-sm font-bold shadow-md"
           >
-            <FiPlus className="w-4 h-4" />
+            <FiPlus className="w-5 h-5" />
             Add Stall
           </button>
         </div>
@@ -171,7 +173,7 @@ const StallManagementPage: React.FC = () => {
             stalls.map((stall) => (
               <div
                 key={stall.id}
-                className="bg-white rounded-lg border border-slate-200 shadow-sm p-6 hover:shadow-md transition-shadow"
+                className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 hover:shadow-lg hover:border-slate-300 transition-all duration-200"
               >
                 <div className="flex items-start justify-between mb-4">
                   <div>

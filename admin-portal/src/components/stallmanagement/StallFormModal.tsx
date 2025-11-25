@@ -50,13 +50,13 @@ const StallFormModal: React.FC<Props> = ({ isOpen, onClose, onSubmit, initialDat
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={onClose}>
-      <div className="bg-white rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-in" onClick={onClose}>
+      <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto animate-scale-in" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between p-6 border-b border-slate-200">
-          <h2 className="text-xl font-bold text-slate-900">{initialData ? "Edit Stall" : "Add Stall"}</h2>
+          <h2 className="text-2xl font-bold text-slate-900">{initialData ? "Edit Stall" : "Add Stall"}</h2>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+            className="p-2 hover:bg-slate-100 rounded-xl transition-colors"
           >
             <FiX className="w-5 h-5 text-slate-600" />
           </button>

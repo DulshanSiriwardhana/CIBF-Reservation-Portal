@@ -89,12 +89,12 @@ const VendorManagementPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-slate-50 pt-20 pb-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-slate-900 mb-2">Vendor Management</h1>
-          <p className="text-slate-600">View and manage all registered vendors</p>
+        <div className="mb-10">
+          <h1 className="text-4xl font-bold text-slate-900 mb-2">Vendor Management</h1>
+          <p className="text-slate-600 text-lg">View and manage all registered vendors</p>
         </div>
 
-        <div className="bg-white rounded-lg border border-slate-200 shadow-sm p-4 mb-6">
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-6">
           <div className="relative">
             <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
             <input
@@ -116,7 +116,7 @@ const VendorManagementPage: React.FC = () => {
             filteredVendors.map((vendor) => (
               <div
                 key={vendor.userId}
-                className="bg-white rounded-lg border border-slate-200 shadow-sm p-6 hover:shadow-md transition-shadow"
+                className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 hover:shadow-lg hover:border-slate-300 transition-all duration-200"
               >
                 <div className="flex items-start justify-between mb-4">
                   <div className="bg-slate-100 text-slate-700 p-3 rounded-lg">

@@ -40,28 +40,28 @@ const NavBar: React.FC = () => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <nav className="bg-white border-b border-slate-200 shadow-sm fixed w-full z-50">
+    <nav className="bg-white border-b border-slate-200 shadow-sm fixed w-full z-50 backdrop-blur-sm bg-white/95">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
-          <Link to="/dashboard" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
-            <div className="w-10 h-10 bg-slate-900 rounded-lg flex items-center justify-center">
+          <Link to="/dashboard" className="flex items-center space-x-3 hover:opacity-90 transition-all group">
+            <div className="w-10 h-10 bg-slate-900 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
               <span className="text-white font-bold text-lg">C</span>
             </div>
             <div>
               <div className="font-bold text-lg text-slate-900">CIBF</div>
-              <div className="text-xs text-slate-600 font-medium">Admin Portal</div>
+              <div className="text-xs text-slate-500 font-medium">Admin Portal</div>
             </div>
           </Link>
 
-          <div className="hidden md:flex space-x-1 items-center">
+          <div className="hidden md:flex space-x-2 items-center">
             {menuItems.map((item) => (
               <Link
                 key={item.name}
                 to={item.href}
-                className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${
+                className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${
                   isActive(item.href)
-                    ? "bg-slate-900 text-white"
-                    : "text-slate-700 hover:bg-slate-100"
+                    ? "bg-slate-900 text-white shadow-md"
+                    : "text-slate-700 hover:bg-slate-100 hover:text-slate-900"
                 }`}
               >
                 {item.name}
@@ -70,7 +70,7 @@ const NavBar: React.FC = () => {
             <div ref={profileRef} className="ml-4 relative">
               <button
                 onClick={toggleProfile}
-                className="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center hover:bg-slate-200 transition-colors border border-slate-200"
+                className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center hover:bg-slate-200 transition-all border border-slate-200 hover:border-slate-300 hover:shadow-sm"
               >
                 <FiUser className="w-5 h-5 text-slate-700" />
               </button>

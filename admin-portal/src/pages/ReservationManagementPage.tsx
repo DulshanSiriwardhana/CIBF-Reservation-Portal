@@ -110,22 +110,22 @@ const ReservationManagementPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-slate-50 pt-20 pb-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-8 flex justify-between items-center">
+        <div className="mb-10 flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold text-slate-900 mb-2">Reservation Management</h1>
-            <p className="text-slate-600">Manage and review all stall reservations</p>
+            <h1 className="text-4xl font-bold text-slate-900 mb-2">Reservation Management</h1>
+            <p className="text-slate-600 text-lg">Manage and review all stall reservations</p>
           </div>
           <button
             onClick={fetchReservations}
             disabled={loading}
-            className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-300 rounded-lg text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors disabled:opacity-50"
+            className="flex items-center gap-2 px-5 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm font-bold text-slate-700 hover:bg-slate-50 hover:border-slate-300 hover:shadow-md active:scale-[0.98] transition-all disabled:opacity-50 shadow-sm"
           >
-            <FiRefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+            <FiRefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
             Refresh
           </button>
         </div>
 
-        <div className="bg-white rounded-lg border border-slate-200 shadow-sm p-4 mb-6">
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-6">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="relative flex-1">
               <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
@@ -162,7 +162,7 @@ const ReservationManagementPage: React.FC = () => {
             filteredReservations.map((reservation) => (
               <div
                 key={reservation.reservationId}
-                className="bg-white rounded-lg border border-slate-200 shadow-sm p-6 hover:shadow-md transition-shadow"
+                className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 hover:shadow-lg hover:border-slate-300 transition-all duration-200"
               >
                 <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                   <div className="flex-1">

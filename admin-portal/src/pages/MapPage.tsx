@@ -46,17 +46,17 @@ const MapPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-slate-50 pt-20 pb-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-8 flex justify-between items-center">
+        <div className="mb-10 flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold text-slate-900 mb-2">Stall Map</h1>
-            <p className="text-slate-600">Visual overview of all exhibition stalls</p>
+            <h1 className="text-4xl font-bold text-slate-900 mb-2">Stall Map</h1>
+            <p className="text-slate-600 text-lg">Visual overview of all exhibition stalls</p>
           </div>
-          <div className="flex gap-2 bg-white border border-slate-200 rounded-lg p-1">
+          <div className="flex gap-2 bg-white border-2 border-slate-200 rounded-xl p-1 shadow-sm">
             <button
               onClick={() => setViewMode("grid")}
-              className={`px-4 py-2 rounded-md text-sm font-semibold transition-colors flex items-center gap-2 ${
+              className={`px-4 py-2.5 rounded-lg text-sm font-bold transition-all flex items-center gap-2 ${
                 viewMode === "grid"
-                  ? "bg-slate-900 text-white"
+                  ? "bg-slate-900 text-white shadow-md"
                   : "text-slate-700 hover:bg-slate-100"
               }`}
             >
@@ -65,9 +65,9 @@ const MapPage: React.FC = () => {
             </button>
             <button
               onClick={() => setViewMode("map")}
-              className={`px-4 py-2 rounded-md text-sm font-semibold transition-colors flex items-center gap-2 ${
+              className={`px-4 py-2.5 rounded-lg text-sm font-bold transition-all flex items-center gap-2 ${
                 viewMode === "map"
-                  ? "bg-slate-900 text-white"
+                  ? "bg-slate-900 text-white shadow-md"
                   : "text-slate-700 hover:bg-slate-100"
               }`}
             >

@@ -47,12 +47,12 @@ const SignupCard: React.FC<{ onSwitch: () => void }> = ({ onSwitch }) => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-2xl border border-slate-200 p-8">
+    <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-8 backdrop-blur-sm">
       <div className="text-center mb-8">
-        <div className="inline-flex items-center justify-center w-12 h-12 bg-slate-900 rounded-lg mb-4">
-          <FiUser className="w-6 h-6 text-white" />
+        <div className="inline-flex items-center justify-center w-14 h-14 bg-slate-900 rounded-2xl mb-4 shadow-lg">
+          <FiUser className="w-7 h-7 text-white" />
         </div>
-        <h2 className="text-2xl font-bold text-slate-900 mb-2">Create Account</h2>
+        <h2 className="text-3xl font-bold text-slate-900 mb-2">Create Account</h2>
         <p className="text-slate-600 text-sm">Register for admin portal access</p>
       </div>
 
@@ -155,7 +155,7 @@ const SignupCard: React.FC<{ onSwitch: () => void }> = ({ onSwitch }) => {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-slate-900 text-white py-3 rounded-lg font-semibold shadow-lg hover:bg-slate-800 active:bg-slate-950 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          className="w-full bg-slate-900 text-white py-3.5 rounded-xl font-semibold shadow-md hover:bg-slate-800 hover:shadow-lg active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-slate-900 disabled:hover:shadow-md disabled:active:scale-100 flex items-center justify-center gap-2"
         >
           {loading ? (
             <>
