@@ -20,5 +20,23 @@ public class Application {
 			System.out.println(beanName);
 		}
 	}
+
+	@Bean
+	public WebMvcConfigurer corsConfigurer() {
+		return new WebMvcConfigurer() {
+			@Override
+			public void addCorsMappings(CorsRegistry registry) {
+				registry.addMapping("/api/**")
+						.allowedOrigins(
+								"http://localhost:3000",
+								"http://localhost:8080",
+								"http://localhost:5003"
+						)
+						.allowCredentials(true)
+						.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+						.allowedHeaders("*");
+			}
+		};
+	}
 	
 }

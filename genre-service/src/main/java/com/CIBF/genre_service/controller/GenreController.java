@@ -25,10 +25,16 @@ public class GenreController {
         return ResponseEntity.ok(genres);
     }
 
-    @GetMapping("/{exhibitorId}")
+    @GetMapping("/all/{exhibitorId}")
     public ResponseEntity<List<Genre>> getGenresByExhibitorId(@PathVariable String exhibitorId) {
         List<Genre> genres = genreService.getGenresByExhibitorId(exhibitorId);
         return ResponseEntity.ok(genres);
+    }
+
+    @GetMapping("/{exhibitorId}")
+    public ResponseEntity<List<String>> getGenreNamesByExhibitorId(@PathVariable String exhibitorId) {
+        List<String> genreNames = genreService.getGenreNamesByExhibitorId(exhibitorId);
+        return ResponseEntity.ok(genreNames);
     }
 
     @PostMapping
@@ -43,6 +49,15 @@ public class GenreController {
         return ResponseEntity.ok(updatedGenre);
     }
 
+    @PostMapping("/add/{exhibitorId}")
+    public ResponseEntity<String> addExhibitorToMultipleGenres(
+            @PathVariable String exhibitorId,
+            @RequestBody List<String> genreNames) {
+
+        List<Genre> updatedGenres = genreService.addExhibitorToMultipleGenres(exhibitorId, genreNames);
+        return ResponseEntity.ok("Success");
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<Genre> updateGenre(@PathVariable Long id, @RequestBody Genre genre) {
         return genreService.updateGenre(id, genre)
@@ -54,5 +69,11 @@ public class GenreController {
     public ResponseEntity<Void> deleteGenre(@PathVariable Long id) {
         genreService.deleteGenre(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/names")
+    public ResponseEntity<List<String>> getAllGenreNames() {
+        List<String> genreNames = genreService.getAllGenreNames();
+        return ResponseEntity.ok(genreNames);
     }
 }

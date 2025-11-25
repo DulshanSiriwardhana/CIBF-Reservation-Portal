@@ -13,7 +13,7 @@ public class StallServiceApplication {
 		SpringApplication.run(StallServiceApplication.class, args);
 		System.out.println("\n========================================");
 		System.out.println("Stall Service Started Successfully!");
-		System.out.println("Port: 8082");
+		System.out.println("Port: 8083");
 		System.out.println("Swagger UI: http://localhost:8082/swagger-ui.html");
 		System.out.println("Health: http://localhost:8082/actuator/health");
 		System.out.println("========================================\n");
@@ -27,7 +27,7 @@ public class StallServiceApplication {
 						.allowedOrigins(
 								"http://localhost:3000",
 								"http://localhost:8080",
-								"http://localhost:8082"
+								"http://localhost:8083"
 						)
 						.allowCredentials(true)
 						.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")

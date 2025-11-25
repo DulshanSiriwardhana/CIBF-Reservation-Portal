@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import Loading from '../components/common/Loading';
 import ErrorMessage from '../components/common/ErrorMessage';
 import ReservationConfirmation from './ReservationConfirmation';
+import { useAuth } from '../context/AuthContext';
 
 const StallList = () => {
   const [stalls, setStalls] = useState([]);
@@ -24,8 +25,9 @@ const StallList = () => {
   const [priceRange, setPriceRange] = useState({ min: 0, max: 100000 });
 
   // TODO: Get from your auth context/state
-  const userEmail = "publisher@example.com"; // Replace with actual user email
-  const userId = "user123"; // Replace with actual user ID
+  const {user} = useAuth();
+  const userEmail = user.email || "publisher@example.com"; // Replace with actual user email
+  const userId = user.userId; // Replace with actual user ID
 
   useEffect(() => {
     fetchStalls();
