@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { FiMenu, FiX, FiUser } from "react-icons/fi";
 import ProfilePopup from "./ProfilePopup";
 import { useAuth } from "../../context/AuthContext";
@@ -17,7 +17,6 @@ const NavBar: React.FC = () => {
   const [profileOpen, setProfileOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
-  const navigate = useNavigate();
   const { logout, user } = useAuth();
 
   const toggleMenu = () => setIsOpen(!isOpen);
@@ -29,14 +28,18 @@ const NavBar: React.FC = () => {
         setProfileOpen(false);
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    // Use click instead of mousedown to allow button clicks to complete first
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
   }, []);
 
   const handleLogout = () => {
-    logout();
+    // Close popup first to prevent visual glitch
     setProfileOpen(false);
-    navigate('/', { replace: true });
+    // Clear auth state
+    logout();
+    // Force full page reload to ensure state is cleared and app re-initializes
+    window.location.href = '/';
   };
 
   const isActive = (path: string) => location.pathname === path;

@@ -15,8 +15,16 @@ interface ProfilePopupProps {
 }
 
 const ProfilePopup: React.FC<ProfilePopupProps> = ({ onLogout, user }) => {
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+  };
+
   return (
-    <div className="absolute right-0 mt-3 w-72 rounded-2xl border border-[#1f2b40] bg-[#0c1525] text-white shadow-2xl shadow-black/40 z-50">
+    <div 
+      className="absolute right-0 mt-3 w-72 rounded-2xl border border-[#1f2b40] bg-[#0c1525] text-white shadow-2xl shadow-black/40 z-50"
+      onClick={handleClick}
+      onMouseDown={handleClick}
+    >
       <div className="p-5 border-b border-[#1f2b40]">
         <div className="flex items-center space-x-4">
           <div className="w-12 h-12 rounded-xl bg-[#20b368] flex items-center justify-center text-[#04110a]">
@@ -38,8 +46,17 @@ const ProfilePopup: React.FC<ProfilePopupProps> = ({ onLogout, user }) => {
       </div>
       <div className="p-2">
         <button
-          className="flex items-center w-full px-4 py-2.5 rounded-lg text-sm font-semibold text-[#f87171] hover:bg-[#18111f]"
-          onClick={onLogout}
+          type="button"
+          className="flex items-center w-full px-4 py-2.5 rounded-lg text-sm font-semibold text-[#f87171] hover:bg-[#18111f] transition-colors"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            onLogout();
+          }}
+          onMouseDown={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          }}
         >
           <FiLogOut className="mr-3 w-4 h-4" />
           Logout
