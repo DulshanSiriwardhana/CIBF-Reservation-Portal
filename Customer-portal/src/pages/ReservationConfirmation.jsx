@@ -24,7 +24,7 @@ const ReservationConfirmation = ({
     setError('');
 
     try {
-      const response = await fetch('http://localhost:8080/api/reservations', {
+      const response = await fetch('http://localhost:5003/api/reservations', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
