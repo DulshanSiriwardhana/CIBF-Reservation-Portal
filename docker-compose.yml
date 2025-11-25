@@ -233,6 +233,7 @@ services:
     - rabbitmq-reservation
     environment:
       SPRING_DATA_MONGODB_URI: mongodb://reservation-db:27017/reservation-service
+      SPRING_DATA_MONGODB_AUTO_INDEX_CREATION: "true"
       SPRING_RABBITMQ_HOST: rabbitmq-reservation
       SPRING_RABBITMQ_PORT: 5672
       SPRING_RABBITMQ_USERNAME: guest
