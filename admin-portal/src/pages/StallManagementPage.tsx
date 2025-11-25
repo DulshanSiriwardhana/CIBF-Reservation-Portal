@@ -1,78 +1,310 @@
-import React, { useState } from "react";
-import StallCard from "../components/stallmanagement/StallCard";
+import React, { useState, useEffect } from "react";
+import { FiBox, FiPlus, FiEdit, FiTrash2, FiRefreshCw, FiLoader, FiTag } from "react-icons/fi";
+import { useLoader } from "../context/LoaderContext";
+import { apiService } from "../services/api";
+import { useToast } from "../context/ToastContext";
 import StallFormModal from "../components/stallmanagement/StallFormModal";
-import { GenreList } from "../components/stallmanagement/GenreList";
 import GenreFormModal from "../components/stallmanagement/GenreFormModal";
 import type { Stall } from "../types/stall";
 import type { Genre } from "../types/genre";
 
-const initialStalls: Stall[] = [
-  { id: 1, stallName: "A1", size: "SMALL", dimension: 10, price: 100, status: "AVAILABLE", positionX: 50, positionY: 50 },
-  { id: 2, stallName: "B2", size: "MEDIUM", dimension: 20, price: 200, status: "RESERVED", reservedBy: "User1", reservationId: "R1", positionX: 200, positionY: 80 },
-];
-
-const initialGenres: Genre[] = [
-  { id: 1, name: "Fiction", description: "Fictional books" },
-  { id: 2, name: "Science", description: "Science books" },
-];
-
 const StallManagementPage: React.FC = () => {
-  const [stalls, setStalls] = useState<Stall[]>(initialStalls);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [editingStall, setEditingStall] = useState<Stall | undefined>(undefined);
-  const [genres, setGenres] = useState<Genre[]>(initialGenres);
+  const { showLoader, hideLoader } = useLoader();
+  const { showToast } = useToast();
+  const [stalls, setStalls] = useState<Stall[]>([]);
+  const [genres, setGenres] = useState<Genre[]>([]);
+  const [stallModalOpen, setStallModalOpen] = useState(false);
   const [genreModalOpen, setGenreModalOpen] = useState(false);
+  const [editingStall, setEditingStall] = useState<Stall | undefined>(undefined);
   const [editingGenre, setEditingGenre] = useState<Genre | undefined>(undefined);
+  const [loading, setLoading] = useState(false);
 
-  const handleEdit = (stallName: string) => {
-    const stall = stalls.find((s) => s.stallName === stallName);
-    if (stall) { setEditingStall(stall); setModalOpen(true); }
-  };
-
-  const handleSaveStall = (stall: Stall) => {
-    if (stall.id) { setStalls((prev) => prev.map((s) => (s.id === stall.id ? { ...s, ...stall } : s))); }
-    else { setStalls((prev) => [...prev, { ...stall, id: Date.now(), positionX: 50, positionY: 50 }]); }
-    setModalOpen(false); setEditingStall(undefined);
-  };
-
-  const handleApprove = (id: number) => { setStalls((prev) => prev.map((s) => (s.id === id ? { ...s, status: "RESERVED" } : s))); };
-  const handleCancel = (id: number) => { setStalls((prev) => prev.map((s) => (s.id === id ? { ...s, status: "AVAILABLE", reservedBy: undefined, reservationId: undefined } : s))); };
-
-  const handleEditGenre = (genre: Genre) => { setEditingGenre(genre); setGenreModalOpen(true); };
-  const handleDeleteGenre = (id: number) => { setGenres((prev) => prev.filter((g) => g.id !== id)); };
-  const handleSaveGenre = (genre: Genre) => {
-    if (genre.id) {
-      setGenres((prev) => prev.map((g) => (g.id === genre.id ? { ...g, ...genre } : g)));
-    } else {
-      setGenres((prev) => [...prev, { ...genre, id: Date.now() }]);
+  const fetchStalls = async () => {
+    try {
+      const data = await apiService.getAllStalls();
+      setStalls(Array.isArray(data) ? data : []);
+    } catch (error: any) {
+      showToast("Failed to load stalls", "error");
     }
-    setGenreModalOpen(false);
-    setEditingGenre(undefined);
+  };
+
+  const fetchGenres = async () => {
+    try {
+      const data = await apiService.getAllGenres();
+      setGenres(Array.isArray(data) ? data : []);
+    } catch (error: any) {
+      showToast("Failed to load genres", "error");
+    }
+  };
+
+  useEffect(() => {
+    const loadData = async () => {
+      showLoader();
+      setLoading(true);
+      await Promise.all([fetchStalls(), fetchGenres()]);
+      hideLoader();
+      setLoading(false);
+    };
+    loadData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleEditStall = (stall: Stall) => {
+    setEditingStall(stall);
+    setStallModalOpen(true);
+  };
+
+  const handleDeleteStall = async (id: number) => {
+    if (!window.confirm("Are you sure you want to delete this stall?")) return;
+
+    setLoading(true);
+    try {
+      await apiService.deleteStall(id);
+      showToast("Stall deleted successfully", "success");
+      await fetchStalls();
+    } catch (error: any) {
+      showToast(error.message || "Failed to delete stall", "error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSaveStall = async (stall: Stall) => {
+    setLoading(true);
+    try {
+      if (stall.id) {
+        await apiService.updateStall(stall.id, stall);
+        showToast("Stall updated successfully", "success");
+      } else {
+        await apiService.createStall(stall);
+        showToast("Stall created successfully", "success");
+      }
+      await fetchStalls();
+      setStallModalOpen(false);
+      setEditingStall(undefined);
+    } catch (error: any) {
+      showToast(error.message || "Failed to save stall", "error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleEditGenre = (genre: Genre) => {
+    setEditingGenre(genre);
+    setGenreModalOpen(true);
+  };
+
+  const handleDeleteGenre = async (id: number) => {
+    if (!window.confirm("Are you sure you want to delete this genre?")) return;
+
+    setLoading(true);
+    try {
+      await apiService.deleteGenre(id);
+      showToast("Genre deleted successfully", "success");
+      await fetchGenres();
+    } catch (error: any) {
+      showToast(error.message || "Failed to delete genre", "error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSaveGenre = async (genre: Genre) => {
+    setLoading(true);
+    try {
+      if (genre.id) {
+        await apiService.updateGenre(genre.id, genre);
+        showToast("Genre updated successfully", "success");
+      } else {
+        await apiService.createGenre(genre);
+        showToast("Genre created successfully", "success");
+      }
+      await fetchGenres();
+      setGenreModalOpen(false);
+      setEditingGenre(undefined);
+    } catch (error: any) {
+      showToast(error.message || "Failed to save genre", "error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getStatusBadge = (status: Stall["status"]) => {
+    const styles = {
+      AVAILABLE: "bg-emerald-100 text-emerald-800 border-emerald-300",
+      RESERVED: "bg-amber-100 text-amber-800 border-amber-300",
+      MAINTENANCE: "bg-red-100 text-red-800 border-red-300",
+    };
+    return (
+      <span className={`px-2 py-1 rounded text-xs font-semibold border ${styles[status]}`}>
+        {status}
+      </span>
+    );
   };
 
   return (
-    <div className="p-6 space-y-6 max-w-7xl mx-auto">
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">Stall Management</h1>
-        <button onClick={() => setModalOpen(true)} className="px-6 py-2 bg-teal-600 text-white rounded-xl hover:bg-teal-700 transition">Add Stall</button>
+    <div className="min-h-screen bg-slate-50 pt-20 pb-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        <div className="mb-8 flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-bold text-slate-900 mb-2">Stall Management</h1>
+            <p className="text-slate-600">Manage exhibition stalls and genres</p>
+          </div>
+          <button
+            onClick={() => {
+              setEditingStall(undefined);
+              setStallModalOpen(true);
+            }}
+            className="flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition-colors text-sm font-semibold"
+          >
+            <FiPlus className="w-4 h-4" />
+            Add Stall
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+          {loading && stalls.length === 0 ? (
+            <div className="col-span-full flex justify-center py-20">
+              <FiLoader className="w-8 h-8 text-slate-400 animate-spin" />
+            </div>
+          ) : stalls.length > 0 ? (
+            stalls.map((stall) => (
+              <div
+                key={stall.id}
+                className="bg-white rounded-lg border border-slate-200 shadow-sm p-6 hover:shadow-md transition-shadow"
+              >
+                <div className="flex items-start justify-between mb-4">
+                  <div>
+                    <h3 className="text-lg font-bold text-slate-900 mb-1">{stall.stallName}</h3>
+                    {getStatusBadge(stall.status)}
+                  </div>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => handleEditStall(stall)}
+                      className="p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors"
+                      title="Edit"
+                    >
+                      <FiEdit className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => handleDeleteStall(stall.id)}
+                      className="p-2 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
+                      title="Delete"
+                    >
+                      <FiTrash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-slate-600">Size:</span>
+                    <span className="font-semibold text-slate-900">{stall.size}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-600">Dimension:</span>
+                    <span className="font-semibold text-slate-900">{stall.dimension} m²</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-600">Price:</span>
+                    <span className="font-semibold text-slate-900">${stall.price}</span>
+                  </div>
+                  {stall.reservedBy && (
+                    <div className="flex justify-between">
+                      <span className="text-slate-600">Reserved By:</span>
+                      <span className="font-semibold text-slate-900">{stall.reservedBy}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="col-span-full text-center py-12 bg-white rounded-lg border border-slate-200">
+              <FiBox className="w-12 h-12 text-slate-400 mx-auto mb-4" />
+              <p className="text-slate-600 font-medium">No stalls found</p>
+            </div>
+          )}
+        </div>
+
+        <div className="bg-white rounded-lg border border-slate-200 shadow-sm p-6">
+          <div className="flex justify-between items-center mb-6">
+            <div>
+              <h2 className="text-xl font-bold text-slate-900 mb-1">Genres</h2>
+              <p className="text-sm text-slate-600">Manage book genres for categorization</p>
+            </div>
+            <button
+              onClick={() => {
+                setEditingGenre(undefined);
+                setGenreModalOpen(true);
+              }}
+              className="flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition-colors text-sm font-semibold"
+            >
+              <FiPlus className="w-4 h-4" />
+              Add Genre
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {genres.length > 0 ? (
+              genres.map((genre) => (
+                <div
+                  key={genre.id}
+                  className="border border-slate-200 rounded-lg p-4 hover:border-slate-300 transition-colors"
+                >
+                  <div className="flex items-start justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <FiTag className="w-4 h-4 text-slate-600" />
+                      <h3 className="font-semibold text-slate-900">{genre.name}</h3>
+                    </div>
+                    <div className="flex gap-1">
+                      <button
+                        onClick={() => handleEditGenre(genre)}
+                        className="p-1.5 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded transition-colors"
+                        title="Edit"
+                      >
+                        <FiEdit className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteGenre(genre.id!)}
+                        className="p-1.5 text-red-600 hover:text-red-700 hover:bg-red-50 rounded transition-colors"
+                        title="Delete"
+                      >
+                        <FiTrash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                  <p className="text-sm text-slate-600">{genre.description || "No description"}</p>
+                </div>
+              ))
+            ) : (
+              <div className="col-span-full text-center py-8">
+                <FiTag className="w-8 h-8 text-slate-400 mx-auto mb-2" />
+                <p className="text-slate-600 text-sm">No genres found</p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <StallFormModal
+          isOpen={stallModalOpen}
+          onClose={() => {
+            setStallModalOpen(false);
+            setEditingStall(undefined);
+          }}
+          onSubmit={handleSaveStall}
+          initialData={editingStall}
+          genres={genres}
+        />
+        <GenreFormModal
+          isOpen={genreModalOpen}
+          onClose={() => {
+            setGenreModalOpen(false);
+            setEditingGenre(undefined);
+          }}
+          onSubmit={handleSaveGenre}
+          initialData={editingGenre}
+        />
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {stalls.map((stall) => (
-          <StallCard 
-          key={stall.id} {...stall} 
-          onEdit={handleEdit} 
-          onApprove={() => handleApprove(stall.id)} 
-          onCancel={() => handleCancel(stall.id)} 
-          genres={genres.filter(g => stall.genreIds?.includes(g.id))}/>
-        ))}
-      </div>
-      <StallFormModal isOpen={modalOpen} onClose={() => { setModalOpen(false); setEditingStall(undefined); }} onSubmit={handleSaveStall} initialData={editingStall} genres={genres}/>
-      <div className="mt-8 flex justify-between items-center">
-        <h2 className="text-xl font-bold text-gray-700 mb-4">Manage Genres</h2>
-        <button onClick={() => setGenreModalOpen(true)} className="px-4 py-2 bg-teal-600 text-white rounded-xl hover:bg-teal-700 transition">Add Genre</button>
-      </div>
-      <GenreList genres={genres} onEdit={handleEditGenre} onDelete={handleDeleteGenre} />
-      <GenreFormModal isOpen={genreModalOpen} onClose={() => { setGenreModalOpen(false); setEditingGenre(undefined); }} onSubmit={handleSaveGenre} initialData={editingGenre} />
     </div>
   );
 };

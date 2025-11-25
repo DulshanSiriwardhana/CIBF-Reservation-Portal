@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, type ReactNode } from "react";
+import React, { createContext, useContext, useState, useRef, useCallback, type ReactNode } from "react";
 
 interface LoaderContextType {
   isLoading: boolean;
@@ -23,10 +23,31 @@ interface LoaderProviderProps {
 
 export const LoaderProvider: React.FC<LoaderProviderProps> = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const loadingCountRef = useRef(0);
 
-  const showLoader = () => setIsLoading(true);
-  const hideLoader = () => setIsLoading(false);
-  const setLoading = (loading: boolean) => setIsLoading(loading);
+  const showLoader = useCallback(() => {
+    loadingCountRef.current += 1;
+    setIsLoading(true);
+  }, []);
+
+  const hideLoader = useCallback(() => {
+    loadingCountRef.current = Math.max(0, loadingCountRef.current - 1);
+    if (loadingCountRef.current === 0) {
+      setIsLoading(false);
+    }
+  }, []);
+
+  const setLoading = useCallback((loading: boolean) => {
+    if (loading) {
+      loadingCountRef.current += 1;
+      setIsLoading(true);
+    } else {
+      loadingCountRef.current = Math.max(0, loadingCountRef.current - 1);
+      if (loadingCountRef.current === 0) {
+        setIsLoading(false);
+      }
+    }
+  }, []);
 
   return (
     <LoaderContext.Provider value={{ isLoading, showLoader, hideLoader, setLoading }}>
@@ -39,10 +60,12 @@ export const LoaderProvider: React.FC<LoaderProviderProps> = ({ children }) => {
 const Loader: React.FC = () => {
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9999] flex items-center justify-center">
-      <div className="relative">
-        <div className="w-20 h-20 border-4 border-slate-300 border-t-emerald-600 rounded-full animate-spin"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-          <div className="w-12 h-12 border-4 border-slate-300 border-t-cyan-600 rounded-full animate-spin animation-delay-150"></div>
+      <div className="bg-white rounded-lg p-8 shadow-2xl">
+        <div className="flex flex-col items-center gap-4">
+          <div className="relative w-16 h-16">
+            <div className="w-16 h-16 border-4 border-slate-200 border-t-slate-900 rounded-full animate-spin"></div>
+          </div>
+          <p className="text-sm font-semibold text-slate-700">Loading...</p>
         </div>
       </div>
     </div>

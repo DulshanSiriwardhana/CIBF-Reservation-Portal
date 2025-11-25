@@ -1,3 +1,5 @@
+import React from "react";
+
 interface ReservationCardProps {
   title: string;
   value: number;

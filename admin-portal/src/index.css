@@ -1,53 +1,32 @@
 @import "tailwindcss";
 
 @theme {
-  --font-family-notoserif: "NotoSerifSinhala", serif;
-  --font-family-varela: "VarelaRound", sans-serif;
+  --font-family-notoserif: "NotoSerifSinhala", -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', serif;
+  --font-family-varela: "VarelaRound", -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
   --img-background: url('/src/assets/images/backgrounds/bg1.jpg');
   
-  --color-ocean-50: #ECFEFF;
-  --color-ocean-100: #CFFAFE;
-  --color-ocean-200: #A5F3FC;
-  --color-ocean-300: #67E8F9;
-  --color-ocean-400: #22D3EE;
-  --color-ocean-500: #06B6D4;
-  --color-ocean-600: #0891B2;
-  --color-ocean-700: #0E7490;
-  --color-ocean-800: #155E75;
-  --color-ocean-900: #164E63;
+  /* Professional Masculine Color Palette */
+  --color-charcoal-50: #F8F9FA;
+  --color-charcoal-100: #E9ECEF;
+  --color-charcoal-200: #DEE2E6;
+  --color-charcoal-300: #CED4DA;
+  --color-charcoal-400: #ADB5BD;
+  --color-charcoal-500: #6C757D;
+  --color-charcoal-600: #495057;
+  --color-charcoal-700: #343A40;
+  --color-charcoal-800: #212529;
+  --color-charcoal-900: #1A1D20;
   
-  --color-emerald-50: #ECFDF5;
-  --color-emerald-100: #D1FAE5;
-  --color-emerald-200: #A7F3D0;
-  --color-emerald-300: #6EE7B7;
-  --color-emerald-400: #34D399;
-  --color-emerald-500: #10B981;
-  --color-emerald-600: #059669;
-  --color-emerald-700: #047857;
-  --color-emerald-800: #065F46;
-  --color-emerald-900: #064E3B;
-  
-  --color-amber-50: #FFFBEB;
-  --color-amber-100: #FEF3C7;
-  --color-amber-200: #FDE68A;
-  --color-amber-300: #FCD34D;
-  --color-amber-400: #FBBF24;
-  --color-amber-500: #F59E0B;
-  --color-amber-600: #D97706;
-  --color-amber-700: #B45309;
-  --color-amber-800: #92400E;
-  --color-amber-900: #78350F;
-  
-  --color-rose-50: #FFF1F2;
-  --color-rose-100: #FFE4E6;
-  --color-rose-200: #FECDD3;
-  --color-rose-300: #FDA4AF;
-  --color-rose-400: #FB7185;
-  --color-rose-500: #F43F5E;
-  --color-rose-600: #E11D48;
-  --color-rose-700: #BE123C;
-  --color-rose-800: #9F1239;
-  --color-rose-900: #881337;
+  --color-navy-50: #F0F4F8;
+  --color-navy-100: #D9E2EC;
+  --color-navy-200: #BCCCDC;
+  --color-navy-300: #9FB3C8;
+  --color-navy-400: #829AB1;
+  --color-navy-500: #627D98;
+  --color-navy-600: #486581;
+  --color-navy-700: #334E68;
+  --color-navy-800: #243B53;
+  --color-navy-900: #102A43;
   
   --color-slate-50: #F8FAFC;
   --color-slate-100: #F1F5F9;
@@ -59,41 +38,103 @@
   --color-slate-700: #334155;
   --color-slate-800: #1E293B;
   --color-slate-900: #0F172A;
+  
+  --color-steel-50: #F5F7FA;
+  --color-steel-100: #E4E7EB;
+  --color-steel-200: #CBD2D9;
+  --color-steel-300: #9AA5B1;
+  --color-steel-400: #7B8794;
+  --color-steel-500: #616E7C;
+  --color-steel-600: #52606D;
+  --color-steel-700: #3E4C59;
+  --color-steel-800: #323F4B;
+  --color-steel-900: #1F2933;
+  
+  /* Accent Colors - Professional */
+  --color-accent-600: #2563EB;
+  --color-accent-700: #1D4ED8;
+  --color-success-600: #059669;
+  --color-success-700: #047857;
+  --color-warning-600: #D97706;
+  --color-warning-700: #B45309;
+  --color-danger-600: #DC2626;
+  --color-danger-700: #B91C1C;
 }
 
+/* Custom fonts - using optional display to prevent blocking and fallback to system fonts */
 @font-face {
   font-family: 'NotoSerifSinhala';
-  src: url('/src/assets/fonts/Noto_Serif_Sinhala/static/NotoSerifSinhala-Regular.ttf') format('truetype');
+  src: url('/src/assets/fronts/Noto_Serif_Sinhala/static/NotoSerifSinhala-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0D80-0DFF;
 }
 
 @font-face {
   font-family: 'NotoSerifSinhala';
-  src: url('/src/assets/fonts/Noto_Serif_Sinhala/static/NotoSerifSinhala-Bold.ttf') format('truetype');
+  src: url('/src/assets/fronts/Noto_Serif_Sinhala/static/NotoSerifSinhala-Bold.ttf') format('truetype');
   font-weight: 700;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0D80-0DFF;
 }
 
 @font-face {
   font-family: 'NotoSerifSinhala';
-  src: url('/src/assets/fonts/Noto_Serif_Sinhala/static/NotoSerifSinhala-Light.ttf') format('truetype');
+  src: url('/src/assets/fronts/Noto_Serif_Sinhala/static/NotoSerifSinhala-Light.ttf') format('truetype');
   font-weight: 300;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0D80-0DFF;
 }
 
 @font-face {
   font-family: 'VarelaRound';
-  src: url('/src/assets/fonts/Varela_Round/VarelaRound-Regular.ttf') format('truetype');
+  src: url('/src/assets/fronts/Varela_Round/VarelaRound-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
-.background-default {
-  background-image: var(--img-background);
-  @apply bg-cover bg-center bg-no-repeat;
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@keyframes slide-in-right {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.3s ease-out;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out;
 }

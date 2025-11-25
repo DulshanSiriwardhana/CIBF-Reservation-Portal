@@ -1,3 +1,5 @@
+import React from "react";
+
 interface ActivityItemProps {
   icon: React.ReactNode;
   iconBgColor: string;
