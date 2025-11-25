@@ -17,10 +17,10 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#02060d]">
+      <div className="min-h-screen flex items-center justify-center bg-[#f6f8fb]">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-4 border-[#1f2b40] border-t-[#22c55e] mx-auto mb-4"></div>
-          <p className="text-[#94a3b8] font-medium">Loading...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-4 border-[#d7dde8] border-t-[#b7ff5e] mx-auto mb-4"></div>
+          <p className="text-[#475569] font-medium">Loading...</p>
         </div>
       </div>
     );
@@ -35,13 +35,13 @@ function AppRoutes() {
   const isAuthPage = location.pathname === "/";
 
   return (
-    <div className="font-family-notoserif min-h-screen flex flex-col bg-[#02060d]">
+    <div className="font-family-notoserif min-h-screen flex flex-col bg-[#f6f8fb]">
       {!isAuthPage && isAuthenticated && (
-        <div className="flex-shrink-0 mb-16">
+        <div className="flex-shrink-0">
           <NavBar/>
         </div>
       )}
-      <main className="flex-1 min-h-0">
+      <main className="flex-1 min-h-0 pt-8 pb-16">
         <LoaderProvider>
           <ToastProvider>
             <Routes>

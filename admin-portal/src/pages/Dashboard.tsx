@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { FiUsers, FiBox, FiClock, FiCheckCircle, FiXCircle, FiShoppingBag, FiArrowRight } from "react-icons/fi";
+import { FiUsers, FiBox, FiClock, FiCheckCircle, FiXCircle, FiShoppingBag } from "react-icons/fi";
 import { useLoader } from "../context/LoaderContext";
 import { apiService } from "../services/api";
 import { useToast } from "../context/ToastContext";
@@ -16,7 +15,6 @@ interface DashboardStats {
 const Dashboard: React.FC = () => {
   const { showLoader, hideLoader } = useLoader();
   const { showToast } = useToast();
-  const navigate = useNavigate();
   const [stats, setStats] = useState<DashboardStats>({
     vendors: 0,
     stalls: 0,
@@ -62,36 +60,31 @@ const Dashboard: React.FC = () => {
     fetchDashboardData();
   }, []);
 
-  const occupancyRate = stats.stalls > 0 
-    ? ((stats.confirmedReservations / stats.stalls) * 100).toFixed(1)
-    : "0.0";
-  
+  const occupancyRate = stats.stalls > 0 ? ((stats.confirmedReservations / stats.stalls) * 100).toFixed(1) : "0.0";
   const totalReservations = stats.confirmedReservations + stats.cancelledReservations + stats.pendingReservations;
-  const cancellationRate = totalReservations > 0
-    ? ((stats.cancelledReservations / totalReservations) * 100).toFixed(1)
-    : "0.0";
+  const cancellationRate = totalReservations > 0 ? ((stats.cancelledReservations / totalReservations) * 100).toFixed(1) : "0.0";
 
   const statCards = [
     {
       title: "Total Vendors",
       value: stats.vendors,
       icon: <FiUsers className="w-5 h-5" />,
-      color: "text-[#22c55e]",
-      bg: "bg-[#0d2a1a]",
+      chipClass: "bg-[#0f0f0f] text-white",
+      hint: "Vendor accounts",
     },
     {
       title: "Total Stalls",
       value: stats.stalls,
       icon: <FiBox className="w-5 h-5" />,
-      color: "text-[#facc15]",
-      bg: "bg-[#2a2410]",
+      chipClass: "bg-[#f1f5f9] text-[#0f172a]",
+      hint: "Active spaces",
     },
     {
       title: "Pending Reservations",
       value: stats.pendingReservations,
       icon: <FiClock className="w-5 h-5" />,
-      color: "text-[#facc15]",
-      bg: "bg-[#2a2410]",
+      chipClass: "bg-[#fff6e4] text-[#b45309]",
+      hint: "Awaiting action",
     },
   ];
 
@@ -100,134 +93,77 @@ const Dashboard: React.FC = () => {
       title: "Confirmed",
       value: stats.confirmedReservations,
       icon: <FiCheckCircle className="w-4 h-4" />,
-      bg: "bg-[#0d2a1a]",
-      border: "border-[#22c55e]/30",
-      text: "text-[#22c55e]",
+      accent: "text-[#0f172a]",
+      border: "border-[#e1e7ef]",
       subtitle: `${occupancyRate}% occupancy`,
     },
     {
       title: "Pending",
       value: stats.pendingReservations,
       icon: <FiClock className="w-4 h-4" />,
-      bg: "bg-[#2a2410]",
-      border: "border-[#facc15]/30",
-      text: "text-[#facc15]",
+      accent: "text-[#b45309]",
+      border: "border-[#fde7c7]",
       subtitle: "Awaiting approval",
     },
     {
       title: "Cancelled",
       value: stats.cancelledReservations,
       icon: <FiXCircle className="w-4 h-4" />,
-      bg: "bg-[#2a0f0f]",
-      border: "border-[#ef4444]/30",
-      text: "text-[#ef4444]",
+      accent: "text-[#dc2626]",
+      border: "border-[#ffe4e6]",
       subtitle: `${cancellationRate}% cancellation rate`,
     },
   ];
 
-  const quickActions = [
-    {
-      title: "Approve Reservations",
-      description: "Review and approve pending reservations",
-      action: () => navigate("/reservations"),
-      icon: <FiCheckCircle className="w-4 h-4" />,
-    },
-    {
-      title: "Manage Stalls",
-      description: "View and manage all exhibition stalls",
-      action: () => navigate("/stall-management"),
-      icon: <FiBox className="w-4 h-4" />,
-    },
-    {
-      title: "View Vendors",
-      description: "Browse and manage vendor accounts",
-      action: () => navigate("/vendors"),
-      icon: <FiUsers className="w-4 h-4" />,
-    },
-  ];
-
   return (
-    <div className="min-h-[calc(100vh-5rem)] bg-[#02060d] pt-6 pb-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto space-y-6">
-        <div className="flex flex-col gap-2">
-          <p className="text-xs font-semibold uppercase tracking-wider text-[#94a3b8]">CIBF Control Room</p>
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-white">Operational Dashboard</h1>
-          <p className="text-sm text-[#94a3b8]">Pulse of the reservation platform at a glance</p>
+    <div className="min-h-[calc(100vh-5rem)] bg-[#f6f8fb] pt-24 pb-16 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto space-y-8">
+        <div className="flex flex-col gap-3">
+          <p className="text-xs font-semibold uppercase tracking-[0.4em] text-[#94a3b8]">CIBF Control Room</p>
+          <h1 className="text-3xl sm:text-4xl font-semibold text-[#0f172a]">Operational Dashboard</h1>
+          <p className="text-sm text-[#475569]">Pulse of the reservation platform at a glance</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {statCards.map((card, index) => (
-            <div
-              key={index}
-              className="bg-[#0b1320] border border-[#1f2b40] rounded-xl p-5 text-white relative overflow-hidden"
-            >
-              <div className="absolute inset-0 opacity-5 bg-[#1f2d47]" />
+            <div key={index} className="surface-card p-6 relative overflow-hidden">
+              <div className="absolute inset-0 opacity-30 pointer-events-none" style={{ background: "radial-gradient(circle at top right, rgba(183,255,94,0.35), transparent 55%)" }} />
               <div className="relative flex items-center justify-between mb-4">
-                <div className={`${card.bg} ${card.color} p-2.5 rounded-lg border border-[#1f2b40]`}>
-                  {card.icon}
-                </div>
-                <span className="text-xs font-semibold uppercase tracking-wider text-[#475569]">Live</span>
+                <div className={`${card.chipClass} px-3 py-2 rounded-2xl text-xs font-semibold`}>{card.icon}</div>
+                <span className="text-xs font-semibold uppercase tracking-[0.35em] text-[#94a3b8]">LIVE</span>
               </div>
-              <h3 className="text-xs font-medium text-[#94a3b8] uppercase tracking-wider mb-2">{card.title}</h3>
-              <p className="text-2xl sm:text-3xl font-semibold">{card.value.toLocaleString()}</p>
+              <h3 className="text-xs font-medium text-[#94a3b8] uppercase tracking-[0.3em] mb-2">{card.title}</h3>
+              <p className="text-3xl font-semibold text-[#0f172a]">{card.value.toLocaleString()}</p>
+              <p className="text-xs text-[#94a3b8] mt-2">{card.hint}</p>
             </div>
           ))}
         </div>
 
-        <div className="bg-[#0b1320] border border-[#1f2b40] rounded-xl p-6 shadow-xl">
+        <div className="surface-card p-6">
           <div className="flex items-center gap-3 mb-6">
-            <div className="bg-[#111e34] border border-[#1f2b40] rounded-lg p-3 text-[#22c55e]">
+            <div className="w-10 h-10 rounded-2xl bg-[#0f0f0f] text-white flex items-center justify-center">
               <FiShoppingBag className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-lg sm:text-xl font-semibold text-white">Reservation Statistics</h2>
-              <p className="text-xs uppercase tracking-wider text-[#94a3b8]">Realtime tracking</p>
+              <h2 className="text-lg sm:text-xl font-semibold text-[#0f172a]">Reservation Statistics</h2>
+              <p className="text-xs uppercase tracking-[0.4em] text-[#94a3b8]">Realtime tracking</p>
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {reservationCards.map((card, index) => (
-              <div
-                key={index}
-                className={`${card.bg} border ${card.border} rounded-xl p-5 text-white`}
-              >
+              <div key={index} className={`bg-white border ${card.border} rounded-xl p-5`}>
                 <div className="flex items-center gap-3 mb-4">
-                  <div className={`p-2.5 rounded-lg border border-[#1f2b40] ${card.text}`}>{card.icon}</div>
-                  <h3 className="text-sm font-medium">{card.title}</h3>
+                  <div className={`p-2.5 rounded-xl bg-[#f8fafc] ${card.accent}`}>{card.icon}</div>
+                  <h3 className="text-sm font-medium text-[#0f172a]">{card.title}</h3>
                 </div>
-                <p className="text-2xl sm:text-3xl font-semibold mb-1">{card.value}</p>
+                <p className="text-3xl font-semibold text-[#0f172a] mb-1">{card.value}</p>
                 <p className="text-xs text-[#94a3b8]">{card.subtitle}</p>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="bg-[#0b1320] border border-[#1f2b40] rounded-xl p-6">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <p className="text-xs uppercase tracking-wider text-[#94a3b8]">Shortcuts</p>
-              <h2 className="text-lg sm:text-xl text-white font-semibold mt-1">Quick Actions</h2>
-            </div>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {quickActions.map((action, index) => (
-              <button
-                key={index}
-                onClick={action.action}
-                className="text-left bg-[#111e34] border border-[#1f2b40] rounded-xl p-5 text-white hover:border-[#22c55e] transition-colors"
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <div className="bg-[#0b1320] text-[#e2e8f0] p-3 rounded-lg border border-[#1f2b40]">
-                    {action.icon}
-                  </div>
-                  <FiArrowRight className="w-4 h-4 text-[#94a3b8]" />
-                </div>
-                <h3 className="font-semibold text-base mb-2">{action.title}</h3>
-                <p className="text-sm text-[#94a3b8]">{action.description}</p>
-              </button>
-            ))}
-          </div>
-        </div>
       </div>
     </div>
   );

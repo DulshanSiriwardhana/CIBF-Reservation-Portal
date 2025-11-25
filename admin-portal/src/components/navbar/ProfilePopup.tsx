@@ -21,23 +21,23 @@ const ProfilePopup: React.FC<ProfilePopupProps> = ({ onLogout, user }) => {
 
   return (
     <div 
-      className="absolute right-0 mt-3 w-72 rounded-2xl border border-[#1f2b40] bg-[#0c1525] text-white shadow-2xl shadow-black/40 z-50"
+      className="absolute right-0 mt-3 w-72 rounded-2xl border border-[#e1e7ef] bg-white text-[#0f172a] shadow-[0_18px_65px_rgba(15,23,42,0.15)] z-50"
       onClick={handleClick}
       onMouseDown={handleClick}
     >
-      <div className="p-5 border-b border-[#1f2b40]">
+      <div className="p-5 border-b border-[#e1e7ef]">
         <div className="flex items-center space-x-4">
-          <div className="w-12 h-12 rounded-xl bg-[#20b368] flex items-center justify-center text-[#04110a]">
+          <div className="w-12 h-12 rounded-2xl bg-[#0f0f0f] flex items-center justify-center text-white">
             <FiUser className="w-6 h-6" />
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-semibold truncate">{user?.username || "Admin"}</p>
-            <p className="text-xs text-[#94a3b8] truncate">{user?.email || ""}</p>
+            <p className="text-xs text-[#64748b] truncate">{user?.email || ""}</p>
             {user?.businessName && (
               <p className="text-xs text-[#94a3b8] truncate mt-1">{user.businessName}</p>
             )}
             <div className="mt-2">
-              <span className="inline-flex px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#111f33] border border-[#1f2b40] text-[#facc15]">
+              <span className="inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-[#f1f5f9] border border-[#e1e7ef] text-[#0f172a]">
                 {user?.role || "ADMIN"}
               </span>
             </div>
@@ -47,7 +47,7 @@ const ProfilePopup: React.FC<ProfilePopupProps> = ({ onLogout, user }) => {
       <div className="p-2">
         <button
           type="button"
-          className="flex items-center w-full px-4 py-2.5 rounded-lg text-sm font-semibold text-[#f87171] hover:bg-[#18111f] transition-colors"
+          className="flex items-center w-full px-4 py-2.5 rounded-xl text-sm font-semibold text-[#ef4444] hover:bg-[#fef2f2] transition-colors"
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();

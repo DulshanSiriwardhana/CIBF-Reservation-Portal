@@ -82,14 +82,15 @@ const VendorManagementPage: React.FC = () => {
   }, [searchTerm, vendors]);
 
   return (
-    <div className="min-h-[calc(100vh-5rem)] bg-[#02060d] pt-6 pb-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto text-white">
-        <div className="mb-6">
-          <h1 className="text-2xl sm:text-3xl font-semibold mb-1">Vendor Management</h1>
-          <p className="text-sm text-[#94a3b8]">View and manage all registered vendors</p>
+    <div className="min-h-[calc(100vh-5rem)] bg-[#f6f8fb] pt-24 pb-16 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto text-[#0f172a]">
+        <div className="mb-8">
+          <p className="text-xs font-semibold uppercase tracking-[0.4em] text-[#94a3b8]">Directory</p>
+          <h1 className="text-3xl sm:text-4xl font-semibold mb-2">Vendor Management</h1>
+          <p className="text-sm text-[#475569]">View and manage all registered vendors</p>
         </div>
 
-        <div className="dark-card p-4 mb-6">
+        <div className="surface-card p-4 mb-6">
           <div className="relative">
             <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#94a3b8] w-4 h-4" />
             <input
@@ -97,7 +98,7 @@ const VendorManagementPage: React.FC = () => {
               placeholder="Search vendors by name, email, or business..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-[#0b1320] border border-[#1f2b40] rounded text-sm text-white placeholder:text-[#475569] focus:outline-none focus:ring-2 focus:ring-[#22c55e]/60 focus:border-[#22c55e]"
+              className="w-full pl-10 pr-4 py-2.5 bg-[#f8fafc] border border-[#e1e7ef] rounded-xl text-sm text-[#0f172a] placeholder:text-[#94a3b8] focus:outline-none focus:ring-2 focus:ring-[#b7ff5e]/60 focus:border-[#0f172a]"
             />
           </div>
         </div>
@@ -111,17 +112,17 @@ const VendorManagementPage: React.FC = () => {
             filteredVendors.map((vendor) => (
               <div
                 key={vendor.userId}
-                className="bg-[#0b1320] border border-[#1f2b40] rounded-xl p-5"
+                className="surface-card p-6"
               >
                 <div className="flex items-start justify-between mb-4">
-                  <div className="w-10 h-10 bg-[#111d30] rounded-lg flex items-center justify-center text-[#22c55e]">
+                  <div className="w-10 h-10 bg-[#f8fafc] border border-[#e1e7ef] rounded-xl flex items-center justify-center text-[#0f172a]">
                     <FiUser className="w-5 h-5" />
                   </div>
                 </div>
 
-                <h3 className="text-base font-semibold mb-4">{vendor.businessName || vendor.username}</h3>
+                <h3 className="text-base font-semibold text-[#0f172a] mb-4">{vendor.businessName || vendor.username}</h3>
                 
-                <div className="space-y-2 text-sm text-[#cbd5f5]">
+                <div className="space-y-2 text-sm text-[#475569]">
                   <div className="flex items-center gap-2">
                     <FiUsers className="w-4 h-4" />
                     <span>{vendor.username}</span>
@@ -139,7 +140,7 @@ const VendorManagementPage: React.FC = () => {
                     <span>{vendor.role}</span>
                   </div>
                   {vendor.reservationCount !== undefined && (
-                    <div className="pt-2 border-t border-[#1f2b40] text-xs text-[#94a3b8]">
+                    <div className="pt-2 border-t border-[#e1e7ef] text-xs text-[#94a3b8]">
                       {vendor.reservationCount} reservation{vendor.reservationCount !== 1 ? "s" : ""}
                     </div>
                   )}
@@ -147,9 +148,9 @@ const VendorManagementPage: React.FC = () => {
               </div>
             ))
           ) : (
-            <div className="col-span-full text-center py-12 bg-[#0b1320] rounded border border-[#1f2b40]">
-              <FiUsers className="w-10 h-10 text-[#475569] mx-auto mb-3" />
-              <p className="text-sm text-[#94a3b8]">
+            <div className="col-span-full text-center py-12 surface-card">
+              <FiUsers className="w-10 h-10 text-[#94a3b8] mx-auto mb-3" />
+              <p className="text-sm text-[#475569]">
                 {searchTerm ? "No vendors found matching your search" : "No vendors found"}
               </p>
             </div>

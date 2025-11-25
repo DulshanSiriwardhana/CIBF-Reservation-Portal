@@ -107,24 +107,25 @@ const ReservationManagementPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-[calc(100vh-5rem)] bg-[#02060d] pt-6 pb-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+    <div className="min-h-[calc(100vh-5rem)] bg-[#f6f8fb] pt-24 pb-16 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto space-y-8">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-semibold text-white mb-1">Reservation Management</h1>
-            <p className="text-sm text-[#94a3b8]">Manage and review all stall reservations</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.4em] text-[#94a3b8]">Operations</p>
+            <h1 className="text-3xl sm:text-4xl font-semibold text-[#0f172a]">Reservation Management</h1>
+            <p className="text-sm text-[#475569]">Manage and review all stall reservations</p>
           </div>
           <button
             onClick={fetchReservations}
             disabled={loading}
-            className="flex items-center gap-2 px-4 py-2 bg-[#0b1320] border border-[#1f2b40] rounded-lg text-sm font-medium disabled:opacity-50 hover:border-[#22c55e] transition-colors"
+            className="flex items-center gap-2 px-4 py-2 rounded-full border border-[#e1e7ef] text-sm font-semibold text-[#0f172a] hover:border-[#0f172a] transition-colors disabled:opacity-50"
           >
-            <FiRefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+            <FiRefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
             Refresh
           </button>
         </div>
 
-        <div className="bg-[#0b1320] border border-[#1f2b40] rounded-xl p-4 mb-6">
+        <div className="surface-card p-5">
           <div className="flex flex-col sm:flex-row gap-4">
             <div className="relative flex-1">
               <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#94a3b8] w-4 h-4" />
@@ -133,7 +134,7 @@ const ReservationManagementPage: React.FC = () => {
                 placeholder="Search by reservation ID, user ID, or stall..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 bg-[#111e34] border border-[#1f2b40] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50 focus:border-[#22c55e] text-sm text-white placeholder:text-[#475569]"
+                className="w-full pl-10 pr-4 py-3 bg-[#f8fafc] border border-[#e1e7ef] rounded-xl text-sm text-[#0f172a] placeholder:text-[#94a3b8] focus:outline-none focus:ring-2 focus:ring-[#b7ff5e]/60 focus:border-[#0f172a]"
               />
             </div>
             <div className="relative">
@@ -141,12 +142,12 @@ const ReservationManagementPage: React.FC = () => {
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value as typeof statusFilter)}
-                className="pl-10 pr-8 py-2.5 bg-[#111e34] border border-[#1f2b40] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#22c55e]/50 focus:border-[#22c55e] text-sm appearance-none text-white"
+                className="pl-10 pr-8 py-3 bg-[#f8fafc] border border-[#e1e7ef] rounded-xl text-sm text-[#0f172a] focus:outline-none focus:ring-2 focus:ring-[#b7ff5e]/60 focus:border-[#0f172a] appearance-none"
               >
-                <option value="ALL" className="bg-[#111e34]">All Status</option>
-                <option value="PENDING" className="bg-[#111e34]">Pending</option>
-                <option value="CONFIRMED" className="bg-[#111e34]">Confirmed</option>
-                <option value="CANCELLED" className="bg-[#111e34]">Cancelled</option>
+                <option value="ALL" className="bg-white text-[#0f172a]">All Status</option>
+                <option value="PENDING" className="bg-white text-[#0f172a]">Pending</option>
+                <option value="CONFIRMED" className="bg-white text-[#0f172a]">Confirmed</option>
+                <option value="CANCELLED" className="bg-white text-[#0f172a]">Cancelled</option>
               </select>
             </div>
           </div>
@@ -154,20 +155,20 @@ const ReservationManagementPage: React.FC = () => {
 
         <div className="space-y-4">
           {loading && !filteredReservations.length ? (
-            <div className="flex justify-center items-center py-12 bg-[#0b1320] rounded border border-[#1f2b40]">
+            <div className="flex justify-center items-center py-12 surface-card">
               <FiLoader className="w-6 h-6 text-[#94a3b8] animate-spin" />
             </div>
           ) : filteredReservations.length > 0 ? (
             filteredReservations.map((reservation) => (
               <div
                 key={reservation.reservationId}
-                className="bg-[#0b1320] border border-[#1f2b40] rounded-xl p-5 hover:border-[#22c55e]/30 transition-colors"
+                className="surface-card p-5 hover:shadow-lifted transition-shadow"
               >
                 <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                   <div className="flex-1">
                     <div className="flex items-center space-x-3 mb-4">
                       {getStatusBadge(reservation.status)}
-                      <span className="text-base font-semibold text-white">
+                      <span className="text-base font-semibold text-[#0f172a]">
                         {reservation.reservationId || "N/A"}
                       </span>
                     </div>
@@ -175,33 +176,36 @@ const ReservationManagementPage: React.FC = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                       <div>
                         <p className="text-xs font-medium text-[#94a3b8] mb-1">User ID</p>
-                        <p className="text-sm font-medium text-white">{reservation.userId || "N/A"}</p>
+                        <p className="text-sm font-medium text-[#0f172a]">{reservation.userId || "N/A"}</p>
                       </div>
                       <div>
                         <p className="text-xs font-medium text-[#94a3b8] mb-1">Stall ID</p>
-                        <p className="text-sm font-medium text-white">{reservation.stallId || "N/A"}</p>
+                        <p className="text-sm font-medium text-[#0f172a]">{reservation.stallId || "N/A"}</p>
                       </div>
                       <div>
                         <p className="text-xs font-medium text-[#94a3b8] mb-1">Email</p>
-                        <p className="text-sm font-medium text-white">{reservation.email || "N/A"}</p>
+                        <p className="text-sm font-medium text-[#0f172a]">{reservation.email || "N/A"}</p>
                       </div>
                       <div>
                         <p className="text-xs font-medium text-[#94a3b8] mb-1">
-                          {reservation.status === "CONFIRMED" ? "Confirmed Date" : 
-                           reservation.status === "CANCELLED" ? "Cancelled Date" : "Reserved Date"}
+                          {reservation.status === "CONFIRMED"
+                            ? "Confirmed Date"
+                            : reservation.status === "CANCELLED"
+                            ? "Cancelled Date"
+                            : "Reserved Date"}
                         </p>
-                        <p className="text-sm font-medium text-white">
+                        <p className="text-sm font-medium text-[#0f172a]">
                           {formatDate(
                             reservation.reserveConfirmDate ||
-                            reservation.reserveCancelDate ||
-                            reservation.reserveDate
+                              reservation.reserveCancelDate ||
+                              reservation.reserveDate
                           )}
                         </p>
                       </div>
                       {reservation.amount && (
                         <div>
                           <p className="text-xs font-medium text-[#94a3b8] mb-1">Amount</p>
-                          <p className="text-sm font-medium text-white">${reservation.amount.toFixed(2)}</p>
+                          <p className="text-sm font-medium text-[#0f172a]">${reservation.amount.toFixed(2)}</p>
                         </div>
                       )}
                     </div>
@@ -212,7 +216,7 @@ const ReservationManagementPage: React.FC = () => {
                       <button
                         onClick={() => handleApprove(reservation.reservationId)}
                         disabled={loading}
-                        className="flex items-center justify-center gap-2 px-4 py-2 bg-[#22c55e] text-black rounded-lg text-sm font-semibold disabled:opacity-50 hover:opacity-90 transition-opacity"
+                        className="flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-[#0f0f0f] text-white text-sm font-semibold disabled:opacity-50"
                       >
                         <FiCheckCircle className="w-4 h-4" />
                         Approve
@@ -220,7 +224,7 @@ const ReservationManagementPage: React.FC = () => {
                       <button
                         onClick={() => handleCancel(reservation.reservationId)}
                         disabled={loading}
-                        className="flex items-center justify-center gap-2 px-4 py-2 bg-[#ef4444] text-white rounded-lg text-sm font-semibold disabled:opacity-50 hover:opacity-90 transition-opacity"
+                        className="flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-[#ef4444] text-white text-sm font-semibold disabled:opacity-50"
                       >
                         <FiXCircle className="w-4 h-4" />
                         Reject
@@ -231,11 +235,11 @@ const ReservationManagementPage: React.FC = () => {
               </div>
             ))
           ) : (
-            <div className="text-center py-12 bg-[#0b1320] rounded border border-[#1f2b40]">
+            <div className="text-center py-12 surface-card">
               <FiClock className="w-10 h-10 text-[#94a3b8] mx-auto mb-3" />
-              <p className="text-[#94a3b8] text-sm">
-                {searchTerm || statusFilter !== "ALL" 
-                  ? "No reservations found matching your filters" 
+              <p className="text-[#475569] text-sm">
+                {searchTerm || statusFilter !== "ALL"
+                  ? "No reservations found matching your filters"
                   : "No reservations found"}
               </p>
             </div>

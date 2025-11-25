@@ -54,49 +54,49 @@ const NavBar: React.FC = () => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <nav className="fixed w-full z-50 border-b border-[#121e32] bg-[#050a15]/95 backdrop-blur-sm shadow-[0_5px_30px_rgba(0,0,0,0.35)]">
+    <nav className="fixed top-0 inset-x-0 z-50 bg-black text-white border-b border-[#141f35] backdrop-blur-xl shadow-[0_12px_45px_rgba(3,7,18,0.55)]">
       <div className="max-w-7xl mx-auto px-4 lg:px-8">
-        <div className="flex justify-between h-16 items-center">
-          <Link to="/dashboard" className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-xl bg-[#20b368] flex items-center justify-center shadow-lg shadow-black/30">
-              <span className="text-[#04110a] font-semibold text-base">C</span>
+        <div className="flex items-center justify-between h-20">
+          <Link to="/dashboard" className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-2xl bg-white/10 border border-white/20 text-white flex items-center justify-center text-lg font-semibold">
+              C
             </div>
             <div>
-              <div className="font-semibold text-base text-white tracking-wide">CIBF</div>
-              <div className="text-[11px] uppercase text-[#94a3b8] tracking-[0.2em]">Admin Portal</div>
+              <p className="text-xs uppercase tracking-[0.35em] text-white/50 mb-1">CIBF</p>
+              <p className="text-xl font-semibold text-white">Admin Operations</p>
             </div>
           </Link>
 
-          <div className="hidden md:flex space-x-2 items-center">
+          <div className="hidden md:flex items-center gap-2">
             {menuItems.map((item) => (
               <Link
                 key={item.name}
                 to={item.href}
-                className={`px-4 py-2 text-xs font-semibold rounded-lg transition-colors ${
+                className={`px-4 py-2 text-sm font-semibold rounded-full transition-all ${
                   isActive(item.href)
-                    ? "bg-[#20b368] text-[#04110a]"
-                    : "text-[#cbd5f5] hover:text-white hover:bg-[#0f172a]"
+                    ? "bg-white text-[#0c1428] shadow-lg shadow-black/30"
+                    : "text-white/80 hover:bg-white/10"
                 }`}
               >
                 {item.name}
               </Link>
             ))}
-            <div ref={profileRef} className="ml-4 relative z-50">
+            <div ref={profileRef} className="ml-4 relative">
               <button
                 type="button"
                 onClick={(e) => {
                   e.stopPropagation();
                   toggleProfile();
                 }}
-                className="w-10 h-10 rounded-xl border border-[#1f2b40] bg-[#0b1320] flex items-center justify-center text-[#e2e8f0] hover:bg-[#111e34] transition-colors cursor-pointer"
+                className="w-11 h-11 rounded-2xl border border-white/20 bg-white/5 flex items-center justify-center text-white hover:border-white/60 transition-colors"
               >
-                <FiUser className="w-4 h-4" />
+                <FiUser className="w-5 h-5" />
               </button>
               {profileOpen && <ProfilePopup onLogout={handleLogout} user={user} />}
             </div>
           </div>
 
-          <div className="md:hidden flex items-center space-x-2 z-50">
+          <div className="md:hidden flex items-center gap-2">
             <div ref={profileRef} className="relative">
               <button
                 type="button"
@@ -104,15 +104,15 @@ const NavBar: React.FC = () => {
                   e.stopPropagation();
                   toggleProfile();
                 }}
-                className="w-10 h-10 rounded-xl border border-[#1f2b40] bg-[#0b1320] flex items-center justify-center text-[#e2e8f0] hover:bg-[#111e34] transition-colors cursor-pointer"
+                className="w-11 h-11 rounded-2xl border border-white/20 bg-white/5 flex items-center justify-center text-white hover:border-white/60 transition-colors"
               >
-                <FiUser className="w-4 h-4" />
+                <FiUser className="w-5 h-5" />
               </button>
               {profileOpen && <ProfilePopup onLogout={handleLogout} user={user} />}
             </div>
             <button
               onClick={toggleMenu}
-              className="p-2 rounded-lg border border-[#1f2b40] text-[#cbd5f5]"
+              className="p-2 rounded-xl border border-white/20 text-white"
               aria-label="Toggle menu"
             >
               {isOpen ? <FiX className="w-5 h-5" /> : <FiMenu className="w-5 h-5" />}
@@ -122,15 +122,15 @@ const NavBar: React.FC = () => {
       </div>
 
       {isOpen && (
-        <div className="md:hidden bg-[#050a15] border-t border-[#121e32] px-4 py-3 space-y-1">
+        <div className="md:hidden bg-[#0c1428] text-white border-t border-white/10 px-4 py-4 space-y-2 backdrop-blur-xl">
           {menuItems.map((item) => (
             <Link
               key={item.name}
               to={item.href}
-              className={`block py-2 px-3 text-sm font-medium rounded ${
+              className={`block py-2.5 px-4 text-sm font-semibold rounded-xl ${
                 isActive(item.href)
-                  ? "bg-[#22c55e] text-black"
-                  : "text-[#cbd5f5]"
+                  ? "bg-white text-[#0c1428]"
+                  : "text-white bg-white/10"
               }`}
               onClick={() => setIsOpen(false)}
             >
