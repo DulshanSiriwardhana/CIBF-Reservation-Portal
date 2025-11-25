@@ -3,6 +3,7 @@ import { FiBox, FiPlus, FiEdit, FiTrash2, FiLoader, FiTag } from "react-icons/fi
 import { useLoader } from "../context/LoaderContext";
 import { apiService } from "../services/api";
 import { useToast } from "../context/ToastContext";
+import { useConfirm } from "../context/ConfirmContext";
 import StallFormModal from "../components/stallmanagement/StallFormModal";
 import GenreFormModal from "../components/stallmanagement/GenreFormModal";
 import type { Stall } from "../types/stall";
@@ -11,6 +12,7 @@ import type { Genre } from "../types/genre";
 const StallManagementPage: React.FC = () => {
   const { showLoader, hideLoader } = useLoader();
   const { showToast } = useToast();
+  const { confirm } = useConfirm();
   const [stalls, setStalls] = useState<Stall[]>([]);
   const [genres, setGenres] = useState<Genre[]>([]);
   const [stallModalOpen, setStallModalOpen] = useState(false);
@@ -54,7 +56,14 @@ const StallManagementPage: React.FC = () => {
   };
 
   const handleDeleteStall = async (id: number) => {
-    if (!window.confirm("Are you sure you want to delete this stall?")) return;
+    const confirmed = await confirm({
+      title: "Delete Stall",
+      message: "Are you sure you want to delete this stall? This action cannot be undone.",
+      confirmText: "Delete",
+      cancelText: "Cancel",
+      type: "danger",
+    });
+    if (!confirmed) return;
 
     setLoading(true);
     try {
@@ -94,7 +103,14 @@ const StallManagementPage: React.FC = () => {
   };
 
   const handleDeleteGenre = async (id: number) => {
-    if (!window.confirm("Are you sure you want to delete this genre?")) return;
+    const confirmed = await confirm({
+      title: "Delete Genre",
+      message: "Are you sure you want to delete this genre? This action cannot be undone.",
+      confirmText: "Delete",
+      cancelText: "Cancel",
+      type: "danger",
+    });
+    if (!confirmed) return;
 
     setLoading(true);
     try {

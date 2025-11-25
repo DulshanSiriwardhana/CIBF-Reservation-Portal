@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { FiCheckCircle, FiXCircle, FiAlertCircle, FiInfo } from 'react-icons/fi';
+import { FiCheckCircle, FiXCircle, FiAlertCircle, FiInfo, FiX } from 'react-icons/fi';
 
 export type ToastType = 'success' | 'error' | 'warning' | 'info';
 
@@ -20,30 +20,40 @@ export const Toast: React.FC<ToastProps> = ({ message, type, onClose, duration =
   }, [duration, onClose]);
 
   const icons = {
-    success: <FiCheckCircle className="w-4 h-4" />,
-    error: <FiXCircle className="w-4 h-4" />,
-    warning: <FiAlertCircle className="w-4 h-4" />,
-    info: <FiInfo className="w-4 h-4" />,
+    success: <FiCheckCircle className="w-5 h-5" />,
+    error: <FiXCircle className="w-5 h-5" />,
+    warning: <FiAlertCircle className="w-5 h-5" />,
+    info: <FiInfo className="w-5 h-5" />,
   };
 
-  const colors = {
-    success: 'bg-[#0b1320] border border-[#10492d] text-[#22c55e]',
-    error: 'bg-[#1f0f19] border border-[#b91c1c]/40 text-[#f87171]',
-    warning: 'bg-[#1f1a0b] border border-[#facc15]/40 text-[#facc15]',
-    info: 'bg-[#0b1426] border border-[#1d4ed8]/40 text-[#60a5fa]',
+  const iconBgColors = {
+    success: 'bg-[#dcfce7] text-[#16a34a]',
+    error: 'bg-[#fee2e2] text-[#dc2626]',
+    warning: 'bg-[#fef3c7] text-[#d97706]',
+    info: 'bg-[#dbeafe] text-[#2563eb]',
+  };
+
+  const borderColors = {
+    success: 'border-[#86efac]',
+    error: 'border-[#fca5a5]',
+    warning: 'border-[#fde047]',
+    info: 'border-[#93c5fd]',
   };
 
   return (
     <div
-      className={`fixed top-16 right-4 z-50 flex items-center space-x-3 px-4 py-3 rounded-xl shadow-[0_15px_60px_rgba(0,0,0,0.6)] ${colors[type]} max-w-md backdrop-blur`}
+      className={`fixed top-20 right-4 z-50 flex items-center gap-3 px-4 py-3.5 rounded-xl border ${borderColors[type]} bg-white shadow-[0_20px_70px_rgba(15,23,42,0.12)] max-w-md animate-slide-in-right`}
     >
-      <div className="flex-shrink-0 bg-black/20 rounded-lg p-2">{icons[type]}</div>
-      <p className="font-medium flex-1 text-sm text-white">{message}</p>
+      <div className={`flex-shrink-0 ${iconBgColors[type]} rounded-lg p-2.5`}>
+        {icons[type]}
+      </div>
+      <p className="font-medium flex-1 text-sm text-[#0f172a] leading-relaxed">{message}</p>
       <button
         onClick={onClose}
-        className="flex-shrink-0 p-1 rounded text-white/70 hover:text-white"
+        className="flex-shrink-0 p-1 rounded-lg text-[#94a3b8] hover:text-[#0f172a] hover:bg-[#f1f5f9] transition-all duration-200"
+        aria-label="Close notification"
       >
-        <FiXCircle className="w-4 h-4" />
+        <FiX className="w-4 h-4" />
       </button>
     </div>
   );

@@ -3,11 +3,13 @@ import { FiClock, FiCheckCircle, FiXCircle, FiSearch, FiFilter, FiRefreshCw, FiL
 import { useLoader } from "../context/LoaderContext";
 import { apiService } from "../services/api";
 import { useToast } from "../context/ToastContext";
+import { useConfirm } from "../context/ConfirmContext";
 import type { Reservation } from "../types/reservation";
 
 const ReservationManagementPage: React.FC = () => {
   const { showLoader, hideLoader } = useLoader();
   const { showToast } = useToast();
+  const { confirm } = useConfirm();
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [filteredReservations, setFilteredReservations] = useState<Reservation[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -55,7 +57,14 @@ const ReservationManagementPage: React.FC = () => {
   }, [searchTerm, statusFilter, reservations]);
 
   const handleApprove = async (reservationId: string) => {
-    if (!window.confirm("Are you sure you want to approve this reservation?")) return;
+    const confirmed = await confirm({
+      title: "Approve Reservation",
+      message: "Are you sure you want to approve this reservation?",
+      confirmText: "Approve",
+      cancelText: "Cancel",
+      type: "info",
+    });
+    if (!confirmed) return;
 
     setLoading(true);
     try {
@@ -70,7 +79,14 @@ const ReservationManagementPage: React.FC = () => {
   };
 
   const handleCancel = async (reservationId: string) => {
-    if (!window.confirm("Are you sure you want to cancel this reservation?")) return;
+    const confirmed = await confirm({
+      title: "Cancel Reservation",
+      message: "Are you sure you want to cancel this reservation?",
+      confirmText: "Cancel Reservation",
+      cancelText: "Keep",
+      type: "danger",
+    });
+    if (!confirmed) return;
 
     setLoading(true);
     try {

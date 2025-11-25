@@ -7,6 +7,7 @@ import Footer from "./components/footer/Footer";
 import { LoaderProvider } from "./context/LoaderContext";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import { ToastProvider } from "./context/ToastContext";
+import { ConfirmProvider } from "./context/ConfirmContext";
 import StallManagementPage from "./pages/StallManagementPage";
 import VendorManagementPage from "./pages/VendorManagementPage";
 import ReservationManagementPage from "./pages/ReservationManagementPage";
@@ -35,7 +36,7 @@ function AppRoutes() {
   const isAuthPage = location.pathname === "/";
 
   return (
-    <div className="font-family-notoserif min-h-screen flex flex-col bg-[#f6f8fb]">
+    <div className="min-h-screen flex flex-col bg-[#f6f8fb]">
       {!isAuthPage && isAuthenticated && (
         <div className="flex-shrink-0">
           <NavBar/>
@@ -44,7 +45,8 @@ function AppRoutes() {
       <main className="flex-1 min-h-0">
         <LoaderProvider>
           <ToastProvider>
-            <Routes>
+            <ConfirmProvider>
+              <Routes>
               <Route path="/" element={<AuthPage />} />
               <Route
                 path="/dashboard"
@@ -87,6 +89,7 @@ function AppRoutes() {
                 }
               />
             </Routes>
+            </ConfirmProvider>
           </ToastProvider>
         </LoaderProvider>
       </main>
