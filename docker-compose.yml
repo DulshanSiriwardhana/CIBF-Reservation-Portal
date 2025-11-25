@@ -5,71 +5,24 @@ services:
     build: ./api-gateway
     container_name: nginx-gateway
     ports:
-      - "8080:80"
+      - "8089:8089"
     volumes:
       - ./api-gateway/nginx.conf:/etc/nginx/conf.d/default.conf
     depends_on:
-      - email-service
       - genre-service
-      - stall-service
-      - user-service
-      - reservation-service
-    
     networks:
     - bookfair-network
 
-# user servive database   
-  user-db:
-    image: postgres:15-alpine
-    container_name: user-db
-    environment:
-      POSTGRES_DB: userdb
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-    ports:
-      - "5433:5432"  # avoid conflicts
-    volumes:
-      - userdb_data:/var/lib/postgresql/data
-    networks:
-      - bookfair-network
-
 # user service
-
   user-service:
     build: ./user-service
     container_name: user-service
-    environment:
-      URL: jdbc:postgresql://user-db:5432/userdb
-      USERNAME: postgres
-      PASSWORD: postgres
+    env_file:
+      - ./user-service/.env     
     ports:
       - "8084:8084"
-    depends_on:
-      - user-db
     networks:
       - bookfair-network
-
-# stall-db
-  stall-db:
-    image: postgres:15-alpine
-    container_name: stall-db
-    environment:
-      POSTGRES_DB: bookfair_stalls
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres123
-      PGDATA: /var/lib/postgresql/data/pgdatavd code
-    ports:
-      - "5434:5432" 
-    volumes:
-      - stalldb_data:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-    networks:
-      - bookfair-network
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
 # rabbitmq
   rabbitmq-stall:
@@ -92,34 +45,25 @@ services:
       retries: 5
 
 # stall service
-
   stall-service:
     build: ./stall-service
     container_name: stall-service
     depends_on:
-      - stall-db
       - rabbitmq-stall
     ports:
       - "8083:8083"
     env_file:
     - ./stall-service/.env
-    
     environment:
-      DATABASE_URL: jdbc:postgresql://stall-db:5432/bookfair_stalls
-      DATABASE_USERNAME: postgres
-      DATABASE_PASSWORD: postgres
       RABBITMQ_HOST: rabbitmq-stall
       RABBITMQ_PORT: 5672
       RABBITMQ_USERNAME: guest
       RABBITMQ_PASSWORD: guest
       RABBITMQ_QUEUE: stall_queue
-    
-    
-
     networks:
       - bookfair-network
 
-    #genre service
+  #genre service
   genre-service:
     build: ./genre-service
     container_name: genre-service
@@ -131,7 +75,6 @@ services:
       - bookfair-network
 
  # Email service rabbitmq
-
   rabbitmq-email:
     image: rabbitmq:3.12-management-alpine
     container_name: rabbitmq-email
@@ -152,7 +95,6 @@ services:
       - bookfair-network
 
   # email service
-
   email-service:
     build: ./email-service
     container_name: email-service
@@ -189,25 +131,8 @@ services:
       - pgadmin_data:/var/lib/pgadmin
     networks:
       - bookfair-network
-    depends_on:
-      - user-db
-      - stall-db
-
-#Reservation-db 
-  reservation-db:
-    image: mongo:7.0
-    container_name: reservation-db
-    ports:
-      - "27018:27017"
-    
-    volumes:
-      - reservationdb_data:/data/db
-    
-    networks:
-      - bookfair-network
     
 # rabbitmq-reservation
-
   rabbitmq-reservation:
     image: rabbitmq:3.12-management-alpine
     container_name: rabbitmq-reservation
@@ -222,17 +147,17 @@ services:
     - bookfair-network
 
 # reservation-service
-
   reservation-service:
     build: ./reservation-service
     container_name: reservation-service
     ports:
     - "5003:5003"
     depends_on:
-    - reservation-db
     - rabbitmq-reservation
     environment:
-      SPRING_DATA_MONGODB_URI: mongodb://reservation-db:27017/reservation-service
+      SPRING_DATA_MONGODB_URI: mongodb+srv://username:password@cluster0.tjxwt5d.mongodb.net/BookFair_Reservations_Service
+      MONGO_USERNAME: mashawijesekara
+      MONGO_PASSWORD: 7HO4hnI0D9CDyJOw
       SPRING_RABBITMQ_HOST: rabbitmq-reservation
       SPRING_RABBITMQ_PORT: 5672
       SPRING_RABBITMQ_USERNAME: guest
@@ -242,27 +167,17 @@ services:
     networks:
     - bookfair-network
 
-
   # Volumes
 volumes:
-  stalldb_data:
-    driver: local
   rabbitmq_stall_data:
     driver: local
   pgadmin_data:
     driver: local
   rabbitmq_email_data: {}
-  userdb_data: {}
-  reservationdb_data:
-    driver: local
     
-
 networks:
   bookfair-network:
     driver: bridge
-
-  
-
 
 
 
